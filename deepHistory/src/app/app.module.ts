@@ -13,6 +13,8 @@ import { UserService } from "./core/user.service";
 import { LoginComponent } from "./login/login.component";
 import { UserComponent } from "./user/user.component";
 import { UserResolver } from "./user/user.resolver";
+// Import HttpClientModule from @angular/common/http in AppModule
+import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from "./app.component";
 
@@ -24,7 +26,8 @@ import { AppComponent } from "./app.component";
     RouterModule.forRoot(rootRouterConfig, { useHash: false }),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
-    AngularFireAuthModule // imports firebase/auth, only needed for auth features
+    AngularFireAuthModule, // imports firebase/auth, only needed for auth features
+    HttpClientModule
   ],
   providers: [AuthService, UserService, UserResolver, AuthGuard],
   bootstrap: [AppComponent]
