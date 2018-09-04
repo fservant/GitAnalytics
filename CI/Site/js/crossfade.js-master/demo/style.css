@@ -1,0 +1,104 @@
+html, body {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: sans-serif;
+	line-height: 1.5;
+	color: #555;
+}
+
+ul, ol {
+	padding: 0;
+}
+
+hr {
+	height: 1px;
+	border: none;
+	background: #f1f1f1;
+}
+
+a {
+	color: #3a6e8f;
+}
+
+/*
+* Style both of the crossfade examples
+*/
+
+.banner {
+	position: relative;
+	color: white;
+	margin-bottom: 50px;
+	height: 500px;
+	background: #333;
+}
+
+.banner h1 {
+	position: absolute;
+	top: 45%;
+	left: 0;
+	width: 100%;
+	font-size: 4em;
+	margin: 0;
+	text-align: center;
+	text-shadow: 0 2px 0 #444;
+	z-index: 10;
+}
+
+/*
+* Presentation styles
+*/
+
+section {
+	min-height: 120%;
+}
+
+.content {
+	max-width: 40em;
+	margin: 0 auto;
+}
+
+.options {
+	border-collapse: collapse;
+}
+
+.options th,
+.options td {
+	padding: 0.5em;
+	border: 2px solid white;
+	background: #f8f8f8;
+}
+
+.options th {
+	text-align: left;
+	background: #f1f1f1;
+}
+
+.center {
+	text-align: center;
+}
+
+.github-button {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	padding: 0.25em 1em;
+	color: white;
+	border: 1px solid white;
+	border-radius: 5px;
+	text-decoration: none;
+}
+
+.github-button:hover {
+	background: white;
+	color: #333;
+}
+
+footer {
+	background: #f1f1f1;
+	padding: 2em 0;
+	text-align: center;
+}
