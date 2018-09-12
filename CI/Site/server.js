@@ -1,8 +1,9 @@
 const express = require('express')
 const app = express()
+
 var path = require('path')
 //app.set('view engine', 'html')
-
+app.use(express.static('.'))
 app.get('/', function (req, res) {
   //res.send('Hello World!')
   //res.render('index')
