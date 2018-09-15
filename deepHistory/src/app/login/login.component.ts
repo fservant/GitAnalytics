@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { AuthService } from "../core/auth.service";
 import { Router, Params } from "@angular/router";
+import { UserResolver } from "../user/user.resolver";
 
 @Component({
   selector: "page-login",

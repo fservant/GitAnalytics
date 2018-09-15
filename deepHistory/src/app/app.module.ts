@@ -13,7 +13,6 @@ import { UserService } from "./core/user.service";
 import { LoginComponent } from "./login/login.component";
 import { UserComponent } from "./user/user.component";
 import { UserResolver } from "./user/user.resolver";
-// Import HttpClientModule from @angular/common/http in AppModule
 import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from "./app.component";
