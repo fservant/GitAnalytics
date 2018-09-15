@@ -7,34 +7,35 @@
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
+    <link rel="stylesheet" type="text/css" href="/css/main.css" >
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <Script src="app.js"></script>
   </head>
-  <body>
+  <body ng-app="authorship" ng-controller="primary as p">
     <h1 style="margin-left: 30px">Authorship</h1>
 
     <hr class="bs-docs-separator">
-
 
     <div class="row" style="margin-bottom:20px; margin-left: 20px">
       <div class="col-lg-6">
         <div class="input-group input-group-lg">
           <span class="input-group-addon" id="sizing-addon1">@</span>
-          <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+          <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1" ng-model="p.user">
         </div>
       </div>
     </div>
 
-
-
     <div class="row">
-      <div class="col-lg-6" style="margin-left: 30px">
+      <div class="col-lg-6" style="margin-left: 30px; position: relative">
         <div class="input-group input-group-lg">
-          <input type="text" class="form-control" placeholder="Search Respository">
+          <ul class="list-group" id="myList" style = "position: absolute; left: -23px; top: 46px; width: 100%" ng-show="p.focus">
+            <li class="list-group-item repo-dropdown" ng-repeat="repo in p.repos" ng-click="p.repo = repo.name">{{repo.name}}</li>
+          </ul>
+          <input type="text" class="form-control" id="myInput" placeholder="Search Respository..." ng-focus="p.getRepos(); p.focus = true" ng-model="p.repo" ng-blur="p.focus = false"/>
           <span class="input-group-btn">
-            <button class="btn btn-default" type="button">Go!</button>
+            <button class="btn btn-default" type="button" ng-click="p.getCommits()">Go!</button>
           </span>
         </div>
       </div>
@@ -42,7 +43,17 @@
 
     <hr class="bs-docs-separator">
 
-    <div class="tabbable tabs-left">
+    <!-- <div class="panel panel-default" ng-repeat="commit in p.commits">
+      <div class="panel-heading">
+        <h3 class="panel-title">Panel title</h3>
+      </div>
+      <div class="panel-body">
+        {{commit}}
+      </div>
+    </div> -->
+
+
+    <!-- <div class="tabbable tabs-left">
       <ul class="nav nav-tabs">
         <li class="active"><a href = "#tab1" data-toggle = "tab"> Committer #1</a></li>
         <li><a href="#tab2" data-toggle="tab">Committer #2</a></li>
@@ -50,16 +61,48 @@
 
       <div class="tab-content">
         <div class="tab-pane fade in active" id="tab1">
-          <p>This is first commit.</p>
+          <div class="list-group">
+            <a href="#" class="list-group-item active">
+              <h4 class="list-group-item-heading">This is the first Commit</h4>
+              <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </a>
+            <a style="margin-bottom: 20px">
+            </a>
+            <a href="#" class="list-group-item">
+              <h4 class="list-group-item-heading">This is the second Commit</h4>
+              <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </a>
+          </div>
         </div>
         <div class="tab-pane fade" id="tab2">
-          <p>This is the second commit.</p>
+          <div class="list-group">
+            <a href="#" class="list-group-item active">
+              <h4 class="list-group-item-heading">This is the first Commit</h4>
+              <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </a>
+            <a style="margin-bottom: 20px">
+            </a>
+            <a href="#" class="list-group-item">
+              <h4 class="list-group-item-heading">This is the second Commit</h4>
+              <p class="list-group-item-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <script src="http://code.jquery.com/jquery.js"></script>
+    <script>
+      $(document).ready(function(){
+        $("#myInput").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $("#myList li").filter(function() {
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          });
+        });
+      });
+    </script>
     <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   </body>
 </html>
