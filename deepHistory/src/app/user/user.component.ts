@@ -1,10 +1,10 @@
-import { Component, OnInit, Input } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { UserService } from "../core/user.service";
 import { AuthService } from "../core/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Location } from "@angular/common";
 import { FormGroup } from "@angular/forms";
-import { FirebaseUserModel } from "../core/user.model";
+import { UserModel } from "../core/user.model";
 import { HttpClient } from "@angular/common/http";
 import { GithubApiService } from "../services/github-api-service";
 import { DataService } from "../services/shared-service";
@@ -15,7 +15,7 @@ import { DataService } from "../services/shared-service";
   styleUrls: ["user.scss"]
 })
 export class UserComponent implements OnInit {
-  user: FirebaseUserModel = new FirebaseUserModel();
+  user: UserModel = new UserModel();
   profileForm: FormGroup;
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
   loginName: string;
@@ -33,7 +33,6 @@ export class UserComponent implements OnInit {
 
   displayRepos() {
     this.repos = this.user.repos;
-    console.log(this.user.repos[0].name);
   }
 
   setup() {
@@ -51,7 +50,6 @@ export class UserComponent implements OnInit {
       .getUserRepositoryList(this.user.username)
       .forEach(repo => {
         this.user.repos = repo;
-        console.log(this.user.repos);
       })
       .then(res => {
         this.displayRepos();

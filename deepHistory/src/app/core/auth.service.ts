@@ -3,7 +3,6 @@ import "rxjs/add/operator/toPromise";
 import { AngularFireAuth } from "angularfire2/auth";
 import * as firebase from "firebase/app";
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject } from "rxjs";
 
 @Injectable()
 export class AuthService {
