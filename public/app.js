@@ -19,16 +19,16 @@ angular.module('authorship', [])
       })
     }
 
-    // p.getCommits = function(){
-    //   var payload = {
-    //     method: 'GET',
-    //     url: 'https://api.github.com/repos/'+ p.user +'/' + p.repo + '/commits'
-    //   }
-    //   $http(payload).then(function(result){
-    //     p.commits = result.data
-    //     console.log(result)
-    //   }, function(err){
-    //     console.log(err)
-    //   })
-    // }
+    p.getCommits = function(){
+      var payload = {
+        method: 'GET',
+        url: 'https://api.github.com/repos/'+ p.user +'/' + p.repo + '/commits'
+      }
+      $http(payload).then(function(result){
+        p.commits = result.data
+        console.log(result)
+      }, function(err){
+        console.log(err)
+      })
+    }
   })

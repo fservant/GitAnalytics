@@ -31,7 +31,7 @@
       <div class="col-lg-6" style="margin-left: 30px; position: relative">
         <div class="input-group input-group-lg">
           <ul class="list-group" id="myList" style = "position: absolute; left: -23px; top: 46px; width: 100%" ng-show="p.focus">
-            <li class="list-group-item repo-dropdown" ng-repeat="repo in p.repos" ng-click="p.repo = repo.name">{{repo.name}}</li>
+            <li class="list-group-item repo-dropdown" ng-repeat="repo in p.repos" ng-mousedown="p.repo = repo.name">{{repo.name}}</li>
           </ul>
           <input type="text" class="form-control" id="myInput" placeholder="Search Respository..." ng-focus="p.getRepos(); p.focus = true" ng-model="p.repo" ng-blur="p.focus = false"/>
           <span class="input-group-btn">
@@ -43,14 +43,14 @@
 
     <hr class="bs-docs-separator">
 
-    <!-- <div class="panel panel-default" ng-repeat="commit in p.commits">
+    <div class="panel panel-default" ng-repeat="commit in p.commits">
       <div class="panel-heading">
         <h3 class="panel-title">Panel title</h3>
       </div>
       <div class="panel-body">
         {{commit}}
       </div>
-    </div> -->
+    </div>
 
 
     <!-- <div class="tabbable tabs-left">
