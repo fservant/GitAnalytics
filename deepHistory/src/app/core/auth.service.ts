@@ -3,9 +3,13 @@ import "rxjs/add/operator/toPromise";
 import { AngularFireAuth } from "angularfire2/auth";
 import * as firebase from "firebase/app";
 import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject } from "rxjs";
 
 @Injectable()
 export class AuthService {
+  private source = new BehaviorSubject('default token');
+  current = this.source.asObservable();
+
   constructor(public afAuth: AngularFireAuth, private http: HttpClient) {
   }
 
@@ -35,5 +39,9 @@ export class AuthService {
         reject();
       }
     });
+  }
+
+  changeToken(token: string) {
+    this.source.next(token);
   }
 }

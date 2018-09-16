@@ -2,7 +2,7 @@
 export class FirebaseUserModel {
   image: string;
   name: string;
-  repos: string[];
+  repos: any;
   username: string;
 
   constructor() {

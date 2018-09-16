@@ -11,5 +11,12 @@
     <div class="col-md-4">
       <button type="button" (click)="logout()" class="btn btn-link">Logout</button>
     </div>
+    <div>
+      <ul class="repos">
+        <li *ngFor="let repo of repos">
+         <span class="badge"></span>{{repo.name}}
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

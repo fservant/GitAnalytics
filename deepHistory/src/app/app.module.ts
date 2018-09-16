@@ -16,6 +16,7 @@ import { UserResolver } from "./user/user.resolver";
 import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from "./app.component";
+import { DataService } from "./services/shared-service";
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, UserComponent],
@@ -28,7 +29,7 @@ import { AppComponent } from "./app.component";
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     HttpClientModule
   ],
-  providers: [AuthService, UserService, UserResolver, AuthGuard],
+  providers: [AuthService, UserService, UserResolver, AuthGuard, DataService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

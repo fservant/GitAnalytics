@@ -26,6 +26,12 @@ export class GithubApiService {
         return this._http.get(url);
     }
 
+    public getAuthenticatedUserInfo(): Observable<Object> {
+        const url: string = `https://api.github.com/user`;
+
+        return this._http.get(url);
+    }
+
     private _generateRepositoryUrl(owner: string, repo: string) {
         return `https://api.github.com/repos/${owner}/${repo}`;
     }
