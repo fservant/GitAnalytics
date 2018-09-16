@@ -7,8 +7,6 @@ import { BehaviorSubject } from "rxjs";
 
 @Injectable()
 export class AuthService {
-  private source = new BehaviorSubject('default token');
-  current = this.source.asObservable();
 
   constructor(public afAuth: AngularFireAuth, private http: HttpClient) {
   }
@@ -19,7 +17,6 @@ export class AuthService {
       let provider = new firebase.auth.GithubAuthProvider();
       this.afAuth.auth.signInWithPopup(provider).then(
         res => {
-          console.log(res);
           resolve(res);
         },
         err => {
@@ -39,9 +36,5 @@ export class AuthService {
         reject();
       }
     });
-  }
-
-  changeToken(token: string) {
-    this.source.next(token);
   }
 }
