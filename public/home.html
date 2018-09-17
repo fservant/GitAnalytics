@@ -1,0 +1,39 @@
+<div class="jumbotron">
+  <h1 style="margin-left: 20px">Welcome to Authorship!</h1>
+  <p style="margin-left: 20px">Visualization of authorship wuthin the deep history of code</p>
+  <p style="margin-left: 20px"><a class="btn btn-primary btn-lg" href="#/about" role="button">Learn More</a></p>
+</div>
+
+<div class="row" style="margin-bottom:20px; margin-left: 20px">
+  <div class="col-lg-6">
+    <div class="input-group input-group-lg">
+      <span class="input-group-addon" id="sizing-addon1">@</span>
+      <input type="text" class="form-control" placeholder="Username" aria-describedby="sizing-addon1" ng-model="p.user">
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-6" style="margin-left: 30px; position: relative">
+    <div class="input-group input-group-lg">
+      <ul class="list-group" id="myList" style = "position: absolute; left: -23px; top: 46px; width: 100%" ng-show="p.focus">
+        <li class="list-group-item repo-dropdown" ng-repeat="repo in p.repos" ng-mousedown="p.repo = repo.name">{{repo.name}}</li>
+      </ul>
+      <input type="text" class="form-control" id="myInput" placeholder="Search Respository..." ng-focus="p.getRepos(); p.focus = true" ng-model="p.repo" ng-blur="p.focus = false"/>
+      <span class="input-group-btn">
+        <button class="btn btn-default" type="button" ng-click="p.getCommits()">Go!</button>
+      </span>
+    </div>
+  </div>
+</div>
+
+<hr class="bs-docs-separator">
+
+<div class="panel panel-default" ng-repeat="commit in p.commits">
+  <div class="panel-heading">
+    <h3 class="panel-title">Panel title</h3>
+  </div>
+  <div class="panel-body">
+    {{commit.commit}}
+  </div>
+</div>

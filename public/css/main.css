@@ -4,3 +4,7 @@
 .repo-dropdown{
   cursor: pointer;
 }
+
+.panel-body{
+  word-break:break-all
+}

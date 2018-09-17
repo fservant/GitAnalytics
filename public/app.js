@@ -1,4 +1,5 @@
-angular.module('authorship', [])
+angular.module('authorship', ['ngRoute'])
+
   .controller('primary', function($http, $timeout){
     var p = this;
     p.focus = false;
@@ -31,4 +32,16 @@ angular.module('authorship', [])
         console.log(err)
       })
     }
+
+
   })
+
+  .config(function($routeProvider) {
+    $routeProvider
+   .when('/', {
+     templateUrl: 'home.html',
+    })
+    .when('/about', {
+      templateUrl: 'about.html',
+    });
+})
