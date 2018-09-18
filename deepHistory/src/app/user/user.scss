@@ -10,13 +10,13 @@
 }
 
 .container {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    height: 100%;
-    width: 100%;
-    text-align: center;
-    flex: w
+
+  display: flex;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  align-items: center;
 }
 
 .search #textbox {
@@ -28,6 +28,7 @@
     border: none;
     border-bottom: 2px solid black;
     border-top: 2px solid white;
+    margin-bottom: 10px;
 }
 
 @font-face { font-family: 'Nexa Light'; src: url('/src/assets/fonts/Nexa\ Light.otf');}
@@ -66,15 +67,15 @@ ul {
 }
 
 .cards {
-
 }
 
 
 #repocolumn{
-    height: 300px; /*your fixed height*/
-    -webkit-column-count: 2;
-       -moz-column-count: 2;
-            column-count: 2; /*3 in those rules is just placeholder -- can be anything*/
+    height: 500px; /*your fixed height*/
+    -webkit-column-count: 3;
+       -moz-column-count: 3;
+            column-count: 3; /*3 in those rules is just placeholder -- can be anything*/
+
 }
 
 #repocolumn li {

@@ -19,19 +19,17 @@
 <div class="repositorypage">
   <h1 class="header">Deep History Analytics</h1>
 
-  <div class="container">
-    <div class="search">
+    <div class="search container">
       <input type="text" name="query" autocomplete="off" placeholder="Search for a Repository..." onfocus="this.placeholder = ''"
       onblur="this.placeholder = 'Search for a Repository...'" id="textbox">
     </div>
-      <div class="cards">
+      <div class="cards container">
         <ul class="repos" id="repocolumn">
           <li *ngFor="let repo of repos">
             <mat-card class="repocards" title={{repo.name}}>{{repo.name}}</mat-card>
           </li>
         </ul>
         </div>
-  </div>
   <button type="button" class="btn-logout" (click)="logout()">Logout</button>
 
 
