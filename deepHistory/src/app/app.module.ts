@@ -18,6 +18,8 @@ import {HttpClientModule} from '@angular/common/http';
 import { AppComponent } from "./app.component";
 import { DataService } from "./services/shared-service";
 
+import { MatCardModule } from '@angular/material';
+
 @NgModule({
   declarations: [AppComponent, LoginComponent, UserComponent],
   imports: [
@@ -27,7 +29,8 @@ import { DataService } from "./services/shared-service";
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
-    HttpClientModule
+    HttpClientModule,
+    MatCardModule
   ],
   providers: [AuthService, UserService, UserResolver, AuthGuard, DataService],
   bootstrap: [AppComponent]

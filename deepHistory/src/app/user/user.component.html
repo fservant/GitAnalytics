@@ -1,4 +1,5 @@
-<div class="container">
+
+<!-- <div class="container">
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
       <div class="card" style="width: 20rem;">
@@ -12,11 +13,26 @@
       <button type="button" (click)="logout()" class="btn btn-link">Logout</button>
     </div>
     <div>
-      <ul class="repos">
-        <li *ngFor="let repo of repos">
-         <span class="badge"></span>{{repo.name}}
-        </li>
-      </ul>
     </div>
   </div>
+</div> -->
+<div class="repositorypage">
+  <h1 class="header">Deep History Analytics</h1>
+
+  <div class="container">
+    <div class="search">
+      <input type="text" name="query" autocomplete="off" placeholder="Search for a Repository..." onfocus="this.placeholder = ''"
+      onblur="this.placeholder = 'Search for a Repository...'" id="textbox">
+    </div>
+      <div class="cards">
+        <ul class="repos" id="repocolumn">
+          <li *ngFor="let repo of repos">
+            <mat-card class="repocards" title={{repo.name}}>{{repo.name}}</mat-card>
+          </li>
+        </ul>
+        </div>
+  </div>
+  <button type="button" class="btn-logout" (click)="logout()">Logout</button>
+
+
 </div>

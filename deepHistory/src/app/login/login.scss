@@ -2,18 +2,24 @@
   text-align: center;
   font-size: 30px;
   margin-bottom: 40px;
+  font-weight: normal;
 }
-
-.row {
-  margin-top: 10px;
-  align-self: center;
-  width: 25%;
+@font-face { font-family: 'Nexa Light'; src: url('/src/assets/fonts/Nexa\ Light.otf');}
+.btn-login {
+  padding: 5px 10px 5px 10px;
+  white-space: nowrap;
+  border-radius: 5px;
+  background-color: transparent;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  font-family: 'Nexa Light'
 }
 
 .container {
-  width: 50%;
-  margin-left: 44%;
-  margin-right: 50%;
+  margin: 0 auto;
+  width: 100px;
+  padding-right: 228.69px;
 }
 
 .loginPage {

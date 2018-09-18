@@ -1,3 +1,82 @@
 .image {
-  width: 100%
+  width: 20%
+}
+
+.header {
+  font-weight: normal;
+  font-size: 30px;
+  margin-left: 40px;
+  margin-top: 20px;
+}
+
+.container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    flex: w
+}
+
+.search #textbox {
+    width: 325px;
+    color: black;
+    outline: none;
+    padding: 10px;
+    font-size: 20px;
+    border: none;
+    border-bottom: 2px solid black;
+    border-top: 2px solid white;
+}
+
+@font-face { font-family: 'Nexa Light'; src: url('/src/assets/fonts/Nexa\ Light.otf');}
+.btn-logout {
+  margin-top: 20px;
+  margin-right: 40px;
+  padding: 3px 20px 3px 20px;
+  border-radius: 5px;
+  background-color: transparent;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+  font-family: 'Nexa Light';
+  position:absolute;
+  top:0;
+  right:0;
+}
+
+ul {
+  list-style-type: none;
+  font-family: 'Nexa Light';
+}
+
+.repocards {
+  max-width: 100px;
+  min-width: 100px;
+  border-radius: 10px;
+  border: 1px solid black;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  padding: 15px 2px 15px 2px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cards {
+
+}
+
+
+#repocolumn{
+    height: 300px; /*your fixed height*/
+    -webkit-column-count: 2;
+       -moz-column-count: 2;
+            column-count: 2; /*3 in those rules is just placeholder -- can be anything*/
+}
+
+#repocolumn li {
+    display: inline-block; /*necessary*/
 }
