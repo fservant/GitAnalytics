@@ -2,10 +2,13 @@ import { Injectable } from "@angular/core";
 import "rxjs/add/operator/toPromise";
 import { AngularFireAuth } from "angularfire2/auth";
 import * as firebase from "firebase/app";
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class AuthService {
-  constructor(public afAuth: AngularFireAuth) {}
+
+  constructor(public afAuth: AngularFireAuth, private http: HttpClient) {
+  }
 
   // use the Firebase auth service to log in with Github
   doGithubLogin() {
