@@ -1,5 +1,7 @@
 
 
 function myFunction() {
-    document.getElementById('test').innterHTML = 'JS Worked!';
+    document.getElementById('test').innerHTML = 'JS Worked!';
 }
+
+window.onload = myFunction;
