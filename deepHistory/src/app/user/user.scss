@@ -10,6 +10,7 @@
 
 .repositorypage {
   height: 100vh;
+  width: 100vw;
 }
 
 .container {
@@ -19,7 +20,6 @@
     height: 10%;
     width: 100%;
     text-align: center;
-    
     padding-bottom: 20px;
     padding-top: 10px;
 }
@@ -79,12 +79,9 @@ ul {
   align-items: center;
   justify-content: center;
   height: 70%;
-  width: 60%;
+  width: 65%;
   text-align: center;
   margin: 0 auto;
-  
-  padding-bottom: 10px;
-  padding-top: 10px;
 }
 
 ::-webkit-scrollbar {
