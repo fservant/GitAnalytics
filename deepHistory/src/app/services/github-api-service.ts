@@ -23,7 +23,7 @@ export class GithubApiService {
     public getUserRepositoryList(owner: string): Promise<string[]> {
         return this._getUserRepositoryList(owner, 1);
     }
-    
+
     public getAuthenticatedUserInfo(): Observable<Object> {
         const url: string = `https://api.github.com/user`;
 
@@ -42,17 +42,15 @@ export class GithubApiService {
             ).then(
                 res => {
                     if (currentArray.length == 100) {
-                        console.log("returning from inside the recursive");
                         this._getUserRepositoryList(owner, page_number + 1).then(res2 => {
                             resolve(currentArray.concat(res2));
                         });
                     } else {
-                        console.log("returning from inside the out");
                         resolve(currentArray);
                     }
                 },
                 err => {
-                    console.log("Error getting repo list");
+                    console.log("Error getting repo list", err);
                     reject(err);
                 }
             )

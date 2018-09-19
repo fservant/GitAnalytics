@@ -33,7 +33,6 @@ export class UserComponent implements OnInit {
 
   displayRepos() {
     this.repos = this.user.repos;
-    console.log(this.repos);
   }
 
   setup() {
@@ -51,7 +50,6 @@ export class UserComponent implements OnInit {
       this.user.repos = res;
       this.displayRepos();
     });
-    console.log(this.user.repos);
   }
 
   ngOnInit(): void {
