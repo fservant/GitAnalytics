@@ -45,15 +45,11 @@ export class UserComponent implements OnInit {
     });
     //setup github login name
     this.user.username = this.loginName;
-    //Get repo names
-    this.githubApiService
-      .getUserRepositoryList(this.user.username)
-      .forEach(repo => {
-        this.user.repos = repo;
-      })
-      .then(res => {
-        this.displayRepos();
-      });
+    //Get repo names (Use Alibaba to test over 200 repos)
+    this.githubApiService.getUserRepositoryList(this.user.username).then(res => {
+      this.user.repos = res;
+      this.displayRepos();
+    });
   }
 
   ngOnInit(): void {

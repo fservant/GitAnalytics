@@ -15,7 +15,6 @@ export class UserResolver implements Resolve<UserModel> {
         res => {
           user.image = res.photoURL;
           user.name = res.displayName;
-          console.log(res);
           return resolve(user);
         },
         err => {
