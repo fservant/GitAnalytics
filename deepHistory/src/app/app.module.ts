@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { ReactiveFormsModule } from "@angular/forms";
+import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouterModule } from "@angular/router";
 import { AngularFireModule } from "angularfire2";
@@ -19,9 +19,10 @@ import { AppComponent } from "./app.component";
 import { DataService } from "./services/shared-service";
 
 import { MatCardModule } from '@angular/material';
+import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, UserComponent],
+  declarations: [AppComponent, LoginComponent, UserComponent, RepositorySearchPipe],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
@@ -30,7 +31,8 @@ import { MatCardModule } from '@angular/material';
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     HttpClientModule,
-    MatCardModule
+    MatCardModule,
+    FormsModule
   ],
   providers: [AuthService, UserService, UserResolver, AuthGuard, DataService],
   bootstrap: [AppComponent]
