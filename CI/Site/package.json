@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/fservant/GitAnalytics#readme",
   "dependencies": {
-    "express": "^4.16.3"
+    "express": "^4.16.3",
+    "jsonfile": "^5.0.0"
   }
 }
