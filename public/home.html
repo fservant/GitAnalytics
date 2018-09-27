@@ -1,6 +1,6 @@
 <div class="jumbotron">
   <h1 style="margin-left: 20px">Welcome to Authorship!</h1>
-  <p style="margin-left: 20px">Visualization of authorship wuthin the deep history of code</p>
+  <p style="margin-left: 20px">Visualization of authorship within the deep history of code</p>
   <p style="margin-left: 20px"><a class="btn btn-primary btn-lg" href="#/about" role="button">Learn More</a></p>
 </div>
 
@@ -22,7 +22,7 @@
       <input type="text" class="form-control" id="myInput" placeholder="Search Respository..." ng-focus="p.getRepos(); p.focus = true" ng-model="p.repo" ng-blur="p.focus = false"/>
       <span class="input-group-btn">
         <button class="btn btn-default" type="button" ng-click="p.getCommits()">Go!</button>
-      </span>
+      </span>``
     </div>
   </div>
 </div>
@@ -30,7 +30,7 @@
 <hr class="bs-docs-separator">
 
 <div class="panel panel-default" ng-repeat="commit in p.commits">
-  <div class="panel-heading">
+  <div class="panel-heading" id="title" background="#ccc">
     <h3 class="panel-title">Panel title</h3>
   </div>
   <div class="panel-body">
