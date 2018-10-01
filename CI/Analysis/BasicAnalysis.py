@@ -1,9 +1,8 @@
 import sys, json, requests, pandas
-token = sys.argv[5]
+token = sys.argv[4]
 owner = sys.argv[1]
 repo = sys.argv[2]
 builds_length = sys.argv[3]
-output = sys.argv[4]
 headers = {"Travis-API-Version": "3", "Authorization": "token "+token}
 #
 r = requests.get("https://api.travis-ci.org/repo/" + owner + "%2F" + repo + "/builds?limit="+builds_length, headers=headers)
@@ -24,5 +23,6 @@ df.columns = ['user', 'status']
 crosstab = pandas.crosstab(df.user, df.status)
 output_dict = crosstab.to_dict(orient='index')
 
+output = owner + "." + repo + "." + "analysis.json"
 with open(output, 'w') as outfile:
     json.dump(output_dict, outfile, indent=4)

@@ -1,4 +1,4 @@
-import sys, json, requests
+import sys, json, requests, pandas
 token = sys.argv[4]
 owner = sys.argv[1]
 repo = sys.argv[2]
@@ -14,9 +14,14 @@ if r.status_code != 200:
 pyresponse = r.json()
 
 builds = pyresponse['builds']
+pairs = [(build.get('event_type'),  build.get('state'))for build in builds if build.get('state') != 'started']
 
-simple = [{'number':b.get('number'), "hash":b.get('commit').get('sha')[:8], 'owner':b.get('created_by').get('login'), 'time':b.get('started_at'), 'status':b.get('state')} for b in builds]
+df = pandas.DataFrame(pairs)
+df.columns = ['event_type', 'status']
 
-output = owner + "." + repo + "." + "history.json"
+crosstab = pandas.crosstab(df.event_type, df.status)
+output_dict = crosstab.to_dict(orient='index')
+
+output = owner + "." + repo + "." + "event.type.json"
 with open(output, 'w') as outfile:
-    json.dump(simple, outfile, indent=4)
+    json.dump(output_dict, outfile, indent=4)
