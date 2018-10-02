@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+  <!-- Header file -->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Code Review</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  
+      <script src="main.js"></script>
+      <!-- <script src="jaja.js"></script> -->
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.2/angular.min.js"></script>
+      <script>
+        // ---------------------------------------------------------------------------
+        // This part to get the user information
+        var app=angular.module('app', []);
+
+        app.controller('MainCtrl', function($http){
+        var vm = this;
+        vm.data = false;
+        var tableData = [];
+        var authorNames = [];
+        var authorFreq = [];
+        var pieData = [];
+        var userDropdown = [];
+
+          /* All the data getting happens here */
+          vm.fetchData = function(user, repo) {
+            /* This first get gets everyone that sent a pull request to the Repo */
+            $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/pulls").then(function(res) {
+              vm.data = res.data;
+              for(i in vm.data) {
+                var pull = vm.data[i];
+                tableData.push({
+                  "number" : pull.number, //pull number
+                  "author" : pull.user.login, //name of author
+                  "authorProfile" : pull.user.html_url, //link to authors profile
+                  "title" : pull.title, //title of pull request
+                  "linkToPull" : pull.html_url, //link to the pull request
+                  "state" :  pull.state//"open" or "closed"
+
+                });
+                var iOf = authorNames.indexOf(pull.user.login);
+                if(iOf < 0) {
+                  authorNames.push(pull.user.login);
+                  authorFreq.push(1);
+                } else {
+                  var currFreq = authorFreq[iOf];
+                  authorFreq[iOf] = currFreq + 1;
+                }
+              }
+              for(var i = 0; i < authorNames.length; i++) {
+                pieData.push({
+                  "author": authorNames[i],
+                  "frequency": authorFreq[i]
+                });
+              }
+              tableData.sort(function(a, b) {
+                  return parseInt(a.number) - parseInt(b.number);
+              });
+              // vm.name = res.data.name || "NOT FOUND~ :(";
+              // vm.location = res.data.location || "NOT FOUND~ :(";
+              vm.loading = false;
+              localStorage.setItem("allPulls",JSON.stringify(vm.data));
+              localStorage.setItem("tableData", JSON.stringify(tableData));
+              localStorage.setItem("pieData", JSON.stringify(pieData));
+              window.location = "index2.html";
+            }),
+            /* This section gets all the users and contributions to fill out the dropdown list */
+            $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/contributors").then(function(res) {
+              for(i in res.data) {
+                var currUser = res.data[i];
+                userDropdown.push({
+                  "login" : currUser.login,
+                  "htmlUrl" : currUser.html_url,
+                  "contributions" : currUser.contributions
+                });
+              }
+              localStorage.setItem("users", JSON.stringify(userDropdown));
+            })
+          
+          }
+        });
+        // end the information part
+        // ----------------------------------------------------------------------------
+      </script>
+    </head>
+
+  <body ng-controller="MainCtrl as vm">
+    <!-- <nav class="navbar navbar-default" data-spy="affix" data-offset-top="197"> -->
+    <!-- <nav class="navbar navbar-exapnd-lg navbar-light bg-light"> -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" data-spy="affix" data-offset-top="197">
+      <a class="navbar-brand mb-0 h1" href="index.html">GitAnalytics</a>
+        
+    </nav>
+
+    <!-- Title -->
+    <h1>Code Review</h1>
+
+
+    <!-- The rest in the body!!! -->
+
+    <!-- Get the user's name and location here -->
+    <!-- <label for="enter">Enter a username</label>
+    <input type="text" ng-model="user.name" name="enter">
+    <label for="enter">Enter a repo name</label>
+    <input type="text" ng-model="repo.name" name="enter">
+    <button ng-click="vm.fetchData(user, repo)">GO!</button>
+      <h4 ng-if="vm.loading === true">Loading...</h4>
+    <h5 ng-hide="vm.data === false">{{tableData}}</h2> -->
+      <div class="center-block  ">
+      <div class = "align-self-center">
+        <div><input type="text" ng-model="user.name" placeholder="Git ID" name="enter"></div>
+        <div><input type="text" ng-model="repo.name" placeholder="Repository" name="enter"></div>
+        <div><button type ="button" class="btn btn-primary" ng-click="vm.fetchData(user, repo)">GO!</button></div>
+      </div>
+    </div>
+
+
+    <h4 ng-if="vm.loading === true">Loading...</h4>
+    <h5 ng-hide="vm.data === false">{{tableData}}</h2>
+  
+  </body>
+  <footer class = "footer" style="background-color:black; text-align:center; color:white;">
+    <p style="padding: 10px">Group GitAnalytics</p>
+  </footer>
+</html>
