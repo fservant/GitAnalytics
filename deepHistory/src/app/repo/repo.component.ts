@@ -1,14 +1,14 @@
-import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { Router } from "@angular/router";
+import { HttpClient } from "@angular/common/http";
+import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
-import { RepoSharedService } from '../services/repo-shared-service';
-import { GithubApiService } from '../services/github-api-service';
-import { DataService } from '../services/shared-service';
+import { RepoSharedService } from "../services/repo-shared-service";
+import { GithubApiService } from "../services/github-api-service";
+import { DataService } from "../services/shared-service";
 
 @Component({
-  selector: 'page-repo',
-  templateUrl: 'repo.component.html'
+  selector: "page-repo",
+  templateUrl: "repo.component.html"
 })
 export class RepoComponent implements OnInit {
   loginName: string;
@@ -23,14 +23,15 @@ export class RepoComponent implements OnInit {
     private router: Router,
     private dataService: DataService,
     private repoService: RepoSharedService
-  ) { 
-    this.repoService.current.subscribe(name => this.repoName = name); 
-    this.dataService.current.subscribe(name => this.loginName = name);
+  ) {
+    this.repoService.current.subscribe(name => (this.repoName = name));
+    this.dataService.current.subscribe(name => (this.loginName = name));
   }
 
   display(): void {
-    this.githubApiService.getRepositoryCommits(this.loginName, this.repoName)
-      .forEach( (commit : any) => {
+    this.githubApiService
+      .getRepositoryCommits(this.loginName, this.repoName)
+      .forEach((commit: any) => {
         this.commits = commit;
       });
   }
@@ -38,6 +39,10 @@ export class RepoComponent implements OnInit {
   ngOnInit(): void {
     if (this.repoName !== "default name") {
       this.display();
+      this.githubApiService.getDirectoryStructureForRepo(
+        this.repoName,
+        this.loginName
+      );
     }
   }
 }
