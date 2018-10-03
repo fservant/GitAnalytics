@@ -1,4 +1,3 @@
-import { RepoComponent } from './repo/repo.component';
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
@@ -12,16 +11,17 @@ import { AuthGuard } from "./core/auth.guard";
 import { AuthService } from "./core/auth.service";
 import { UserService } from "./core/user.service";
 import { LoginComponent } from "./login/login.component";
+import { RepoComponent } from "./repo/repo.component";
 import { UserComponent } from "./user/user.component";
 import { UserResolver } from "./user/user.resolver";
-import {HttpClientModule} from '@angular/common/http';
-
+import { HttpClientModule} from '@angular/common/http';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { AppComponent } from "./app.component";
 import { DataService } from "./services/shared-service";
-
 import { MatCardModule } from '@angular/material';
 import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
 import { RepoSharedService } from './services/repo-shared-service';
+
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RepoComponent, UserComponent, RepositorySearchPipe],
@@ -34,7 +34,8 @@ import { RepoSharedService } from './services/repo-shared-service';
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features
     HttpClientModule,
     MatCardModule,
-    FormsModule
+    FormsModule,
+    MatGridListModule
   ],
   providers: [AuthService, UserService, UserResolver, AuthGuard, DataService, RepoSharedService],
   bootstrap: [AppComponent]
