@@ -44,9 +44,55 @@ function tableCreate(blob) {
     }
     tbdy.append(tr);
     tbl.appendChild(tbdy);
+    var body = document.getElementsByName('body')[0];
+    var d3 = Object.assign({}, require("d3-format"), require("d3-geo"), require("d3-geo-projection"));
+    body.appendChild(d3);
+
+}
+
+
+function drawChart() {
+    // var gscript = document.createElement('script');
+    // gscript.setAttribute('src', "https://www.gstatic.com/charts/loader.js");
+    // document.head.appendChild(gscript);
+    // gscript.google.charts.load("current", {packages:["calendar"]});
+    // gscript.google.charts.setOnLoadCallback(drawChart);
+    //
+    // var dataTable = new google.visualization.DataTable();
+    // dataTable.addColumn({ type: 'date', id: 'Date' });
+    // dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+    // dataTable.addRows([
+    //     [ new Date(2012, 3, 13), 37032 ],
+    //     [ new Date(2012, 3, 14), 38024 ],
+    //     [ new Date(2012, 3, 15), 38024 ],
+    //     [ new Date(2012, 3, 16), 38108 ],
+    //     [ new Date(2012, 3, 17), 38229 ],
+    //     // Many rows omitted for brevity.
+    //     [ new Date(2013, 9, 4), 38177 ],
+    //     [ new Date(2013, 9, 5), 38705 ],
+    //     [ new Date(2013, 9, 12), 38210 ],
+    //     [ new Date(2013, 9, 13), 38029 ],
+    //     [ new Date(2013, 9, 19), 38823 ],
+    //     [ new Date(2013, 9, 23), 38345 ],
+    //     [ new Date(2013, 9, 24), 38436 ],
+    //     [ new Date(2013, 9, 30), 38447 ]
+    // ]);
+    //
+    // var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+    //
+    // var options = {
+    //     title: "Builds By Date",
+    //     height: 300,
+    // };
+    //
+    // chart.draw(dataTable, options);
 }
 loadJSON(function(response) {
     var actual_json = JSON.parse(response);
     tableCreate(actual_json);
 });
-window.onload = tableCreate;
+
+function makePage() {
+    drawChart();
+}
+window.onload = makePage;

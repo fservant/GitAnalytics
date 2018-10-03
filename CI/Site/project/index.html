@@ -21,8 +21,68 @@
   <link href="https://fonts.googleapis.com/css?family=Great+Vibes"
   rel="stylesheet">
   <script src='js/script.js'></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+      google.charts.load("current", {packages:["calendar"]});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+          var dataTable = new google.visualization.DataTable();
+          dataTable.addColumn({ type: 'date', id: 'Date' });
+          dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
+          dataTable.addRows([
+              [ new Date(2018, 9, 6), 1 ],
+              [ new Date(2018, 9, 5), 3 ],
+              [ new Date(2018, 9, 4), -1 ],
+              [ new Date(2018, 9, 7), 5],
+              [ new Date(2018, 9, 8), 3],
+              [new Date(2018, 9, 9), 2],
+              [new Date(2018, 9, 10), 0],
+              [new Date(2018, 9, 11), -1],
+              [new Date(2018, 9, 12), -2],
+              [new Date(2018, 9, 13), -1],
+              [new Date(2018, 9, 14), 2],
+              [new Date(2018, 9, 15), 3],
+              [new Date(2018, 9, 16), 4],
+              [new Date(2018, 9, 17), 5],
+              [new Date(2018, 9, 18), 4],
+              [new Date(2018, 9, 19), 1],
+              [new Date(2018, 9, 20), 3],
+              [new Date(2018, 9, 21), 1],
+              [new Date(2018, 9, 22), -1],
+              [new Date(2018, 9, 23), -5],
+              [new Date(2018, 9, 24), -2],
+              [new Date(2018, 9, 25), -5],
+              [new Date(2018, 9, 26), -1],
+              [new Date(2018, 9, 27), 0],
+              [new Date(2018, 9, 28), 1],
+              [new Date(2018, 9, 29), 3],
+              [new Date(2018, 9, 30), 4],
+              [new Date(2018, 9, 21), 5],
+              [new Date(2018, 9, 22), 4],
+              [new Date(2018, 9, 23), 5],
+              [new Date(2018, 9, 24), 2],
+              [new Date(2018, 9, 25), 1],
+              [new Date(2018, 9, 26), 0],
+              [new Date(2018, 9, 27), -2],
+              [new Date(2018, 9, 28), -3],
+              [new Date(2018, 9, 29), -3],
+              [new Date(2018, 9, 30), 3],
+          ]);
+
+          var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+          var options = {
+              title: "Builds By Date",
+              height: 300,
+          };
+
+          chart.draw(dataTable, options);
+      }
+  </script>
 </head>
 <body>
+
   <!--Main Menu-->
   <nav class=
   "navbar navbar-expand-md sticky-top navbar-light fixed-top bg-light popup">
@@ -51,8 +111,14 @@
   </nav>
   <div class="album">
     <h2 class="text-center" style=
-    "font-family:'Great Vibes'; font-size: 4rem; color: var(--charcoal);">
-    Project</h2>
+            "font-family:'Great Vibes'; font-size: 4rem; color: var(--charcoal);">
+      Project</h2>
+  <div class="container">
+    <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+  </div>
+
+
+
     <div class="container">
       <table class="table table-bordered table-hover table-condensed" id="builds">
         <thead><tr><th title="Field #1">number</th>
