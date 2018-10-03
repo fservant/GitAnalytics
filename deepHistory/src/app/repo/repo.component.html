@@ -1,9 +1,14 @@
-<div>
- <ul>
-   <li *ngFor="let commit of commits">
-     <mat-card>
-       {{commit.commit.message}}
-     </mat-card>
-   </li>
- </ul>
+<div class="repository_page">
+  <h1 class="header">Deep History Analytics</h1>
+  <div class="search container" ng-controller="myController">
+    <input type="text" name="query" autocomplete="off" placeholder="Search for a Commit..." onfocus="this.placeholder = ''"
+      onblur="this.placeholder = 'Search for a Commit...'" id="textbox" [(ngModel)]="searchTerm" />
+  </div>
+  <div class="cards_container">
+    <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
+      <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" class="repocards">{{commit.commit.message}}</mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <button type="button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page</button>
 </div>

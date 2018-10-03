@@ -8,7 +8,8 @@ import { DataService } from "../services/shared-service";
 
 @Component({
   selector: "page-repo",
-  templateUrl: "repo.component.html"
+  templateUrl: "repo.component.html",
+  styleUrls: ["repo.component.css"]
 })
 export class RepoComponent implements OnInit {
   loginName: string;
@@ -44,5 +45,9 @@ export class RepoComponent implements OnInit {
         this.loginName
       );
     }
+  }
+
+  returnBack() {
+    this.router.navigate(["/user"]);
   }
 }
