@@ -36,8 +36,8 @@ export class RepoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log("Initializing page with repo: " + this.repoName);
-
-    this.display();
+    if (this.repoName !== "default name") {
+      this.display();
+    }
   }
 }
