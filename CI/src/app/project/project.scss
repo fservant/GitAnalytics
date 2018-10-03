@@ -1,0 +1,283 @@
+body {
+  min-height: 75rem; /* Can be removed; just added for demo purposes */
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+.jumbotron {
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  margin-bottom: 0;
+  background-color: #fff;
+}
+
+.jumbotron p:last-child {
+  margin-bottom: 0;
+}
+
+.jumbotron-heading {
+  font-weight: 300;
+}
+
+.jumbotron .container {
+  max-width: 40rem;
+}
+
+.album {
+  min-height: 50rem; /* Can be removed; just added for demo purposes */
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+  background-color: #f7f7f7;
+}
+
+.card {
+  float: left;
+  width: 33.333%;
+  padding: .75rem;
+  margin-bottom: 2rem;
+  border: 0;
+}
+
+.card > img {
+  margin-bottom: .75rem;
+}
+
+.card-text {
+  font-size: 85%;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
+.bg-main {
+	background: url('../../assets/images/logo-name.png');
+	background-position: 50% 50%;
+	object-fit: fill;
+}
+
+.bg-g3 {
+	background-color: var(--g3)!important;
+}
+
+footer {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
+
+/*******************************CSS******************************/
+/*Define CSS variables*/
+:root {
+	--shadow:rgba(150, 150, 150, 1);
+	--g1:#E0E0E0;
+	--g2:#F5F5F5;
+	--g3:#FAFAFA;
+	--g4:#FFFFFF;
+	--white:#FFFFFF;
+	--light-grey: #f7f7f7;
+	--grey:#F5F5F5;
+	--dark-grey: #E0E0E0;
+	--color-1: #00BCD4;
+	--emerald1: #174F34;
+	--gold: #848365;
+	--charcoal: #262626;
+	--hokie-stone: #74767c;
+}
+
+.socialMedia{
+    width: 25px;
+    height: 25px;
+    margin: 1%;
+    margin-top: -15%;
+    margin-bottom: -15%;
+}
+
+.bg-g1 {
+	background-color: var(--g1)!important;
+}
+
+.bg-g2 {
+	background-color: var(--g2)!important;
+}
+
+.bg-g3 {
+	background-color: var(--g3)!important;
+}
+
+.bg-g4 {
+	background-color: var(--g4)!important;
+}
+
+.color-charcoal {
+	color: var(--charcoal);
+}
+
+body {
+  min-height: 75rem; /* Can be removed; just added for demo purposes */
+}
+
+.low-popup {
+	box-shadow:2px 4px 8px -6px var(--shadow);
+}
+
+.popup {
+    box-shadow:2px 6px 12px -6px var(--shadow);
+}
+
+.jumbotron {
+  /* padding-top: 6rem; */
+  /* padding-bottom: 6rem; */
+  margin-bottom: 0;
+  background-color: var(--g3);
+}
+
+.color-1-theme {
+	color: var(--g3);
+	background-color: var(--color-1);
+}
+
+.white-theme {
+	color: var(--charcoal);
+	background-color: var(--g3);
+}
+
+.text-box-kickoff {
+	color:var(--g4);
+	text-shadow: 1px 2px var(--charcoal);
+}
+
+.sz-30rem {
+	size: 30rem;
+}
+
+.txt-sz-header {
+	font-size: 5vw;
+}
+
+.margined {
+	margin-top: 3rem; margin-bottom: 3rem;
+}
+
+.pos-low {
+	position: relative;
+	top: 60%;
+	left: 0%;
+}
+
+.pos-kickoff {
+	position: relative; 
+	top:50%; 
+	left: -20%;
+}
+
+.gv-header {
+	font-family: 'Great Vibes';
+	font-size: 5rem;
+}
+
+.hero {
+	color: var(--g);
+	background-repeat: no-repeat;
+	background-size: contain;
+	width: 100%;
+	height: 600px;
+	/*object-fit: contain;*/
+}
+
+.main-banner {
+	 background-repeat: no-repeat; 
+	 background-size:cover; 
+	 background-position: 50% 50%; 
+	 width: 100%; 
+	 height: 600px;
+}
+
+
+.responsive-video {
+position: relative;
+padding-bottom: 56.25%;
+padding-top: 30px; overflow: hidden;
+}
+
+
+.responsive-video iframe,
+.responsive-video object,
+.responsive-video embed {
+position: absolute;
+top: 50%;
+left: 50%;
+width: 65%;
+height: 65%;
+transform: translate(-50%, -50%);
+}
+
+.bs-example {
+    position: relative;
+    padding: 45px 15px 15px;
+    margin: 0 -15px 15px;
+    border-color: #e5e5e5 #eee #eee;
+    border-style: solid;
+    border-width: 1px 0;
+    -webkit-box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,.05);
+}
+
+/* @media (min-width: 768px) */
+.bs-example {
+    margin-right: 0;
+    margin-left: 0;
+    background-color: #fff;
+    border-color: #ddd;
+    border-width: 1px;
+    border-radius: 4px 4px 0 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+* {
+	box-siding: border-box;
+}
+
+@font-face {
+    font-family: "Boris";
+    src: url("../src/boris_black_bloxx/BorisBlackBloxx.ttf") format("truetype");
+}
+.boris { 
+    font-family: "Boris", Verdana, Tahoma;
+}
+
+
+/* Style all font awesome icons */
+.fa {
+    padding: 20px;
+    font-size: 30px;
+    width: 55px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 50%;
+}
+
+/* Add a hover effect if you want */
+.fa:hover {
+    opacity: 0.7;
+}
+
+/* Set a specific color for each brand */
+
+/* Facebook */
+.fa-facebook {
+    background: #3B5998;
+    color: white;
+}
+
+/* Twitter */
+.fa-twitter {
+    background: #55ACEE;
+    color: white;
+}
