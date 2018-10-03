@@ -30,6 +30,12 @@ export class GithubApiService {
         return this._http.get(url);
     }
 
+    public getUserObjectWithId(id: string) {
+        const url: string = this._generateUserObjectWithIdUrl(id);
+
+        return this._http.get(url);
+    }
+
     private _getUserRepositoryList(owner: string, page_number: number): Promise<string[]> {
         return new Promise((resolve, reject) => {
             let currentArray: any;
@@ -67,5 +73,8 @@ export class GithubApiService {
 
     private _generateUserRepositoryUrl(owner: string, page_number: number) {
         return `https://api.github.com/users/${owner}/repos?per_page=100\&page=${page_number}`;
+    }
+    private _generateUserObjectWithIdUrl(id: string) {
+        return `https://api.github.com/user/${id}`;
     }
 }

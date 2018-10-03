@@ -64,7 +64,7 @@ export class UserComponent implements OnInit {
 
   tryGithubLogin() {
     this.authService.doGithubLogin().then(res => {
-      this.data.changeValue(res.additionalUserInfo.username);
+      this.data.changeValue(res);
       this.setup();
     },
     err => {
