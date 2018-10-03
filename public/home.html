@@ -21,19 +21,93 @@
       </ul>
       <input type="text" class="form-control" id="myInput" placeholder="Search Respository..." ng-focus="p.getRepos(); p.focus = true" ng-model="p.repo" ng-blur="p.focus = false"/>
       <span class="input-group-btn">
-        <button class="btn btn-default" type="button" ng-click="p.getCommits()">Go!</button>
-      </span>``
+        <button class="btn btn-default" type="button" ng-click="p.getAnalysis()">Go!</button>
+      </span>
     </div>
   </div>
 </div>
 
 <hr class="bs-docs-separator">
+<section ng-show="p.repoName">
+  <div class="jumbotron text-center">
+    <h1>{{p.repoName}}</h1>
+    <p>This is what we found about {{p.repoName}}</p>
+  </div>
 
-<div class="panel panel-default" ng-repeat="commit in p.commits">
+  <div class="panel panel-default">
+    <div class="panel-heading">Topics</div>
+    <div class="panel-body">
+      <div>
+        <span class="label label-info" style="font-size: 100%; white-space: normal; margin: 5px;" ng-repeat="topic in p.topics">{{topic}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="row" ng-repeat="contributorData in p.contributors">
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <img src={{contributorData.avatar_url}}>
+        <div class="caption">
+          <h3>{{contributorData.login}}</h3>
+          <p>...</p>
+          <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">Button</a></p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class=" panel panel-default" ng-repeat="contributorData in p.contributors" ng-init="open=false">
+    <div class="profile-panel">
+      <div class="pic" style="background: url({{contributorData.avatar_url}})">
+      </div>
+
+      <div class="name">
+        {{contributorData.login}}
+      </div>
+
+      <div class="details">
+        <div class="progress">
+          <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: {{(contributorData.contributions / p.sumOfContribution) * 100}}%">
+            <!-- <span class="sr-only">40% Complete (success)</span> -->
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="dd-arrow btn btn-info" ng-click="open=!open">
+        <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+      </button>
+
+    </div>
+    <div class="dd-info" ng-class="{open:open}">
+      <span>{{contributorData.contributions}}</span>
+      <span>{{p.sumOfContribution}}</span>
+    </div>
+
+  </div>
+
+  <div>
+        <!-- <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                 Messages per hour <span class="caret"></span>
+          </button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a class="m" value="2014-02-19" href="#">2014-02-19</a></li>
+              <li><a class="m" value="2014-02-20" href="#">2014-02-20</a></li>
+              <li><a class="m" value="2014-02-21" href="#">2014-02-21</a></li>
+              <li><a class="m" value="2014-02-22" href="#">2014-02-22</a></li>
+              <li><a class="m" value="2014-02-23" href="#">2014-02-23</a></li>
+            </ul>
+        </div> -->
+
+      <div id="mbars"></div>
+  </div>
+</section>
+
+<!-- <div class="panel panel-default" ng-repeat="commit in p.commits">
   <div class="panel-heading" id="title" background="#ccc">
     <h3 class="panel-title">Panel title</h3>
   </div>
   <div class="panel-body">
     {{commit.commit}}
   </div>
-</div>
+</div> -->
