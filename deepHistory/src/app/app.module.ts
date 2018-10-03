@@ -1,3 +1,4 @@
+import { RepoComponent } from './repo/repo.component';
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
@@ -20,9 +21,10 @@ import { DataService } from "./services/shared-service";
 
 import { MatCardModule } from '@angular/material';
 import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
+import { RepoSharedService } from './services/repo-shared-service';
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, UserComponent, RepositorySearchPipe],
+  declarations: [AppComponent, LoginComponent, RepoComponent, UserComponent, RepositorySearchPipe],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
@@ -34,7 +36,7 @@ import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
     MatCardModule,
     FormsModule
   ],
-  providers: [AuthService, UserService, UserResolver, AuthGuard, DataService],
+  providers: [AuthService, UserService, UserResolver, AuthGuard, DataService, RepoSharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
