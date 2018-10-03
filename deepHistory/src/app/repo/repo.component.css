@@ -1,4 +1,7 @@
-@font-face { font-family: 'Nexa Light'; src: url('/src/assets/fonts/Nexa\ Light.otf');}
+@font-face {
+  font-family: 'Nexa Light';
+  src: url('/src/assets/fonts/Nexa\ Light.otf');
+}
 
 .header {
   font-weight: normal;
@@ -24,31 +27,31 @@
   border: 1px solid black;
   font-family: 'Nexa Light';
   font-size: 150%;
-  position:absolute;
-  top:0;
-  right:0;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .container {
-    height: 10%;
-    width: 100%;
-    text-align: center;
-    padding-bottom: 20px;
-    padding-top: 10px;
+  height: 10%;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 20px;
+  padding-top: 10px;
 }
 
 .search #textbox {
-    width: 33%;
-    color: black;
-    outline: none;
-    padding: 10px;
-    border: none;
-    border-bottom: 2px solid black;
-    border-top: 2px solid white;
-    margin-bottom: 10px;
+  width: 33%;
+  color: black;
+  outline: none;
+  padding: 10px;
+  border: none;
+  border-bottom: 2px solid black;
+  border-top: 2px solid white;
+  margin-bottom: 10px;
 }
 
-.repocards{
+.repocards {
   border-radius: 20px;
   border: 1px solid black;
   font-size: 100%;
@@ -65,8 +68,18 @@
   overflow-x: hidden;
 }
 
+.cards_container_files {
+  padding-left: 3%;
+  float: right;
+  height: 70%;
+  width: 40%;
+  text-align: center;
+  margin: 0 auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
 ::-webkit-scrollbar {
   background: transparent;
   width: 0px;
 }
-

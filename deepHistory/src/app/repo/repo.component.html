@@ -10,5 +10,12 @@
     </mat-grid-list>
   </div>
 
-  <button type="button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page</button>
+  <div class="cards_container_files">
+    <mat-grid-list cols="1" rowHeight="20:1" gutterSize="2">
+      <mat-grid-tile *ngFor="let file of files" (click)="fileOnClick(file)">{{file.path}}</mat-grid-tile>
+    </mat-grid-list>
+  </div>
+
+  <button type="
+        button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page</button>
 </div>

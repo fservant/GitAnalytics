@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import { Observable } from "rxjs/Rx";
-import { map } from "rxjs/operators";
+import { Observable } from "rxjs";
+import "rxjs/add/operator/map";
 
 @Injectable()
 export class GithubApiService {
@@ -30,14 +30,25 @@ export class GithubApiService {
   }
 
   public getDirectoryStructureForRepo(repo: string, owner: string) {
-    // assuming we get the master branch
-    this.shaId = this.getMasterBranch(owner, repo);
-    console.log(this.shaId);
-    const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${
-      this.shaId
-    }?recursive=1`;
+    return new Promise((resolve, reject) => {
+      let shaId: string;
 
-    return this._http.get(url); // gets ur the tree of the files in the repo
+      this.getMasterBranch(owner, repo)
+        .forEach(datas => {
+          shaId = datas["object"].sha;
+        })
+        .then(
+          res => {
+            const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${shaId}?recursive=1`;
+            resolve(this._http.get(url));
+          },
+          err => {
+            console.log("Error getting files list for thhe repo", err);
+            reject(err);
+          }
+        );
+    });
+    // gets ur the tree of the files in the repo
   }
 
   public getUserObjectWithId(id: string) {
@@ -47,10 +58,9 @@ export class GithubApiService {
 
   public getMasterBranch(owner: string, repo: string) {
     const masterBranch = `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/master`;
-    return this._http
-      .get(masterBranch)
-      .pipe(map(response => response["objects"].sha));
+    return this._http.get(masterBranch);
   }
+
   public getAuthenticatedUserInfo(): Observable<Object> {
     const url: string = `https://api.github.com/user`;
 

@@ -5,6 +5,7 @@ import { Component, OnInit } from "@angular/core";
 import { RepoSharedService } from "../services/repo-shared-service";
 import { GithubApiService } from "../services/github-api-service";
 import { DataService } from "../services/shared-service";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "page-repo",
@@ -17,6 +18,7 @@ export class RepoComponent implements OnInit {
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
 
   commits: any;
+  files: any;
 
   constructor(
     public route: ActivatedRoute,
@@ -34,17 +36,26 @@ export class RepoComponent implements OnInit {
       .getRepositoryCommits(this.loginName, this.repoName)
       .forEach((commit: any) => {
         this.commits = commit;
+        console.log(this.commits);
       });
+    this.githubApiService
+      .getDirectoryStructureForRepo(this.repoName, this.loginName)
+      .then((res: Observable<Object>) =>
+        res.forEach(filesTree => {
+          this.files = filesTree["tree"];
+        })
+      );
   }
 
   ngOnInit(): void {
     if (this.repoName !== "default name") {
       this.display();
-      this.githubApiService.getDirectoryStructureForRepo(
-        this.repoName,
-        this.loginName
-      );
     }
+  }
+
+  fileOnClick(file: string) {
+    // TODO: pull the contents from the url.
+    window.location.href = file["url"];
   }
 
   returnBack() {
