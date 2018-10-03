@@ -8,11 +8,14 @@
     <div class="cards cards_container">
       <ul class="repos" id="repocolumn">
         <li *ngFor="let repo of repos | repoFilter:searchTerm">
-          <mat-card class="repocards" title={{repo.name}}><button type="button" (click)="cardOnClick(repo.name)">{{repo.name}}</button></mat-card>
+          <mat-card class="repocards" title={{repo.name}} (click)="cardOnClick(repo.name)">{{repo.name}}</mat-card>
         </li>
       </ul>
     </div>
 
   <button type="button" class="btn-logout" (click)="logout()">Logout</button>
 
+  <div>
+    <page-repo hidden></page-repo>
+  </div>
 </div>

@@ -12,7 +12,6 @@ import { AuthGuard } from "./core/auth.guard";
 import { AuthService } from "./core/auth.service";
 import { UserService } from "./core/user.service";
 import { LoginComponent } from "./login/login.component";
-import { RepoComponent } from "./repo/repo.component";
 import { UserComponent } from "./user/user.component";
 import { UserResolver } from "./user/user.resolver";
 import {HttpClientModule} from '@angular/common/http';
@@ -22,6 +21,7 @@ import { DataService } from "./services/shared-service";
 
 import { MatCardModule } from '@angular/material';
 import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
+import { RepoSharedService } from './services/repo-shared-service';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, RepoComponent, UserComponent, RepositorySearchPipe],
@@ -36,7 +36,7 @@ import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
     MatCardModule,
     FormsModule
   ],
-  providers: [AuthService, UserService, UserResolver, AuthGuard, DataService],
+  providers: [AuthService, UserService, UserResolver, AuthGuard, DataService, RepoSharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

@@ -8,6 +8,7 @@ import { UserModel } from "../core/user.model";
 import { HttpClient } from "@angular/common/http";
 import { GithubApiService } from "../services/github-api-service";
 import { DataService } from "../services/shared-service";
+import { RepoSharedService } from "../services/repo-shared-service";
 
 @Component({
   selector: "page-user",
@@ -28,6 +29,7 @@ export class UserComponent implements OnInit {
     private location: Location,
     private httpClient: HttpClient,
     private data: DataService,
+    private repoData: RepoSharedService,
     private router: Router
   ) { this.data.current.subscribe(name => this.loginName = name); }
 
@@ -82,8 +84,8 @@ export class UserComponent implements OnInit {
     );
   }
 
-  cardOnClick(repoName: any) {
-    console.log("About to call route");
+  cardOnClick(repoName: string) {
+    this.repoData.changeValue(repoName);
     this.router.navigate(["/repo"]);
   }
 }
