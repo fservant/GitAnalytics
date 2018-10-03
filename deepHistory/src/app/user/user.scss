@@ -58,8 +58,8 @@ ul {
 }
 
 .repocards {
-  max-width: 300px;
-  min-width: 300px;
+  max-width:100%;
+  min-width: 100%;
   border-radius: 20px;
   border: 1px solid black;
   padding: 50px 2px 50px 2px;
@@ -72,7 +72,9 @@ ul {
 
 .cards {
   height: 50%;
+  max-width: 50%;
   overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .cards_container {
@@ -92,7 +94,8 @@ ul {
 #repocolumn{
     display: grid;
     grid-template-areas: "a a a";
-    grid-gap: 70px;
-    grid-auto-rows: 100px;
+    grid-gap: 1em;
+    // grid-auto-rows: 100px;
+
 }
 

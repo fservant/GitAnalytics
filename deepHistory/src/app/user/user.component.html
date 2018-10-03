@@ -8,7 +8,7 @@
     <div class="cards cards_container">
       <ul class="repos" id="repocolumn">
         <li *ngFor="let repo of repos | repoFilter:searchTerm">
-          <mat-card class="repocards" title={{repo.name}}>{{repo.name}}</mat-card>
+          <mat-card class="repocards" title={{repo.name}}><button type="button" (click)="cardOnClick(repo.name)">{{repo.name}}</button></mat-card>
         </li>
       </ul>
     </div>

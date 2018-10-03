@@ -81,4 +81,9 @@ export class UserComponent implements OnInit {
       }
     );
   }
+
+  cardOnClick(repoName: any) {
+    console.log("About to call route");
+    this.router.navigate(["/repo"]);
+  }
 }
