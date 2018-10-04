@@ -67,6 +67,12 @@ export class GithubApiService {
     return this._http.get(url);
   }
 
+  /**
+   * Sends a promise back to caller containing the list of ALL repos from the user. 
+   * 
+   * @param owner                     login github name of wanted user              : string
+   * @param page_number               the current page_number, that starts from 1   : number
+   */
   private _getUserRepositoryList(
     owner: string,
     page_number: number
@@ -78,15 +84,18 @@ export class GithubApiService {
       this._http
         .get<string[]>(url)
         .forEach(repo => {
+          //repo here is a LIST of arrays
           currentArray = repo;
         })
-        .then(
+        .then(  //array is resolved in then 
           res => {
+            //If length is 100, there is a possibility of another page, hence concatenate the
+            //current array with a recursive call (increase in page number)
             if (currentArray.length == 100) {
               this._getUserRepositoryList(owner, page_number + 1).then(res2 => {
                 resolve(currentArray.concat(res2));
               });
-            } else {
+            } else {  //Gets here when we are at the last possible page of repos
               resolve(currentArray);
             }
           },
