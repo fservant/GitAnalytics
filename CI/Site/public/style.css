@@ -186,11 +186,11 @@ transform: translate(-50%, -50%);
 }
 
 @font-face {
-    font-family: "Boris";
-    src: url("../src/boris_black_bloxx/BorisBlackBloxx.ttf") format("truetype");
+	font-family: 'Patua One', cursive;
 }
-.boris { 
-    font-family: "Boris", Verdana, Tahoma;
+
+.patua {
+	font-family: 'Patua One', Verdana, Tahoma;
 }
 
 
