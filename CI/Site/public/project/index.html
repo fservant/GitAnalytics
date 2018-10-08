@@ -15,11 +15,24 @@
   "sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
   crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="../style.css">
-  <link rel="stylesheet" type="text/css" href="./style.css">
+  <link rel="stylesheet" type="text/css" href="style.css">
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel=
   "stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Great+Vibes"
   rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyDtPErxE8ob3bR0k3E2iJF1aNVfpnq9Skk",
+            authDomain: "continuous-integration-a9f3c.firebaseapp.com",
+            databaseURL: "https://continuous-integration-a9f3c.firebaseio.com",
+            projectId: "continuous-integration-a9f3c",
+            storageBucket: "continuous-integration-a9f3c.appspot.com",
+            messagingSenderId: "821526453812"
+        };
+        firebase.initializeApp(config);
+    </script>
   <script src='js/script.js'></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript">
@@ -87,14 +100,14 @@
   <nav class=
   "navbar navbar-expand-md sticky-top navbar-light fixed-top bg-light popup">
     <a class="navbar-brand" href=
-    "../index.html"><img src=
+    "../../../index.html"><img src=
     "../img/logo.png" width="60" height="60" class=
     "d-inline-block align-top" alt=""></a>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a class="nav-link" href=
-          "../project/index.html">PROJECT</a>
+          "/index.html">PROJECT</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href=
