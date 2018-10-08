@@ -10,6 +10,7 @@
 
 .repositorypage {
   height: 100vh;
+  width: 100vw;
 }
 
 .container {
@@ -19,7 +20,6 @@
     height: 10%;
     width: 100%;
     text-align: center;
-    
     padding-bottom: 20px;
     padding-top: 10px;
 }
@@ -56,35 +56,35 @@ ul {
   list-style-type: none;
   font-family: 'Nexa Light';
 }
-
-.repocards {
-  max-width: 300px;
-  min-width: 300px;
+.repocards{
   border-radius: 20px;
   border: 1px solid black;
-  padding: 50px 2px 50px 2px;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 200%;
+}
+.grid_text{
+  font-size: 150%;
 }
 
-.cards {
-  height: 50%;
-  overflow-y: scroll;
-}
+// .repocards {
+//   width: 300px;
+//   border-radius: 20px;
+//   border: 1px solid black;
+//   padding: 50px 2px 50px 2px;
+//   text-align: center;
+//   white-space: nowrap;
+//   overflow: hidden;
+//   text-overflow: ellipsis;
+//   font-size: 200%;
+// }
 
 .cards_container {
   align-items: center;
   justify-content: center;
   height: 70%;
-  width: 60%;
+  width: 65%;
   text-align: center;
   margin: 0 auto;
-  
-  padding-bottom: 10px;
-  padding-top: 10px;
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -92,10 +92,9 @@ ul {
   width: 0px;
 }
 
-#repocolumn{
-    display: grid;
-    grid-template-areas: "a a a";
-    grid-gap: 70px;
-    grid-auto-rows: 100px;
-}
+// #repocolumn{
+//     display: grid;
+//     grid-template-areas: "a a a";
+//     grid-gap: 1em;
+// }
 

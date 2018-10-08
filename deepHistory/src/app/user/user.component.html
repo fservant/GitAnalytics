@@ -5,14 +5,15 @@
       <input type="text" name="query" autocomplete="off" placeholder="Search for a Repository..." onfocus="this.placeholder = ''"
       onblur="this.placeholder = 'Search for a Repository...'" id="textbox" [(ngModel)]="searchTerm"/>
     </div>
-    <div class="cards cards_container">
-      <ul class="repos" id="repocolumn">
-        <li *ngFor="let repo of repos | repoFilter:searchTerm">
-          <mat-card class="repocards" title={{repo.name}}>{{repo.name}}</mat-card>
-        </li>
-      </ul>
+    <div class="cards_container">
+        <mat-grid-list cols="3" rowHeight="2.5:1" gutterSize="10">
+          <mat-grid-tile *ngFor="let repo of repos | repoFilter:searchTerm" class="repocards" title={{repo.name}} (click)="cardOnClick(repo.name)" >{{repo.name}}</mat-grid-tile>
+        </mat-grid-list>
     </div>
 
   <button type="button" class="btn-logout" (click)="logout()">Logout</button>
 
+  <div>
+    <page-repo hidden></page-repo>
+  </div>
 </div>
