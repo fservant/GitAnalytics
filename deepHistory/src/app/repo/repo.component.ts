@@ -55,6 +55,11 @@ export class RepoComponent implements OnInit {
 
   fileOnClick(file: string) {
     // TODO: pull the contents from the url.
+    this.githubApiService.getHtmlContentOfFiles(
+      file["url"],
+      this.repoName,
+      this.loginName
+    );
     window.location.href = file["url"];
   }
 

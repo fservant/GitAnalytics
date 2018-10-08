@@ -33,13 +33,14 @@ export class GithubApiService {
     return new Promise((resolve, reject) => {
       let shaId: string;
 
+      // fetch the shaId to get list of all files
       this.getMasterBranch(owner, repo)
         .forEach(datas => {
           shaId = datas["object"].sha;
         })
         .then(
           res => {
-            const url = `https://api.github.com/repos/${owner}/${repo}/git/trees/${shaId}?recursive=1`;
+            const url = this._generateAllFilesUrl(owner, repo, shaId);
             resolve(this._http.get(url));
           },
           err => {
@@ -57,22 +58,23 @@ export class GithubApiService {
   }
 
   public getMasterBranch(owner: string, repo: string) {
-    const masterBranch = `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/master`;
+    const masterBranch = this._generateRespositoryBranchUrl(
+      repo,
+      owner,
+      "master"
+    );
     return this._http.get(masterBranch);
   }
 
   public getAuthenticatedUserInfo(): Observable<Object> {
-    const url: string = `https://api.github.com/user`;
-
+    const url: string = this._generateUserUrl();
     return this._http.get(url);
   }
 
-  /**
-   * Sends a promise back to caller containing the list of ALL repos from the user. 
-   * 
-   * @param owner                     login github name of wanted user              : string
-   * @param page_number               the current page_number, that starts from 1   : number
-   */
+  public getHtmlContentOfFiles(blob: string, repo: string, owner: string) {
+    // construct the header to get the file with the whole html component;
+  }
+
   private _getUserRepositoryList(
     owner: string,
     page_number: number
@@ -87,7 +89,8 @@ export class GithubApiService {
           //repo here is a LIST of arrays
           currentArray = repo;
         })
-        .then(  //array is resolved in then 
+        .then(
+          //array is resolved in then
           res => {
             //If length is 100, there is a possibility of another page, hence concatenate the
             //current array with a recursive call (increase in page number)
@@ -95,7 +98,8 @@ export class GithubApiService {
               this._getUserRepositoryList(owner, page_number + 1).then(res2 => {
                 resolve(currentArray.concat(res2));
               });
-            } else {  //Gets here when we are at the last possible page of repos
+            } else {
+              //Gets here when we are at the last possible page of repos
               resolve(currentArray);
             }
           },
@@ -110,14 +114,32 @@ export class GithubApiService {
   private _generateUserRepositoryUrl(owner: string, page_number: number) {
     return `https://api.github.com/users/${owner}/repos?per_page=100\&page=${page_number}`;
   }
+
   private _generateUserObjectWithIdUrl(id: string) {
     return `https://api.github.com/user/${id}`;
   }
+
   private _generateRepositoryUrl(owner: string, repo: string) {
     return `https://api.github.com/repos/${owner}/${repo}`;
   }
 
   private _generateRepositoryCommitsUrl(owner: string, repo: string) {
     return `https://api.github.com/repos/${owner}/${repo}/commits`;
+  }
+
+  private _generateRespositoryBranchUrl(
+    owner: string,
+    repo: string,
+    branch: string
+  ) {
+    return `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`;
+  }
+
+  private _generateAllFilesUrl(owner: string, repo: string, shaId: string) {
+    return `https://api.github.com/repos/${owner}/${repo}/git/trees/${shaId}?recursive=1`;
+  }
+
+  private _generateUserUrl() {
+    return `https://api.github.com/user`;
   }
 }
