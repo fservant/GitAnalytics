@@ -36,7 +36,6 @@ export class RepoComponent implements OnInit {
       .getRepositoryCommits(this.loginName, this.repoName)
       .forEach((commit: any) => {
         this.commits = commit;
-        console.log(this.commits);
       });
     this.githubApiService
       .getDirectoryStructureForRepo(this.repoName, this.loginName)
@@ -54,13 +53,9 @@ export class RepoComponent implements OnInit {
   }
 
   fileOnClick(file: string) {
-    // TODO: pull the contents from the url.
-    this.githubApiService.getHtmlContentOfFiles(
-      file["url"],
-      this.repoName,
-      this.loginName
-    );
-    window.location.href = file["url"];
+    this.githubApiService
+      .getHtmlContentOfFiles(this.loginName, this.repoName, file["path"])
+      .then(res => console.log(res)); // TODO: remove this and put in a new window
   }
 
   returnBack() {

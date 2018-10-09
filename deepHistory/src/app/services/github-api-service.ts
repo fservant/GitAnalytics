@@ -71,7 +71,16 @@ export class GithubApiService {
     return this._http.get(url);
   }
 
-  public getHtmlContentOfFiles(blob: string, repo: string, owner: string) {
+  public getHtmlContentOfFiles(owner: string, repo: string, path: string) {
+    return this._http
+      .get(this._generateHtmlContentUrl(owner, repo, path), {
+        headers: {
+          "Content-Type": "application/json",
+          accept: "application/vnd.github.VERSION.full+json"
+        },
+        responseType: "text"
+      })
+      .toPromise();
     // construct the header to get the file with the whole html component;
   }
 
@@ -141,5 +150,9 @@ export class GithubApiService {
 
   private _generateUserUrl() {
     return `https://api.github.com/user`;
+  }
+
+  private _generateHtmlContentUrl(owner: string, repo: string, path: string) {
+    return `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
   }
 }
