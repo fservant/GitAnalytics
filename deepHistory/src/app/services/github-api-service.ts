@@ -59,8 +59,8 @@ export class GithubApiService {
 
   public getMasterBranch(owner: string, repo: string) {
     const masterBranch = this._generateRespositoryBranchUrl(
-      repo,
       owner,
+      repo,
       "master"
     );
     return this._http.get(masterBranch);
