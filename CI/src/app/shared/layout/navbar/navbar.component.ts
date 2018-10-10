@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from "../../../core/http/user/user.service"; 
 import { AuthService } from "../../../core/authentication/auth.service";
+import { DataService } from "../../../core/services/data-service";
 
 @Component({
   selector: 'layout-navbar',
@@ -8,17 +9,23 @@ import { AuthService } from "../../../core/authentication/auth.service";
 })
 
 export class NavbarComponent implements OnInit {
-  userImageUrl: String;
+  loginname: String 
 
-  constructor(public userService: UserService, public authService: AuthService) {}
+  constructor(public userService: UserService, public authService: AuthService, private data: DataService) { 
+    this.loginname = localStorage.getItem("username");
+    debugger;
+  }
 
   setup() {
-    this.userImageUrl = "http://github.com/" + localStorage.getItem("username") + ".png";
+    this.loginname = localStorage.getItem("username");
   }
 
   ngOnInit(): void {
+    debugger;
     if (localStorage.getItem("username") !== "default name") {
       this.setup();
     }
   }
+
+  
 }

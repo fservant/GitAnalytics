@@ -24,6 +24,7 @@ export class AuthService {
               this.githubApiService.getUserRepositoryList(userObject.login).then(res => {
                 localStorage.setItem("currentUserRepos", JSON.stringify(res));
               })
+              debugger;
               localStorage.setItem("username", userObject.login);
               resolve(userObject.login);
             });

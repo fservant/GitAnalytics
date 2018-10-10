@@ -16,7 +16,7 @@ export class AppComponent {
     
     router.events.forEach((event) => {
         if(event instanceof NavigationStart) {
-            this.showNavbar = (event.url !== "/login");
+            this.showNavbar = (!(event.url === "/login" || event.url === "/"));
             this.showHeader = (event.url === "/login" || event.url === "/");
         }
       });

@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   tryGithubLogin() {
     this.authService.doGithubLogin().then(res => {
       this.data.changeValue(res);
-      debugger;
+      localStorage.setItem("username", res);
       this.router.navigate(["/home"]);
     });
   }
