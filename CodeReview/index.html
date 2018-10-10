@@ -97,12 +97,12 @@
     <!-- <nav class="navbar navbar-default" data-spy="affix" data-offset-top="197"> -->
     <!-- <nav class="navbar navbar-exapnd-lg navbar-light bg-light"> -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light" data-spy="affix" data-offset-top="197">
-      <a class="navbar-brand mb-0 h1" href="index.html">GitAnalytics</a>
+      <a class="navbar-brand mb-0 h1" href="index.html">GitAnalytics.CodeReview</a>
         
     </nav>
 
     <!-- Title -->
-    <h1>Code Review</h1>
+    <!-- h1>Code Review</h1>
 
 
     <!-- The rest in the body!!! -->
@@ -117,6 +117,7 @@
     <h5 ng-hide="vm.data === false">{{tableData}}</h2> -->
       <div class="center-block  ">
       <div class = "align-self-center">
+        <div><img src="title.jpg" alt="Label Icon" style="width:120px;height:120px;"></div>
         <div><input type="text" ng-model="user.name" placeholder="Git ID" name="enter"></div>
         <div><input type="text" ng-model="repo.name" placeholder="Repository" name="enter"></div>
         <div><button type ="button" class="btn btn-primary" ng-click="vm.fetchData(user, repo)">GO!</button></div>
