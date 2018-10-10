@@ -49,6 +49,8 @@ export class RepoComponent implements OnInit {
   ngOnInit(): void {
     if (this.repoName !== "default name") {
       this.display();
+    } else {
+      this.router.navigate(["/user"]);
     }
   }
 
