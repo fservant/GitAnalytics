@@ -76,7 +76,7 @@ export class GithubApiService {
       .get(this._generateHtmlContentUrl(owner, repo, path), {
         headers: {
           "Content-Type": "application/json",
-          accept: "application/vnd.github.VERSION.full+json"
+          accept: "application/vnd.github.VERSION.html"
         },
         responseType: "text"
       })
