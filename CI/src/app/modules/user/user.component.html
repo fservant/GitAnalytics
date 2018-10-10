@@ -1,0 +1,48 @@
+<div class="text-center" style="padding:20px">
+    <div class="row">
+        <!-- Grid column -->
+        <div class="col-md-10 col-lg-8 col-xl-5 mx-xl-auto">
+            <section class="form-elegant scrollbar-light-blue">
+                <!--Form without header-->
+                <div class="card">
+                    <div class="card-body mx-4">
+                        <!--Header-->
+                        <div class="text-center">
+                            <h3 class="dark-grey-text mb-5"><strong>User Info</strong></h3>
+                        </div>
+                        <!--Body-->
+                        <div class="md-form">
+                            <label>Username: {{user.username}}</label>
+                        </div>
+                        <div>
+                            <label>Repository count: {{(repos) ? repos.length : 0}}</label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- Grid column -->
+        <div class="col-md-10 col-lg-8 col-xl-5 mx-xl-auto">
+                <section class="form-elegant scrollbar-light-blue">
+                <!--Form without header-->
+                <div class="card">
+                    <div class="card-body mx-4">
+                        <div class="text-center">
+                            <h3 class="dark-grey-text mb-5"><strong>Repositories</strong></h3>
+                        </div>
+                        <!--Body-->
+                        <div class="md-form">
+                            <div class="cards_container" *ngFor="let repo of repos | repoFilter:searchTerm">
+                                <a class="list-group-item list-group-item-action" title={{repo.name}}>{{repo.name}}</a>
+                            </div>            
+                        </div>
+                    </div>
+                </div>
+                <!--/Form without header-->
+            </section>
+            <!--Section: Live preview-->
+        </div>
+        <!-- Grid column -->
+    </div>
+    <!-- Grid row -->
+</div>

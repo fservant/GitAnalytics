@@ -1,3 +1,26 @@
+
 <main>
+  <head>
+    <meta name="generator" content=
+    "HTML Tidy for HTML5 for Linux version 5.7.3">
+    <meta charset="utf-8">
+    <title>Git Analytics - Continuous Integration</title>
+    <!-- Required meta tags -->
+    <meta name="viewport" content=
+    "width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href=
+    "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+    integrity=
+    "sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M"
+    crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel=
+    "stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Great+Vibes"
+    rel="stylesheet">
+  </head>
+  <layout-header *ngIf="showHeader"></layout-header>
+  <layout-navbar *ngIf="showNavbar"></layout-navbar>
   <router-outlet></router-outlet>
+  <layout-footer></layout-footer>
 </main>
