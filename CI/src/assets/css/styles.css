@@ -1,15 +1,38 @@
-  .body {
+* {
+    box-sizing: border-box;
+   }
+   *:before,
+   *:after {
+    box-sizing: border-box;
+   }
+   html,
+   body {
     height: 100%;
-  }
+    position: relative;
+   }
+   .main-container {
+    min-height: 100vh; /* will cover the 100% of viewport */
+    overflow: hidden;
+    display: block;
+    position: relative;
+    padding-bottom: 40px; /* height of your footer */
+   }
 
+   footer {
+    height: 40px;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 0;
+    background-color: white;
+  }
+    
   .navbar {
     margin-bottom: 0;
   }
 
   .jumbotron {
-    padding-top: 6rem;
-    padding-bottom: 6rem;
-    margin-bottom: 0;
+    padding-top: 4rem;
     background-color: #fff;
   }
   
@@ -37,15 +60,6 @@
       background-color: var(--g3)!important;
   }
   
-  footer {
-    margin-top: 40px;
-    width: 100%;
-    text-align: center;
-  }
-  
-  footer p {
-    margin-bottom: .25rem;
-  }
   
   /*******************************CSS******************************/
   /*Define CSS variables*/
@@ -103,8 +117,7 @@
   }
   
   .color-1-theme {
-      color: var(--g3);
-      background-color: var(--color-1);
+      background-color: var(--color-1) !important;
   }
   
   .white-theme {
