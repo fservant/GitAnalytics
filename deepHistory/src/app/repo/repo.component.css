@@ -16,6 +16,17 @@
   width: 100vw;
 }
 
+.fileCommitButtons {
+  border-radius: 5px;
+  margin-right: 10px;
+  background-color: transparent;
+  color: black;
+  border: 1px solid black;
+  font-family: 'Nexa Light';
+  font-size: 150%;
+  background-color:#D0D0D0;
+}
+
 .btn-previous-page {
   margin-top: 20px;
   margin-right: 40px;
@@ -67,23 +78,22 @@
   overflow-y: scroll;
   overflow-x: hidden;
 }
-
-.cards_container_files {
-  padding-left: 3%;
-  float: right;
-  height: 70%;
-  width: 40%;
-  text-align: center;
-  margin: 0 auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
-}
-
 ::-webkit-scrollbar {
   background: transparent;
   width: 0px;
 }
 
+[hidden] {
+  display:none;
+}
+/*
+FOR THE BLUE OUTLINE ON BUTTONS */
+button:focus {
+  outline:0;
+  background-color:white;
+  /* color:#D0D0D0; */
+  color:black;
+}
 pre.code {
   display: table;
   table-layout: fixed;
