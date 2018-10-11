@@ -17,6 +17,7 @@
 }
 
 .fileCommitButtons {
+  float:left;
   border-radius: 5px;
   margin-right: 10px;
   background-color: transparent;
@@ -69,44 +70,28 @@
   font-size: 100%;
 }
 
-.cards_container {
-  /*
-  float: left;
-    width: 40%; */
- padding-left: 1.5%;
-
+.center_container {
   height: 80%;
-
   text-align: center;
   margin: 0 auto;
   overflow-y: scroll;
   overflow-x: hidden;
   position: absolute;
-  left: 0px;
-  width: 50%;
-
   border-bottom: 1px solid #D0D0D0;
-
-border-top: 1px solid #D0D0D0;
+  border-top: 1px solid #D0D0D0;
 }
 
-.table_container {
-  /* padding-left: 3%;
-  float: right;
-  width: 40%; */
-border-bottom: 1px solid #D0D0D0;
-border-top: 1px solid #D0D0D0;
-  height: 80%;
-  text-align: center;
-  margin: 0 auto;
-  overflow-y: scroll;
-  overflow-x: hidden;
+#cards_container {
+  padding-left: 1.5%;
+  left: 0px;
+  width: 50%;
+}
 
-    position: absolute;
+#table_container {
   right: 0px;
   width: 50%;
-    padding-right: 1.5%;
-    padding-left: 1.5%;
+  padding-right: 1.5%;
+  padding-left: 1.5%;
 }
 
 ::-webkit-scrollbar {
@@ -122,16 +107,13 @@ FOR THE BLUE OUTLINE ON BUTTONS */
 button:focus {
   outline:0;
   background-color:white;
-  /* color:#D0D0D0; */
   color:black;
 }
 pre.code {
-
   display: table;
   table-layout: fixed;
   width: 100%;
   white-space: pre-wrap;
-
   border: solid 1px black;
   border-collapse: collapse;
 }
@@ -175,9 +157,6 @@ pre.code code {
   display: table-cell;
   text-align: left;
   padding: 3px;
-  /* white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; */
 }
 
 pre.code span.tr.first-row span.th {

@@ -9,21 +9,21 @@
       onblur="this.placeholder = 'Search for a Commit...'" id="textbox" [(ngModel)]="searchTerm" />
   </div>
 
-  <div class="cards_container" [hidden]=!showme>
+  <div class="center_container" id="cards_container" [hidden]=!showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
       <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" class="repocards">{{commit.commit.message}}</mat-grid-tile>
     </mat-grid-list>
   </div>
 
-  <div class="cards_container" [hidden]=showme>
+  <div class="center_container" id="cards_container" [hidden]=showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
       <mat-grid-tile *ngFor="let file of files" (click)="fileOnClick(file)" class="repocards">{{file.path}}</mat-grid-tile>
     </mat-grid-list>
   </div>
   <!-- https://stackoverflow.com/questions/41306797/html-how-to-add-line-numbers-to-a-source-code-block -->
   <!-- The design and idea for this display is from the above link -->
-  <div class="table_container">
-    <pre class="code tableBox">
+  <div class="center_container" id="table_container">
+    <pre class="code">
       <!-- tr is each ROW, while th is the number, and code is the line of code -->
       <span *ngFor="let code of codes" class="tr">
         <span class="th"></span>
