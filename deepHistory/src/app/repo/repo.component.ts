@@ -19,6 +19,8 @@ export class RepoComponent implements OnInit {
 
   commits: any;
   files: any;
+  codes: any;
+  contentOfFile: string;
 
   constructor(
     public route: ActivatedRoute,
@@ -57,7 +59,10 @@ export class RepoComponent implements OnInit {
   fileOnClick(file: string) {
     this.githubApiService
       .getHtmlContentOfFiles(this.loginName, this.repoName, file["path"])
-      .then(res => console.log(res)); // TODO: remove this and put in a new window
+      .then(res => {
+        this.contentOfFile = atob(JSON.parse(res).content);
+        this.codes = this.contentOfFile.split("\n");
+      });
   }
 
   returnBack() {

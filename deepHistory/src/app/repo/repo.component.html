@@ -18,4 +18,17 @@
 
   <button type="
         button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page</button>
+
+</div>
+
+<!-- https://stackoverflow.com/questions/41306797/html-how-to-add-line-numbers-to-a-source-code-block -->
+<!-- The design and idea for this display is from the above link -->
+<div class="filePreview">
+  <pre class="code">
+    <!-- tr is each ROW, while th is the number, and code is the line of code -->
+    <span *ngFor="let code of codes" class="tr">
+      <span class="th"></span>
+      <code>{{ code }}</code>
+    </span>
+  </pre>
 </div>
