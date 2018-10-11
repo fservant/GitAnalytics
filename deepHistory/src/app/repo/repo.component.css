@@ -142,6 +142,7 @@ pre.code span.th {
 
 pre.code code {
   display: table-cell;
+  text-align: left;
   padding: 3px;
 }
 
