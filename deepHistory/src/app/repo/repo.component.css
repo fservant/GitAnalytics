@@ -51,6 +51,7 @@
   padding-top: 10px;
 }
 
+
 .search #textbox {
   width: 33%;
   color: black;
@@ -63,21 +64,51 @@
 }
 
 .repocards {
-  border-radius: 20px;
+  border-radius: 15px;
   border: 1px solid black;
   font-size: 100%;
 }
 
 .cards_container {
-  padding-left: 3%;
+  /*
   float: left;
-  height: 70%;
-  width: 40%;
+    width: 40%; */
+ padding-left: 1.5%;
+
+  height: 80%;
+
   text-align: center;
   margin: 0 auto;
   overflow-y: scroll;
   overflow-x: hidden;
+  position: absolute;
+  left: 0px;
+  width: 50%;
+
+  border-bottom: 1px solid #D0D0D0;
+
+border-top: 1px solid #D0D0D0;
 }
+
+.table_container {
+  /* padding-left: 3%;
+  float: right;
+  width: 40%; */
+border-bottom: 1px solid #D0D0D0;
+border-top: 1px solid #D0D0D0;
+  height: 80%;
+  text-align: center;
+  margin: 0 auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+    position: absolute;
+  right: 0px;
+  width: 50%;
+    padding-right: 1.5%;
+    padding-left: 1.5%;
+}
+
 ::-webkit-scrollbar {
   background: transparent;
   width: 0px;
@@ -95,14 +126,14 @@ button:focus {
   color:black;
 }
 pre.code {
+
   display: table;
   table-layout: fixed;
-  width: 90%;
+  width: 100%;
   white-space: pre-wrap;
 
   border: solid 1px black;
-  /* width: 400px; */
-  margin: 80px auto;
+  border-collapse: collapse;
 }
 
 pre.code::before {
@@ -144,6 +175,9 @@ pre.code code {
   display: table-cell;
   text-align: left;
   padding: 3px;
+  /* white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; */
 }
 
 pre.code span.tr.first-row span.th {
@@ -153,3 +187,5 @@ pre.code span.tr.first-row span.th {
 pre.code span.e code {
   background: #f0f8ff;
 }
+
+

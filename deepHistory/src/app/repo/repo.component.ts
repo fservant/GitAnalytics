@@ -22,6 +22,7 @@ export class RepoComponent implements OnInit {
   codes: any;
   contentOfFile: string;
 
+
   constructor(
     public route: ActivatedRoute,
     private httpClient: HttpClient,
@@ -67,5 +68,7 @@ export class RepoComponent implements OnInit {
 
   returnBack() {
     this.router.navigate(["/user"]);
+
   }
+
 }
