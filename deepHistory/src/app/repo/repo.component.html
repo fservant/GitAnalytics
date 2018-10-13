@@ -11,7 +11,7 @@
 
   <div class="center_container" id="cards_container" [hidden]=!showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-      <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" class="repocards">{{commit.commit.message}}</mat-grid-tile>
+      <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" (click)="commitOnClick(commit.sha)" class="repocards">{{commit.commit.message}}</mat-grid-tile>
     </mat-grid-list>
   </div>
 
@@ -20,6 +20,7 @@
       <mat-grid-tile *ngFor="let file of files" (click)="fileOnClick(file)" class="repocards">{{file.path}}</mat-grid-tile>
     </mat-grid-list>
   </div>
+
   <!-- https://stackoverflow.com/questions/41306797/html-how-to-add-line-numbers-to-a-source-code-block -->
   <!-- The design and idea for this display is from the above link -->
   <div class="center_container" id="table_container">
@@ -33,6 +34,15 @@
   </div>
 
   <button type="
-        button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page</button>
+    button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page
+  </button>
 
+</div>
+
+<div>
+  <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
+    <mat-grid-tile *ngFor="let cf of commitFiles">
+      {{cf.filename}}
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>

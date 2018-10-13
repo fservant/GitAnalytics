@@ -17,11 +17,10 @@ export class RepoComponent implements OnInit {
   repoName: string;
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
 
-  commits: any;
-  files: any;
-  codes: any;
-  contentOfFile: string;
-
+  commits: any;               //all commits on current repo
+  files: any;                 //all files in current repo
+  codes: any;                 //code of current file (chosen by file tab)
+  commitFiles: any;           //list of files affected by current commit
 
   constructor(
     public route: ActivatedRoute,
@@ -35,11 +34,14 @@ export class RepoComponent implements OnInit {
   }
 
   display(): void {
+    //gets all commits
     this.githubApiService
       .getRepositoryCommits(this.loginName, this.repoName)
       .forEach((commit: any) => {
         this.commits = commit;
       });
+
+    //gets all files
     this.githubApiService
       .getDirectoryStructureForRepo(this.repoName, this.loginName)
       .then((res: Observable<Object>) =>
@@ -57,18 +59,24 @@ export class RepoComponent implements OnInit {
     }
   }
 
-  fileOnClick(file: string) {
+  fileOnClick(file: string): void {
     this.githubApiService
       .getHtmlContentOfFiles(this.loginName, this.repoName, file["path"])
       .then(res => {
-        this.contentOfFile = atob(JSON.parse(res).content);
-        this.codes = this.contentOfFile.split("\n");
+        this.codes = atob(JSON.parse(res).content).split("\n");
       });
   }
 
-  returnBack() {
-    this.router.navigate(["/user"]);
+  commitOnClick(sha: string): void {
+    this.githubApiService
+      .getSingleCommitWithSha(this.loginName, this.repoName, sha)
+      .forEach(res => {
+        this.commitFiles = res["files"];
+      });
+  }
 
+  returnBack(): void {
+    this.router.navigate(["/user"]);
   }
 
 }
