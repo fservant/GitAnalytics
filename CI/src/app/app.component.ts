@@ -9,7 +9,7 @@ import '../assets/css/styles.css';
 })
 
 export class AppComponent {
-  title = 'CI';
+  title = 'Continuous Integration';
   showNavbar: boolean;
   showHeader: boolean;
   username: String;

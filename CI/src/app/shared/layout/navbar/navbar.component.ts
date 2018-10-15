@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, OnInit, ElementRef } from '@angular/core';
+import { Router } from "@angular/router";
 import { UserService } from "../../../core/http/user/user.service"; 
 import { AuthService } from "../../../core/authentication/auth.service";
 import { GithubApiService } from "../../../core/services/github-api-service";
-import { Location } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
 
 
@@ -14,19 +14,27 @@ import { HttpClient } from "@angular/common/http";
 
 export class NavbarComponent implements AfterViewInit, OnInit {
   private username: string;
-  private userImageUrl: String;
+  userImageUrl: String;
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
 
 
-  constructor(public userService: UserService, public authService: AuthService, private httpClient: HttpClient, private location: Location, private elementRef: ElementRef) {
-    this.username = localStorage.getItem("username");
-  }
+  constructor(
+      public userService: UserService, 
+      public authService: AuthService, 
+      private httpClient: HttpClient, 
+      private elementRef: ElementRef,
+      private router: Router
+    ) {
+        this.username = localStorage.getItem("username");
+    }
 
   ngAfterViewInit() {
     this.elementRef.nativeElement.querySelector('div#dropbtn')
                                 .addEventListener('click', this.displayMenu.bind(this));
     this.elementRef.nativeElement.querySelector('a#signout')
                                 .addEventListener('click', this.signOut.bind(this));
+    this.elementRef.nativeElement.querySelector('a#userProfile')
+                                .addEventListener('click', this.navToUserProfile.bind(this));
   };
 
 
@@ -53,7 +61,10 @@ export class NavbarComponent implements AfterViewInit, OnInit {
   displayMenu() {
     debugger;
     document.getElementById("drpdwnMenu").classList.toggle("show");
+  }
 
+  navToUserProfile() {
+    this.router.navigate(["/user"]);
   }
 
   signOut() {
@@ -61,8 +72,8 @@ export class NavbarComponent implements AfterViewInit, OnInit {
       res => {
         debugger;
         localStorage.clear();
-        this.location.back();
-      },
+        this.router.navigate(["/login"]);
+    },
       error => {
         console.log("Logout error", error);
       }

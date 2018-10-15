@@ -1,31 +1,39 @@
 .btn { 
     width: 100%;     
     height: 50px; 
-    line-height: 50px;
     text-align: center;
-    padding: 0px;
-    border: 0px;
+    margin-top: 0px!important;
+    padding: 0px!important;
+    border: 0px!important;
 }
 
-.btn center {
-    width: 100%;     
-    height: 50px; 
-    line-height: 50px;
-    text-align: center;
-    vertical-align: middle;
-}
-.center img {
-    height: 44px;
-    margin: 3px;
+#header {
+    font-family: sans-serif;
+    width: 100px;
+    margin-left: auto;
+    margin-right: auto;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  
+  .logo {
+    display: inline-block;
     margin-right: 5px;
-    line-height: 1.5;
-    display: inline-block;
-    vertical-align: middle;
-}
+    text-align: left;
+  }
+  
+  .logo img {
+      height: 42px;
+  }
 
-.center b {
-    line-height: 1.5;
-    margin-left: 5px;
+  .text {
     display: inline-block;
-    vertical-align: middle;
-}
+    text-align: right;
+    width: 81%;
+  }
