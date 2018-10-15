@@ -4,11 +4,16 @@ import { BehaviorSubject } from "rxjs";
 @Injectable()
 export class DataService {
     private source = new BehaviorSubject('default name');
-    current = this.source.asObservable();
+    username = this.source.asObservable();
 
-    constructor() { }
+    constructor() {}
 
-    changeValue(value: string) {
-        this.source.next(value);
+    changeUsername(name: string) {
+        debugger;
+        this.source.next(name);
+    }
+
+    getUsername() {
+        return this.source.getValue();
     }
 }

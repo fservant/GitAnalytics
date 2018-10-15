@@ -10,21 +10,23 @@ import '../../../assets/css/styles.css';
   styleUrls: ["login.component.css"]
 })
 export class LoginComponent implements OnInit {
-  loginName: string;
+  username: string;
+  data: DataService;
 
   constructor(
-    public authService: AuthService, 
-    private router: Router, private data: DataService) {}
+    public authService: AuthService, private router: Router, dataService: DataService) {
+      this.data = dataService;
+    }
 
   tryGithubLogin() {
     this.authService.doGithubLogin().then(res => {
-      this.data.changeValue(res);
-      debugger;
+      this.data.changeUsername(res);
+      localStorage.setItem("username", res);
       this.router.navigate(["/home"]);
     });
   }
 
   ngOnInit() {
-    this.data.current.subscribe(name => this.loginName = name);
+
   }
 }

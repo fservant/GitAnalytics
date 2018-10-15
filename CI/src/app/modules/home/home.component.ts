@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 import { UserService } from "../../core/http/user/user.service"; 
 import { AuthService } from "../../core/authentication/auth.service";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -15,11 +15,11 @@ import { DataService } from "../../core/services/data-service";
   styleUrls: ["home.component.css"]
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   user: UserModel = new UserModel();
   profileForm: FormGroup;
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
-  loginName: string;
+  username: string;
   userAvatarURL: string;
 
   constructor(
@@ -30,23 +30,6 @@ export class HomeComponent implements OnInit {
     private httpClient: HttpClient,
     private data: DataService,
     private router: Router
-  ) { this.data.current.subscribe(name => this.loginName = name); }
+  ) { }
 
-  displayUserAvatar() {
-    this.userAvatarURL = "https://github.com/" + this.loginName + ".png";
-  }
-
-  navToUserProfile() {
-    this.router.navigate(["/user"]);
-  }
-
-  display(): void {
-    this.displayUserAvatar();
-  }
-
-  ngOnInit(): void {
-    if (this.loginName !== "default name") {
-      this.display();
-    }
-  }
 }
