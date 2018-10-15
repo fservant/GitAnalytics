@@ -25,7 +25,9 @@
             "styles": [
               "src/assets/css/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/js/project-calendar.js"
+            ]
           },
           "configurations": {
             "production": {

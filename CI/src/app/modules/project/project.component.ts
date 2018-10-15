@@ -4,7 +4,10 @@ import { ActivatedRoute } from "@angular/router";
 import { Component, OnInit } from "@angular/core";
 import { GithubApiService } from "../../core/services/github-api-service";
 import { DataService } from "../../core/services/data-service";
+import * as firebase from "firebase";
 import '../../../assets/css/styles.css';
+
+declare function makePage(): any;
 
 @Component({
   selector: "page-project",
@@ -13,7 +16,7 @@ import '../../../assets/css/styles.css';
 })
 export class ProjectComponent implements OnInit {
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
-  loginName: string;
+  username: string;
   userAvatarURL: string;
 
   constructor(
@@ -22,24 +25,10 @@ export class ProjectComponent implements OnInit {
     private router: Router,
     private dataService: DataService,
   ) {
-    this.dataService.current.subscribe(name => (this.loginName = name));
-  }
-
-  displayUserAvatar() {
-    this.userAvatarURL = "https://github.com/" + this.loginName + ".png";
-  }
-
-  navToUserProfile() {
-    this.router.navigate(["/user"]);
-  }
-
-  display(): void {
-    this.displayUserAvatar();
+    this.dataService.username.subscribe(name => (this.username = name));
   }
 
   ngOnInit(): void {
-    if (this.loginName !== "default name") {
-      this.display();
-    }
+    makePage();
   }
 }

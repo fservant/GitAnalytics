@@ -20,8 +20,9 @@ export class UserComponent implements OnInit {
   profileForm: FormGroup;
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
   repos: any;
-  userAvatarURL: string
-  loginname: string;
+  userAvatarURL: string;
+  username: string;
+  data: DataService;
 
   constructor(
     public userService: UserService,
@@ -29,9 +30,12 @@ export class UserComponent implements OnInit {
     private route: ActivatedRoute,
     private location: Location,
     private httpClient: HttpClient,
-    private data: DataService,
+    dataService: DataService,
     private router: Router
-  ) { this.data.current.subscribe(name => this.loginname = name); }
+  ) { 
+    this.data = dataService;
+    this.data.username.subscribe(name => this.username = name); 
+  }
 
   displayRepos() {
     this.repos = JSON.parse(localStorage.getItem("currentUserRepos"));
@@ -61,16 +65,5 @@ export class UserComponent implements OnInit {
     if (localStorage.getItem("username") !== "default name") {
       this.setup();
     }
-  }
-
-  logout() {
-    this.authService.doLogout().then(
-      res => {
-        this.location.back();
-      },
-      error => {
-        console.log("Logout error", error);
-      }
-    );
   }
 }

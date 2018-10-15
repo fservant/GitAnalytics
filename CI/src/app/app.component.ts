@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router, NavigationStart } from "@angular/router";
+import { DataService } from '../app/core/services/data-service';
 import '../assets/css/styles.css';
 
 @Component({
@@ -11,14 +12,15 @@ export class AppComponent {
   title = 'CI';
   showNavbar: boolean;
   showHeader: boolean;
+  username: String;
 
-  constructor(private router: Router) {
-    
+  constructor(private router: Router, private data: DataService) {
     router.events.forEach((event) => {
         if(event instanceof NavigationStart) {
-            this.showNavbar = (event.url !== "/login");
-            this.showHeader = (event.url === "/login" || event.url === "/");
+            this.showNavbar = (event.url !== "/login" && event.url !== "/");
+            this.showHeader = (event.url === "/login" || event.url === "/" || event.url === "/home");
         }
       });
+      data.username.subscribe(name => {this.username = name});
     }
 }
