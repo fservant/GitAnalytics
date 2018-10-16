@@ -6,24 +6,26 @@
     <button class="fileCommitButtons"(click)="showme=true">Commits</button>
 
     <input type="text" name="query" autocomplete="off" placeholder="Search for a Commit..." onfocus="this.placeholder = ''"
-      onblur="this.placeholder = 'Search for a Commit...'" id="textbox" [(ngModel)]="searchTerm" />
+      onblur="this.placeholder = 'Search for a Commit...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=!showme />
+    <input type="text" name="query" autocomplete="off" placeholder="Search for a File..." onfocus="this.placeholder = ''"
+      onblur="this.placeholder = 'Search for a File...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
   </div>
 
   <div class="center_container" id="cards_container" [hidden]=!showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-      <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" (click)="commitOnClick(commit.sha)" class="repocards">{{commit.commit.message}}</mat-grid-tile>
+      <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" (click)="commitOnClick(commit.sha)" (click)="displayme=true" class="repocards">{{commit.commit.message}}</mat-grid-tile>
     </mat-grid-list>
   </div>
 
   <div class="center_container" id="cards_container" [hidden]=showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-      <mat-grid-tile *ngFor="let file of files" (click)="fileOnClick(file)" class="repocards">{{file.path}}</mat-grid-tile>
+      <mat-grid-tile *ngFor="let file of files | fileFilter:searchTerm" (click)="fileOnClick(file)" (click)="displayme=false" class="repocards">{{file.path}}</mat-grid-tile>
     </mat-grid-list>
   </div>
 
   <!-- https://stackoverflow.com/questions/41306797/html-how-to-add-line-numbers-to-a-source-code-block -->
   <!-- The design and idea for this display is from the above link -->
-  <div class="center_container" id="table_container">
+  <div class="center_container" id="table_container" [hidden]=displayme>
     <pre class="code">
       <!-- tr is each ROW, while th is the number, and code is the line of code -->
       <span *ngFor="let code of codes" class="tr">
@@ -39,9 +41,9 @@
 
 </div>
 
-<div>
+<div class="center_container" id="table_container" [hidden]=!displayme>
   <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-    <mat-grid-tile *ngFor="let cf of commitFiles">
+    <mat-grid-tile class="filecards" *ngFor="let cf of commitFiles"><img src="/src/assets/pictures/file.png" height=30 width=30>
       {{cf.filename}}
     </mat-grid-tile>
   </mat-grid-list>
