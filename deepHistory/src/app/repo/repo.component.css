@@ -20,6 +20,14 @@
   border: 1px solid black;
   font-family: 'Nexa Light';
   font-size: 150%;
+
+}
+
+#filebutton {
+background-color:white;
+}
+
+#commitbutton{
   background-color:#D0D0D0;
 }
 
@@ -57,6 +65,7 @@
   border-bottom: 2px solid black;
   border-top: 2px solid white;
   margin-bottom: 10px;
+  font-size:150%;
 }
 
 .repocards {
@@ -69,13 +78,11 @@
   border-radius: 5px;
   border: 1px solid black;
   font-size: 100%;
-  max-width: 30%;
 }
 
 .center_container {
   height: 80%;
   text-align: center;
-  margin: 0 auto;
   overflow-y: scroll;
   overflow-x: hidden;
   position: absolute;
@@ -87,13 +94,14 @@
   padding-left: 1.5%;
   left: 0px;
   width: 50%;
+  padding-right: 0.75%;
 }
 
-#table_container {
+.table_container {
   right: 0px;
   width: 50%;
+  padding-left: 0.75%;
   padding-right: 1.5%;
-  padding-left: 1.5%;
 }
 
 ::-webkit-scrollbar {
@@ -108,8 +116,6 @@
 FOR THE BLUE OUTLINE ON BUTTONS */
 button:focus {
   outline:0;
-  background-color:white;
-  color:black;
 }
 pre.code {
   display: table;

@@ -79,4 +79,58 @@ export class RepoComponent implements OnInit {
     this.router.navigate(["/user"]);
   }
 
+  // filesbutton clears the containers on the right side and changes button color to white when clicked
+  filesButton() {
+    if (document.getElementById('file_container') != null) {
+      document.getElementById('file_container').style.display = 'none';
+    }
+    if (document.getElementById('code_table') != null) {
+      document.getElementById('code_table').style.display = 'none';
+    }
+
+    if (document.getElementById('commitbutton') != null) {
+      document.getElementById('commitbutton').style.backgroundColor = '#D0D0D0';
+    }
+
+    if (document.getElementById('filebutton') != null) {
+      document.getElementById('filebutton').style.backgroundColor = 'white';
+    }
+  }
+
+  // commitsbutton clears the containers on the right side and changes button color to white when clicked
+  commitsButton() {
+    if (document.getElementById('file_container') != null) {
+      document.getElementById('file_container').style.display = 'none';
+    }
+    if (document.getElementById('code_table') != null) {
+      document.getElementById('code_table').style.display = 'none';
+    }
+    if (document.getElementById('filebutton') != null) {
+      document.getElementById('filebutton').style.backgroundColor = '#D0D0D0';
+    }
+    if (document.getElementById('commitbutton') != null) {
+      document.getElementById('commitbutton').style.backgroundColor = 'white';
+    }
+  }
+
+  // file_container is the display of the files once a commit is clicked
+  file_containerDisplay() {
+    if (document.getElementById('file_container') != null) {
+      document.getElementById('file_container').style.display = 'initial';
+    }
+    if (document.getElementById('code_table') != null) {
+      document.getElementById('code_table').style.display = 'none';
+    }
+  }
+
+  // table_container is the display of the code once a file is clicked
+  table_containerDisplay() {
+    if (document.getElementById('code_table') != null) {
+      document.getElementById('code_table').style.display = 'initial';
+    }
+    if (document.getElementById('file_container') != null) {
+      document.getElementById('file_container').style.display = 'none';
+    }
+  }
+
 }
