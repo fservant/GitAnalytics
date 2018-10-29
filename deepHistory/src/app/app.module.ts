@@ -21,11 +21,12 @@ import { DataService } from "./services/shared-service";
 import { MatCardModule } from '@angular/material';
 import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
 import { CommitSearchPipe } from "./pipe/commit-search-pipe";
+import { FileSearchPipe } from "./pipe/file-search-pipe";
 import { RepoSharedService } from './services/repo-shared-service';
 
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RepoComponent, UserComponent, RepositorySearchPipe, CommitSearchPipe],
+  declarations: [AppComponent, LoginComponent, RepoComponent, UserComponent, RepositorySearchPipe, CommitSearchPipe, FileSearchPipe],
   imports: [
     BrowserModule,
     ReactiveFormsModule,

@@ -10,10 +10,7 @@ export class GithubApiService {
     //empty constructor
   }
 
-  public getRepositoryByOwnerAndRepo(
-    owner: string,
-    repo: string
-  ): Observable<Object> {
+  public getRepositoryByOwnerAndRepo(owner: string,repo: string): Observable<Object> {
     const url: string = this._generateRepositoryUrl(owner, repo);
 
     return this._http.get(url);
@@ -25,11 +22,17 @@ export class GithubApiService {
     return this._http.get(url);
   }
 
+  public getSingleCommitWithSha(owner: string, repo: string, sha: string): Observable<Object> {
+    const url: string = this._generateSingleCommitWithSha(owner, repo, sha);
+
+    return this._http.get(url);
+  }
+
   public getUserRepositoryList(owner: string): Promise<string[]> {
     return this._getUserRepositoryList(owner, 1);
   }
 
-  public getDirectoryStructureForRepo(repo: string, owner: string) {
+  public getDirectoryStructureForRepo(repo: string, owner: string): Promise<Observable<Object>> {
     return new Promise((resolve, reject) => {
       let shaId: string;
 
@@ -52,12 +55,13 @@ export class GithubApiService {
     // gets ur the tree of the files in the repo
   }
 
-  public getUserObjectWithId(id: string) {
+  public getUserObjectWithId(id: string): Observable<Object> {
     const url: string = this._generateUserObjectWithIdUrl(id);
+
     return this._http.get(url);
   }
 
-  public getMasterBranch(owner: string, repo: string) {
+  public getMasterBranch(owner: string, repo: string): Observable<Object> {
     const masterBranch = this._generateRespositoryBranchUrl(
       owner,
       repo,
@@ -71,12 +75,12 @@ export class GithubApiService {
     return this._http.get(url);
   }
 
-  public getHtmlContentOfFiles(owner: string, repo: string, path: string) {
+  public getHtmlContentOfFiles(owner: string, repo: string, path: string): Promise<string> {
     return this._http
       .get(this._generateHtmlContentUrl(owner, repo, path), {
         headers: {
           "Content-Type": "application/json",
-          accept: "application/vnd.github.VERSION.html"
+          'Accept' : "application/vnd.github.v3.object"
         },
         responseType: "text"
       })
@@ -84,10 +88,7 @@ export class GithubApiService {
     // construct the header to get the file with the whole html component;
   }
 
-  private _getUserRepositoryList(
-    owner: string,
-    page_number: number
-  ): Promise<string[]> {
+  private _getUserRepositoryList(owner: string, page_number: number): Promise<string[]> {
     return new Promise((resolve, reject) => {
       let currentArray: any;
       const url: string = this._generateUserRepositoryUrl(owner, page_number);
@@ -120,6 +121,10 @@ export class GithubApiService {
     });
   }
 
+  private _generateUserUrl() {
+    return `https://api.github.com/user`;
+  }
+
   private _generateUserRepositoryUrl(owner: string, page_number: number) {
     return `https://api.github.com/users/${owner}/repos?per_page=100\&page=${page_number}`;
   }
@@ -136,11 +141,7 @@ export class GithubApiService {
     return `https://api.github.com/repos/${owner}/${repo}/commits`;
   }
 
-  private _generateRespositoryBranchUrl(
-    owner: string,
-    repo: string,
-    branch: string
-  ) {
+  private _generateRespositoryBranchUrl(owner: string, repo: string, branch: string) {
     return `https://api.github.com/repos/${owner}/${repo}/git/refs/heads/${branch}`;
   }
 
@@ -148,11 +149,11 @@ export class GithubApiService {
     return `https://api.github.com/repos/${owner}/${repo}/git/trees/${shaId}?recursive=1`;
   }
 
-  private _generateUserUrl() {
-    return `https://api.github.com/user`;
-  }
-
   private _generateHtmlContentUrl(owner: string, repo: string, path: string) {
     return `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  }
+
+  private _generateSingleCommitWithSha(owner: string, repo: string, sha: string) {
+    return `https://api.github.com/repos/${owner}/${repo}/commits/${sha}`;
   }
 }
