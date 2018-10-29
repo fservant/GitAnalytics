@@ -14,7 +14,13 @@
       <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-  </head>
+      <script>
+        var pullReqs = JSON.parse(localStorage.getItem("allPulls"));
+      var tableData = JSON.parse(localStorage.getItem("tableData"));
+      var pieData = JSON.parse(localStorage.getItem("pieData"));
+      var userDropdown = JSON.parse(localStorage.getItem("users"));
+        </script>
+ </head>
 
   <body>
     <!-- <nav class="navbar navbar-expand-lg navbar-light"> -->
@@ -100,67 +106,10 @@
           <th data-field="state">State</th>
         </tr>
       </thead>
-      <!--tbody>
-        <tr>
-          <td>1</td>
-          <td>initial</td>
-          <td>test</td>
-          <td>yes</td>
-          <td>me</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>initial</td>
-          <td>test</td>
-          <td>yes</td>
-          <td>me</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>initial</td>
-          <td>test</td>
-          <td>yes</td>
-          <td>me</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>initial</td>
-          <td>test</td>
-          <td>yes</td>
-          <td>me</td>
-        </tr>
-        <tr>
-          <td>5</td>
-          <td>initial</td>
-          <td>test</td>
-          <td>yes</td>
-          <td>me</td>
-        </tr>
-        <tr>
-          <td>6</td>
-          <td>initial</td>
-          <td>test</td>
-          <td>yes</td>
-          <td>me</td>
-        </tr>
-        <tr>
-          <td>7</td>
-          <td>initial</td>
-          <td>test</td>
-          <td>yes</td>
-          <td>me</td>
-        </tr>
-      </tbody-->
+      
     </table>
   </div>
-  <div class="col-md-3 col-md-pull-9">right</div>
-</div>
-
-</div>
-    <!-- The rest in the body!!! -->
-
-
-<!-- Graphs-->
+  <!-- Graphs-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
 <script>
   //var table = $('#pullRequestTable');
@@ -168,60 +117,14 @@
    var nameClicked = JSON.parse(localStorage.getItem("nameClicked"));
     var mydata = tableData;
     
-/*[{
-        "a": "test",
-        "b": "test2",
-        "c": "ctest",
-        "d": "teast d",
-        "e": "asdf"
-    },
-    {
-        "a": "test",
-        "b": "test2",
-        "c": "ctest",
-        "d": "teast d",
-        "e": "asdf"
-    },
-    {
-        "a": "test",
-        "b": "test2",
-        "c": "ctest",
-        "d": "teast d",
-        "e": "asdf"
-    },
-    {
-        "a": "test",
-        "b": "test2",
-        "c": "ctest",
-        "d": "teast d",
-        "e": "asdf"
-    },
-    {
-        "a": "test",
-        "b": "test2",
-        "c": "ctest",
-        "d": "teast d",
-        "e": "asdf"
-    },
-    {
-        "a": "test",
-        "b": "test2",
-        "c": "ctest",
-        "d": "teast d",
-        "e": "asdf"
-    },
-    {
-        "a": "test",
-        "b": "test2",
-        "c": "ctest",
-        "d": "teast d",
-        "e": "asdf"
-    }];*/
+
     
     var table = document.getElementById('pullRequestTable');
     console.log(nameClicked);
+    var count = 0;
     mydata.forEach(function(object) {
       if(object.author==nameClicked[0]){
+        count=count+1;
         var tr = document.createElement('tr');
         tr.innerHTML = '<td>' + object.number + '</td>' +
           '<td><a href="' + object.linkToPull + '">' + object.title + '</a></td>' +
@@ -232,7 +135,36 @@
         table.appendChild(tr);
       }
 });
+
 </script>
+  <div class="col-md-3 col-md-pull-9">
+    <table class="table table-dark">
+      <tr>
+        <th>Total Users</th>
+        <td><script> document.write(Object.keys(userDropdown).length)</script></td>
+      </tr>
+      <tr>
+        <th>Pull Requested</th>
+        <td><script> document.write(Object.keys(pieData).length)</script></td>
+      </tr>
+      <tr>
+        <th>Current User</th>
+        <td><script>document.write(nameClicked[0])</script></td>
+      </tr>
+      <tr>
+          <th>Current User's # 0f Pull Request</th>
+          <td><script>document.write(count)</script></td>
+        </tr>
+    </table>
+
+  </div>
+</div>
+
+</div>
+    <!-- The rest in the body!!! -->
+
+
+
 
 
   </body>
