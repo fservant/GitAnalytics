@@ -34,28 +34,23 @@ clean = [x for x in clean if x.get('commit') != None]
 clean = [x for x in clean if (x.get('created_by') != None)]
 clean = [x for x in clean if x.get('started_at') != None]
 
-def breakstatus(build):
+
+passing = []
+failing = []
+curr_sum = 0
+for build in clean:
     previous = build.get('previous_state')  == 'passed'
     current = build.get('state') == 'passed'
     if previous:
         if current:
-            return 'notbreak'
+            curr_sum = curr_sum + 1
         else:
-            return 'break'
+            passing.append(curr_sum)
+            curr_sum = 1
     else:
         if current:
-            return 'fix'
+            failing.append(curr_sum)
+            curr_sum = 1
         else:
-            return 'notfix'
-
-pairs = [(build.get('created_by').get('login'),  breakstatus(build) )for build in clean]
-
-df = pandas.DataFrame(pairs)
-df.columns = ['user', 'status']
-
-crosstab = pandas.crosstab(df.user, df.status)
-output_dict = crosstab.to_dict(orient='index')
-
-
-with open('breaksbylogin.json', 'w') as outfile:
-    json.dump(output_dict, outfile, indent=4)
+            curr_sum = curr_sum + 1
+    
