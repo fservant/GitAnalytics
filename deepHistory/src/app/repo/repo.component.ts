@@ -46,7 +46,7 @@ export class RepoComponent implements OnInit {
       .getDirectoryStructureForRepo(this.repoName, this.loginName)
       .then((res: Observable<Object>) =>
         res.forEach(filesTree => {
-          this.files = filesTree["tree"];
+          this.files = filesTree["tree"].filter(obj => obj.type == "blob"); //filters directories out of view
         })
       );
   }
