@@ -1,3 +1,5 @@
+
+
 function tableCreate(blob) {
   var tbl = document.getElementById('builds');
   var tbdy = document.createElement('tbody');
@@ -45,19 +47,34 @@ function dataToDateMap(data) {
   Object.values(data).forEach((elem) => {
     let from_date = dateFromISOString(elem.time);
     if(isValidDate(from_date)) {
-      let utc = Date.UTC(from_date.getUTCFullYear(), from_date.getMonth(), from_date.getDay());
-      map.set(utc, (map.has(utc) ? map.get(utc) : 0) + 1);
+      let utc = Date.UTC(from_date.getUTCFullYear(), from_date.getUTCMonth(), from_date.getUTCDate());
+      adj_date = new Date(utc);
+      map.set(utc, [adj_date, (map.has(utc) ? map.get(utc)[1] : 0) + 1]);
     }
   });
+  console.log(map);
   let out_arr = [];
   for(let [key, val] of map.entries()) {
-    out_arr.push([new Date(key), val]);
+    out_arr.push(val);
   }
+  console.log(out_arr);
   return out_arr;
 }
 
+function calculateCalHeight(data) {
+  var years = [];
+  Object.values(data).forEach((elem) => {
+    let from_date = dateFromISOString(elem.time);
+    if(isValidDate(from_date)) {
+      if (years.indexOf(from_date.getUTCFullYear()) < 0) {
+        years.push(from_date.getUTCFullYear());
+      }
+    }
+  });
+  return years.length;
+}
+
 function calendarCreate(data) {
-  debugger;
   let dataTable = new google.visualization.DataTable();
   dataTable.addColumn({ type: 'date', id: 'Date' });
   dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
@@ -65,7 +82,7 @@ function calendarCreate(data) {
   let chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
   let options = {
     title: "Builds By Date",
-    height: 350,
+    height: calculateCalHeight(data) * 175,
   };
   chart.draw(dataTable, options);
 }
@@ -90,11 +107,9 @@ function makePage() {
   });
   google.charts.load("current", {packages:["calendar"]});
 
-  db.collection("history").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
+  db.collection("history").doc("rails").get().then((doc) => {
       tableCreate(doc.data());
       google.charts.setOnLoadCallback(calendarCreate(doc.data()));
-    });
   });
 }
 
