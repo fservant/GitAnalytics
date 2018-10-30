@@ -15,6 +15,8 @@ import { Observable } from "rxjs";
 export class RepoComponent implements OnInit {
   loginName: string;
   repoName: string;
+  currentCommitIndex: number;
+  currentCommitShaId: string;
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
 
   commits: any;               //all commits on current repo
@@ -71,8 +73,15 @@ export class RepoComponent implements OnInit {
     this.githubApiService
       .getSingleCommitWithSha(this.loginName, this.repoName, sha)
       .forEach(res => {
+        this.currentCommitShaId = res["sha"];
         this.commitFiles = res["files"];
       });
+    
+    this.currentCommitIndex = this.commits.findIndex(commit => commit["sha"] == sha);
+  }
+
+  fileToHistory(cf: any): void {
+    this.router.navigate(['/history', this.currentCommitIndex, this.currentCommitShaId, cf["filename"]]);
   }
 
   returnBack(): void {

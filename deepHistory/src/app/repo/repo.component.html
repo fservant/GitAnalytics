@@ -39,15 +39,10 @@
     button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page
   </button>
 
-    <div class="center_container table_container" id="file_container">
-      <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-        <mat-grid-tile class="filecards" *ngFor="let cf of commitFiles"><img src="/src/assets/pictures/file.png" height=30
-            width=30>{{cf.filename}}</mat-grid-tile>
-      </mat-grid-list>
-    </div>
-
-
-
-
+  <div class="center_container table_container" id="file_container">
+    <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
+      <mat-grid-tile class="filecards" *ngFor="let cf of commitFiles" (click)="fileToHistory(cf)"><img src="/src/assets/pictures/file.png" height=30
+          width=30>{{cf.filename}}</mat-grid-tile>
+    </mat-grid-list>
+  </div>
 </div>
-
