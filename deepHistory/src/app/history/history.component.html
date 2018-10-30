@@ -1,1 +1,9 @@
-<div>Hello World</div>
+<div class="center_container table_container" id="code_table">
+  <pre *ngFor="let patch of patches" class="code">
+      <!-- tr is each ROW, while th is the number, and code is the line of code -->
+        <span *ngFor = "let code of patch" class="tr"> 
+            <span class="th"></span>
+            <code title={{code}}>{{ code }}</code>
+        </span>
+    </pre>
+</div>
