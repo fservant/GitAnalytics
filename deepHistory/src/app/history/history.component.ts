@@ -94,7 +94,11 @@ export class HistoryComponent implements OnInit {
 
   splitFilesPatches() {
     this.filePatches.forEach(element => {
-      let patch = element.split("\n").map(item => item.trim());
+      let patch = element
+        .split("\n")
+        .map(item => item.trim())
+        .slice(1);
+      // remove the github comment regarding the number of addition and deletions occured to the patch
       this.patches.push(patch);
     });
   }
