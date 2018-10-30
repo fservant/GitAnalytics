@@ -101,6 +101,17 @@ export class HistoryComponent implements OnInit {
     });
   }
 
+  // update the background color patch
+  backgroundColorForPatch(code: string) {
+    let char = code.charAt(0);
+    if (char == "+") {
+      return "add";
+    } else if (char == "-") {
+      return "deletion";
+    }
+    return "";
+  }
+
   ngOnInit(): void {
     if (this.repoName !== "default name") {
       this.setup();

@@ -3,7 +3,7 @@
       <!-- tr is each ROW, while th is the number, and code is the line of code -->
         <span *ngFor = "let code of patch" class="tr"> 
             <span class="th"></span>
-            <code title={{code}}>{{ code }}</code>
+            <code [ngClass]="backgroundColorForPatch(code)" title={{code}}>{{ code }}</code>
         </span>
     </pre>
 </div>

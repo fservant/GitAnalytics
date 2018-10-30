@@ -42,6 +42,14 @@ pre.code span.th {
   width: 4em;
 }
 
+code.add {
+  background-color: #aafcaa;
+}
+
+code.deletion {
+  background-color: #ec9f9f80;
+}
+
 pre.code code {
   display: table-cell;
   text-align: left;
