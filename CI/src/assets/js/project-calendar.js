@@ -52,12 +52,10 @@ function dataToDateMap(data) {
       map.set(utc, [adj_date, (map.has(utc) ? map.get(utc)[1] : 0) + 1]);
     }
   });
-  console.log(map);
   let out_arr = [];
   for(let [key, val] of map.entries()) {
     out_arr.push(val);
   }
-  console.log(out_arr);
   return out_arr;
 }
 
