@@ -16,7 +16,6 @@ export class HistoryComponent implements OnInit {
   commitIndex: number;
   commitSha: string;
   fileName: string;
-  filePatches: string[];
   patches: string[][];
 
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
@@ -69,7 +68,6 @@ export class HistoryComponent implements OnInit {
   }
 
   setup(): void {
-    this.filePatches = new Array<string>();
     this.patches = new Array<Array<string>>();
 
     this.route.params.subscribe(params => {
@@ -86,19 +84,19 @@ export class HistoryComponent implements OnInit {
       })
       .then(res => {
         this.getDiffs(this.commitIndex, new Array<string>()).then(res => {
-          this.filePatches = res;
-          this.splitFilesPatches();
+          this.splitFilesPatches(res);
         });
       });
   }
 
-  splitFilesPatches() {
-    this.filePatches.forEach(element => {
-      let patch = element
-        .split("\n")
-        .map(item => item.trim())
-        .slice(1);
+  splitFilesPatches(filePatches: string[]) {
+    filePatches.forEach(element => {
+      let patch = element.split("\n").map(item => item.trim());
       // remove the github comment regarding the number of addition and deletions occured to the patch
+      // there is a case where github adds text "No newline at end of file" which needs to be cleaned
+      patch = patch[patch.length - 1].includes(" No newline at end of file")
+        ? patch.slice(1, -1)
+        : patch.slice(1);
       this.patches.push(patch);
     });
   }
