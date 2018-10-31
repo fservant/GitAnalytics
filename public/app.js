@@ -9,281 +9,373 @@ angular.module('authorship', ['ngRoute'])
   .controller('homeCtrl', function(){
 
     var home = this;
+    var margin = {top: 20, right: 20, bottom: 30, left: 40},
+        width = 960 - margin.left - margin.right,
+        height = 500 - margin.top - margin.bottom;
 
-    //////////////////////////////D3 Code Begins////////////////////////////////////////////////////////////////////
-    var w = 600;                        //width
-    var h = 500;                        //height
-    var padding = {top: 40, right: 40, bottom: 40, left:40};
-    var dataset;
-    //Set up stack method
-    var stack = d3.layout.stack();
+    var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1);
 
-    d3.json("mperday.json",function(json){
-      dataset = json;
+    var y = d3.scale.linear()
+        .rangeRound([height, 0]);
 
-      //Data, stacked
-      stack(dataset);
+    var color = d3.scale.ordinal()
+        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
 
-      var color_hash = {
-          0 : ["Invite","#1f77b4"],
-          1 : ["Accept","#2ca02c"],
-          2 : ["Decline","#ff7f0e"]
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
 
-      };
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .tickFormat(d3.format(".2s"));
 
+        console.log('create svg')
 
-      //Set up scales
-      var xScale = d3.time.scale()
-        .domain([new Date(dataset[0][0].time),d3.time.day.offset(new Date(dataset[0][dataset[0].length-1].time),8)])
-        .rangeRound([0, w-padding.left-padding.right]);
+    var svg = d3.select(document.getElementById("graph")).append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-      var yScale = d3.scale.linear()
-        .domain([0,
-          d3.max(dataset, function(d) {
-            return d3.max(d, function(d) {
-              return d.y0 + d.y;
-            });
-          })
-        ])
-        .range([h-padding.bottom-padding.top,0]);
-
-      var xAxis = d3.svg.axis()
-               .scale(xScale)
-               .orient("bottom")
-               .ticks(d3.time.days,1);
-
-      var yAxis = d3.svg.axis()
-               .scale(yScale)
-               .orient("left")
-               .ticks(10);
+    var active_link = "0"; //to control legend selections and hover
+    var legendClicked; //to control legend selections
+    var legendClassArray = []; //store legend classes to select bars in plotSingle()
+    var legendClassArray_orig = []; //orig (with spaces)
+    var sortDescending; //if true, bars are sorted by height in descending order
+    var restoreXFlag = false; //restore order of bars back to original
 
 
+    //disable sort checkbox
+    d3.select("label")
+      .select("input")
+      .property("disabled", true)
+      .property("checked", false);
 
-      //Easy colors accessible via a 10-step ordinal scale
-      var colors = d3.scale.category10();
+    console.log('make req')
 
-      //Create SVG element
-      var svg = d3.select("#mbars")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h);
+    d3.csv("state_data.csv", function(error, data) {
+      console.log('data', data)
+      if (error) throw error;
 
-      // Add a group for each row of data
-      var groups = svg.selectAll("g")
-        .data(dataset)
-        .enter()
-        .append("g")
-        .attr("class","rgroups")
-        .attr("transform","translate("+ padding.left + "," + (h - padding.bottom) +")")
-        .style("fill", function(d, i) {
-          return color_hash[dataset.indexOf(d)][1];
-        });
+      color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
 
-      // Add a rect for each data value
-      var rects = groups.selectAll("rect")
-        .data(function(d) { return d; })
-        .enter()
-        .append("rect")
-        .attr("width", 2)
-        .style("fill-opacity",1e-6);
+      data.forEach(function(d) {
+        var mystate = d.State; //add to stock code
+        var y0 = 0;
+        //d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
+        d.ages = color.domain().map(function(name) {
+          //return { mystate:mystate, name: name, y0: y0, y1: y0 += +d[name]}; });
+          return {
+            mystate:mystate,
+            name: name,
+            y0: y0,
+            y1: y0 += +d[name],
+            value: d[name],
+            y_corrected: 0
+          };
+          });
+        d.total = d.ages[d.ages.length - 1].y1;
 
+      });
 
-      rects.transition()
-           .duration(function(d,i){
-             return 500 * i;
-           })
-           .ease("linear")
-          .attr("x", function(d) {
-          return xScale(new Date(d.time));
-        })
-        .attr("y", function(d) {
-          return -(- yScale(d.y0) - yScale(d.y) + (h - padding.top - padding.bottom)*2);
-        })
-        .attr("height", function(d) {
-          return -yScale(d.y) + (h - padding.top - padding.bottom);
-        })
-        .attr("width", 15)
-        .style("fill-opacity",1);
+      //Sort totals in descending order
+      data.sort(function(a, b) { return b.total - a.total; });
 
-        svg.append("g")
-          .attr("class","x axis")
-          .attr("transform","translate(40," + (h - padding.bottom) + ")")
+      x.domain(data.map(function(d) { return d.State; }));
+      y.domain([0, d3.max(data, function(d) { return d.total; })]);
+
+      svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")")
           .call(xAxis);
 
+      svg.append("g")
+          .attr("class", "y axis")
+          .call(yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end");
+          //.text("Population");
 
-        svg.append("g")
-          .attr("class","y axis")
-          .attr("transform","translate(" + padding.left + "," + padding.top + ")")
-          .call(yAxis);
+      var state = svg.selectAll(".state")
+          .data(data)
+        .enter().append("g")
+          .attr("class", "g")
+          .attr("transform", function(d) { return "translate(" + "0" + ",0)"; });
+          //.attr("transform", function(d) { return "translate(" + x(d.State) + ",0)"; })
 
-        // adding legend
+       height_diff = 0;  //height discrepancy when calculating h based on data vs y(d.y0) - y(d.y1)
+       state.selectAll("rect")
+          .data(function(d) {
+            return d.ages;
+          })
+        .enter().append("rect")
+          .attr("width", x.rangeBand())
+          .attr("y", function(d) {
+            height_diff = height_diff + y(d.y0) - y(d.y1) - (y(0) - y(d.value));
+            y_corrected = y(d.y1) + height_diff;
+            d.y_corrected = y_corrected //store in d for later use in restorePlot()
 
-        var legend = svg.append("g")
-                .attr("class","legend")
-                .attr("x", w - padding.right - 65)
-                .attr("y", 25)
-                .attr("height", 100)
-                .attr("width",100);
+            if (d.name === "Tommy") height_diff = 0; //reset for next d.mystate
 
-        legend.selectAll("g").data(dataset)
-            .enter()
-            .append('g')
-            .each(function(d,i){
-              var g = d3.select(this);
-              g.append("rect")
-                .attr("x", w - padding.right - 65)
-                .attr("y", i*25 + 10)
-                .attr("width", 10)
-                .attr("height",10)
-                .style("fill",color_hash[String(i)][1]);
+            return y_corrected;
+            // return y(d.y1);  //orig, but not accurate
+          })
+          .attr("x",function(d) { //add to stock code
+              return x(d.mystate)
+            })
+          .attr("height", function(d) {
+            //return y(d.y0) - y(d.y1); //heights calculated based on stacked values (inaccurate)
+            return y(0) - y(d.value); //calculate height directly from value in csv file
+          })
+          .attr("class", function(d) {
+            classLabel = d.name.replace(/\s/g, ''); //remove spaces
+            return "bars class" + classLabel;
+          })
+          .style("fill", function(d) { return color(d.name); });
 
-              g.append("text")
-               .attr("x", w - padding.right - 50)
-               .attr("y", i*25 + 20)
-               .attr("height",30)
-               .attr("width",100)
-               .style("fill",color_hash[String(i)][1])
-               .text(color_hash[String(i)][0]);
-            });
+      state.selectAll("rect")
+           .on("mouseover", function(d){
 
-        svg.append("text")
-        .attr("transform","rotate(-90)")
-        .attr("y", 0 - 5)
-        .attr("x", 0-(h/2))
-        .attr("dy","1em")
-        .text("Number of Commits");
+              var delta = d.y1 - d.y0;
+              var xPos = parseFloat(d3.select(this).attr("x"));
+              var yPos = parseFloat(d3.select(this).attr("y"));
+              var height = parseFloat(d3.select(this).attr("height"))
 
-      svg.append("text")
-         .attr("class","xtext")
-         .attr("x",w/2 - padding.left)
-         .attr("y",h - 5)
-         .attr("text-anchor","middle")
-         .text("Days");
+              d3.select(this).attr("stroke","blue").attr("stroke-width",0.8);
 
-      svg.append("text")
-          .attr("class","title")
-          .attr("x", (w / 2))
-          .attr("y", 20)
-          .attr("text-anchor", "middle")
-          .style("font-size", "16px")
-          .style("text-decoration", "underline")
-          .text("Number of Commits Per Day");
+              svg.append("text")
+              .attr("x",xPos)
+              .attr("y",yPos +height/2)
+              .attr("class","tooltip")
+              .text(d.name +": "+ delta);
 
-      //On click, update with new data
-      d3.selectAll(".m")
-        .on("click", function() {
-          var date = this.getAttribute("value");
+           })
+           .on("mouseout",function(){
+              svg.select(".tooltip").remove();
+              d3.select(this).attr("stroke","pink").attr("stroke-width",0.2);
 
-          var str;
-          if(date == "2014-02-19"){
-            str = "19.json";
-          }else if(date == "2014-02-20"){
-            str = "20.json";
-          }else if(date == "2014-02-21"){
-            str = "21.json";
-          }else if(date == "2014-02-22"){
-            str = "22.json";
-          }else{
-            str = "23.json";
-          }
-
-          d3.json(str,function(json){
-
-            dataset = json;
-            stack(dataset);
-
-            console.log(dataset);
-
-            xScale.domain([new Date(0, 0, 0,dataset[0][0].time,0, 0, 0),new Date(0, 0, 0,dataset[0][dataset[0].length-1].time,0, 0, 0)])
-            .rangeRound([0, w-padding.left-padding.right]);
-
-            yScale.domain([0,
-                    d3.max(dataset, function(d) {
-                      return d3.max(d, function(d) {
-                        return d.y0 + d.y;
-                      });
-                    })
-                  ])
-                  .range([h-padding.bottom-padding.top,0]);
-
-            xAxis.scale(xScale)
-                 .ticks(d3.time.hour,2)
-                 .tickFormat(d3.time.format("%H"));
-
-            yAxis.scale(yScale)
-                 .orient("left")
-                 .ticks(10);
-
-             groups = svg.selectAll(".rgroups")
-                        .data(dataset);
-
-                        groups.enter().append("g")
-                        .attr("class","rgroups")
-                        .attr("transform","translate("+ padding.left + "," + (h - padding.bottom) +")")
-                        .style("fill",function(d,i){
-                            return color(i);
-                        });
+            })
 
 
-                        rect = groups.selectAll("rect")
-                        .data(function(d){return d;});
+      var legend = svg.selectAll(".legend")
+          .data(color.domain().slice().reverse())
+        .enter().append("g")
+          .attr("class", function (d) {
+            legendClassArray.push(d.replace(/\s/g, '')); //remove spaces
+            legendClassArray_orig.push(d); //remove spaces
+            return "legend";
+          })
+          .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
 
-                        rect.enter()
-                          .append("rect")
-                          .attr("x",w)
-                          .attr("width",1)
-                          .style("fill-opacity",1e-6);
+      //reverse order to match order in which bars are stacked
+      legendClassArray = legendClassArray.reverse();
+      legendClassArray_orig = legendClassArray_orig.reverse();
 
-                    rect.transition()
-                        .duration(1000)
-                        .ease("linear")
-                        .attr("x",function(d){
-                            return xScale(new Date(0, 0, 0,d.time,0, 0, 0));
-                        })
-                        .attr("y",function(d){
-                            return -(- yScale(d.y0) - yScale(d.y) + (h - padding.top - padding.bottom)*2);
-                        })
-                        .attr("height",function(d){
-                            return -yScale(d.y) + (h - padding.top - padding.bottom);
-                        })
-                        .attr("width",15)
-                        .style("fill-opacity",1);
+      legend.append("rect")
+          .attr("x", width - 18)
+          .attr("width", 18)
+          .attr("height", 18)
+          .style("fill", color)
+          .attr("id", function (d, i) {
+            return "id" + d.replace(/\s/g, '');
+          })
+          .on("mouseover",function(){
 
-                    rect.exit()
-                 .transition()
-                 .duration(1000)
-                 .ease("circle")
-                 .attr("x",w)
-                 .remove();
+            if (active_link === "0") d3.select(this).style("cursor", "pointer");
+            else {
+              if (active_link.split("class").pop() === this.id.split("id").pop()) {
+                d3.select(this).style("cursor", "pointer");
+              } else d3.select(this).style("cursor", "auto");
+            }
+          })
+          .on("click",function(d){
 
-                    groups.exit()
-                 .transition()
-                 .duration(1000)
-                 .ease("circle")
-                 .attr("x",w)
-                 .remove();
+            if (active_link === "0") { //nothing selected, turn on this selection
+              d3.select(this)
+                .style("stroke", "black")
+                .style("stroke-width", 2);
+
+                active_link = this.id.split("id").pop();
+                plotSingle(this);
+
+                //gray out the others
+                for (i = 0; i < legendClassArray.length; i++) {
+                  if (legendClassArray[i] != active_link) {
+                    d3.select("#id" + legendClassArray[i])
+                      .style("opacity", 0.5);
+                  } else sortBy = i; //save index for sorting in change()
+                }
+
+                //enable sort checkbox
+                d3.select("label").select("input").property("disabled", false)
+                d3.select("label").style("color", "black")
+                //sort the bars if checkbox is clicked
+                d3.select("input").on("change", change);
+
+            } else { //deactivate
+              if (active_link === this.id.split("id").pop()) {//active square selected; turn it OFF
+                d3.select(this)
+                  .style("stroke", "none");
+
+                //restore remaining boxes to normal opacity
+                for (i = 0; i < legendClassArray.length; i++) {
+                    d3.select("#id" + legendClassArray[i])
+                      .style("opacity", 1);
+                }
 
 
-            svg.select(".x.axis")
-               .transition()
-               .duration(1000)
-               .ease("circle")
-               .call(xAxis);
+                if (d3.select("label").select("input").property("checked")) {
+                  restoreXFlag = true;
+                }
 
-            svg.select(".y.axis")
-               .transition()
-               .duration(1000)
-               .ease("circle")
-               .call(yAxis);
+                //disable sort checkbox
+                d3.select("label")
+                  .style("color", "#D8D8D8")
+                  .select("input")
+                  .property("disabled", true)
+                  .property("checked", false);
 
-            svg.select(".xtext")
-               .text("Hours");
 
-            svg.select(".title")
-                .text("Number of messages per hour on " + date + ".");
+                //sort bars back to original positions if necessary
+                change();
+
+                //y translate selected category bars back to original y posn
+                restorePlot(d);
+
+                active_link = "0"; //reset
+              }
+
+            } //end active_link check
+
+
           });
-        });
+
+      legend.append("text")
+          .attr("x", width - 24)
+          .attr("y", 9)
+          .attr("dy", ".35em")
+          .style("text-anchor", "end")
+          .text(function(d) { return d; });
+
+      // restore graph after a single selection
+      function restorePlot(d) {
+        //restore graph after a single selection
+        d3.selectAll(".bars:not(.class" + class_keep + ")")
+              .transition()
+              .duration(1000)
+              .delay(function() {
+                if (restoreXFlag) return 3000;
+                else return 750;
+              })
+              .attr("width", x.rangeBand()) //restore bar width
+              .style("opacity", 1);
+
+        //translate bars back up to original y-posn
+        d3.selectAll(".class" + class_keep)
+          .attr("x", function(d) { return x(d.mystate); })
+          .transition()
+          .duration(1000)
+          .delay(function () {
+            if (restoreXFlag) return 2000; //bars have to be restored to orig posn
+            else return 0;
+          })
+          .attr("y", function(d) {
+            //return y(d.y1); //not exactly correct since not based on raw data value
+            return d.y_corrected;
+          });
+
+        //reset
+        restoreXFlag = false;
+
+      }
+
+      // plot only a single legend selection
+      function plotSingle(d) {
+
+        class_keep = d.id.split("id").pop();
+        idx = legendClassArray.indexOf(class_keep);
+
+        //erase all but selected bars by setting opacity to 0
+        d3.selectAll(".bars:not(.class" + class_keep + ")")
+              .transition()
+              .duration(1000)
+              .attr("width", 0) // use because svg has no zindex to hide bars so can't select visible bar underneath
+              .style("opacity", 0);
+
+        //lower the bars to start on x-axis
+        state.selectAll("rect").forEach(function (d, i) {
+
+          //get height and y posn of base bar and selected bar
+          h_keep = d3.select(d[idx]).attr("height");
+          y_keep = d3.select(d[idx]).attr("y");
+
+          h_base = d3.select(d[0]).attr("height");
+          y_base = d3.select(d[0]).attr("y");
+
+          h_shift = h_keep - h_base;
+          y_new = y_base - h_shift;
+
+          //reposition selected bars
+          d3.select(d[idx])
+            .transition()
+            .ease("bounce")
+            .duration(1000)
+            .delay(750)
+            .attr("y", y_new);
+
+        })
+
+      }
+
+      //adapted change() fn in http://bl.ocks.org/mbostock/3885705
+      function change() {
+
+        if (this.checked) sortDescending = true;
+        else sortDescending = false;
+
+        colName = legendClassArray_orig[sortBy];
+
+        var x0 = x.domain(data.sort(sortDescending
+            ? function(a, b) { return b[colName] - a[colName]; }
+            : function(a, b) { return b.total - a.total; })
+            .map(function(d,i) { return d.State; }))
+            .copy();
+
+        state.selectAll(".class" + active_link)
+             .sort(function(a, b) {
+                return x0(a.mystate) - x0(b.mystate);
+              });
+
+        var transition = svg.transition().duration(750),
+            delay = function(d, i) { return i * 20; };
+
+        //sort bars
+        transition.selectAll(".class" + active_link)
+          .delay(delay)
+          .attr("x", function(d) {
+            return x0(d.mystate);
+          });
+
+        //sort x-labels accordingly
+        transition.select(".x.axis")
+            .call(xAxis)
+            .selectAll("g")
+            .delay(delay);
+
+
+        transition.select(".x.axis")
+            .call(xAxis)
+          .selectAll("g")
+            .delay(delay);
+      }
+
     });
+
   })
 
   .controller('primary', function($http){
@@ -396,7 +488,7 @@ angular.module('authorship', ['ngRoute'])
             // Object.keys(p.contributors).forEach(function(contributor){
             //   console.log(contributor)
             // })
-            
+
           }, function(err){
             console.log(err)
           })
