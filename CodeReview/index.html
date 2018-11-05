@@ -34,7 +34,7 @@
           /* All the data getting happens here */
           vm.fetchData = function(user, repo) {
             /* This first get gets everyone that sent a pull request to the Repo */
-            $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/pulls").then(function(res) {
+            $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/pulls?state=all&client_id=f3c2bc2be8ba0b77fb43&client_secret=a92aa63bf9f45fcc19af0b2c25f78118534d020d").then(function(res) {
               vm.data = res.data;
               for(i in vm.data) {
                 var pull = vm.data[i];
@@ -55,6 +55,9 @@
                   var currFreq = authorFreq[iOf];
                   authorFreq[iOf] = currFreq + 1;
                 }
+                $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/pulls/"+pull.number+"reviews?client_id=f3c2bc2be8ba0b77fb43&client_secret=a92aa63bf9f45fcc19af0b2c25f78118534d020d").then(function(res2) {
+                    console.log(res2.data);
+                })
               }
               for(var i = 0; i < authorNames.length; i++) {
                 pieData.push({
@@ -71,10 +74,10 @@
               localStorage.setItem("allPulls",JSON.stringify(vm.data));
               localStorage.setItem("tableData", JSON.stringify(tableData));
               localStorage.setItem("pieData", JSON.stringify(pieData));
-              window.location = "index2.html";
+              //window.location = "index2.html";
             }),
             /* This section gets all the users and contributions to fill out the dropdown list */
-            $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/contributors").then(function(res) {
+            $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/contributors?client_id=f3c2bc2be8ba0b77fb43&client_secret=a92aa63bf9f45fcc19af0b2c25f78118534d020d").then(function(res) {
               for(i in res.data) {
                 var currUser = res.data[i];
                 userDropdown.push({
@@ -85,7 +88,6 @@
               }
               localStorage.setItem("users", JSON.stringify(userDropdown));
             })
-          
           }
         });
         // end the information part
@@ -97,7 +99,7 @@
     <!-- <nav class="navbar navbar-default" data-spy="affix" data-offset-top="197"> -->
     <!-- <nav class="navbar navbar-exapnd-lg navbar-light bg-light"> -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light" data-spy="affix" data-offset-top="197">
-      <a class="navbar-brand mb-0 h1" href="index.html">GitAnalytics.CodeReview</a>
+      <a class="navbar-brand mb-0 h1" href="index.html">GitAnalytics</a>
         
     </nav>
 
