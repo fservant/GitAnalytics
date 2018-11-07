@@ -7,7 +7,6 @@ import { DataService } from "../../core/services/data-service";
 import * as firebase from "firebase";
 import '../../../assets/css/styles.css';
 
-declare function makePage(): any;
 
 @Component({
   selector: "page-project",
@@ -29,6 +28,5 @@ export class ProjectComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    makePage();
   }
 }
