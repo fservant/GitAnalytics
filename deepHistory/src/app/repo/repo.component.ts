@@ -15,12 +15,14 @@ import { Observable } from "rxjs";
 export class RepoComponent implements OnInit {
   loginName: string;
   repoName: string;
+  currentCommitIndex: number;
+  currentCommitShaId: string;
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
 
-  commits: any;               //all commits on current repo
-  files: any;                 //all files in current repo
-  codes: any;                 //code of current file (chosen by file tab)
-  commitFiles: any;           //list of files affected by current commit
+  commits: any; //all commits on current repo
+  files: any; //all files in current repo
+  codes: any; //code of current file (chosen by file tab)
+  commitFiles: any; //list of files affected by current commit
 
   constructor(
     public route: ActivatedRoute,
@@ -71,66 +73,62 @@ export class RepoComponent implements OnInit {
     this.githubApiService
       .getSingleCommitWithSha(this.loginName, this.repoName, sha)
       .forEach(res => {
+        this.currentCommitShaId = res["sha"];
         this.commitFiles = res["files"];
       });
+
+    this.currentCommitIndex = this.commits.findIndex(
+      commit => commit["sha"] == sha
+    );
+  }
+
+  fileToHistory(cf: any): void {
+    this.router.navigate([
+      "/history",
+      this.currentCommitIndex,
+      this.currentCommitShaId,
+      cf["filename"]
+    ]);
   }
 
   returnBack(): void {
     this.router.navigate(["/user"]);
   }
 
-  // filesbutton clears the containers on the right side and changes button color to white when clicked
-  filesButton() {
-    if (document.getElementById('file_container') != null) {
-      document.getElementById('file_container').style.display = 'none';
-    }
-    if (document.getElementById('code_table') != null) {
-      document.getElementById('code_table').style.display = 'none';
-    }
-
-    if (document.getElementById('commitbutton') != null) {
-      document.getElementById('commitbutton').style.backgroundColor = '#D0D0D0';
-    }
-
-    if (document.getElementById('filebutton') != null) {
-      document.getElementById('filebutton').style.backgroundColor = 'white';
-    }
-  }
-
   // commitsbutton clears the containers on the right side and changes button color to white when clicked
-  commitsButton() {
-    if (document.getElementById('file_container') != null) {
-      document.getElementById('file_container').style.display = 'none';
+  // filesbutton clears the containers on the right side and changes button color to white when clicked
+  hideContainers() {
+    if (document.getElementById("file_container") != null) {
+      document.getElementById("file_container").style.display = "none";
     }
-    if (document.getElementById('code_table') != null) {
-      document.getElementById('code_table').style.display = 'none';
+    if (document.getElementById("code_table") != null) {
+      document.getElementById("code_table").style.display = "none";
     }
-    if (document.getElementById('filebutton') != null) {
-      document.getElementById('filebutton').style.backgroundColor = '#D0D0D0';
+    if (document.getElementById("filebutton") != null) {
+      document.getElementById("filebutton").style.backgroundColor = "#D0D0D0";
     }
-    if (document.getElementById('commitbutton') != null) {
-      document.getElementById('commitbutton').style.backgroundColor = 'white';
+    if (document.getElementById("commitbutton") != null) {
+      document.getElementById("commitbutton").style.backgroundColor = "white";
     }
   }
 
   // file_container is the display of the files once a commit is clicked
   file_containerDisplay() {
-    if (document.getElementById('file_container') != null) {
-      document.getElementById('file_container').style.display = 'initial';
+    if (document.getElementById("file_container") != null) {
+      document.getElementById("file_container").style.display = "initial";
     }
-    if (document.getElementById('code_table') != null) {
-      document.getElementById('code_table').style.display = 'none';
+    if (document.getElementById("code_table") != null) {
+      document.getElementById("code_table").style.display = "none";
     }
   }
 
   // table_container is the display of the code once a file is clicked
   table_containerDisplay() {
-    if (document.getElementById('code_table') != null) {
-      document.getElementById('code_table').style.display = 'initial';
+    if (document.getElementById("code_table") != null) {
+      document.getElementById("code_table").style.display = "initial";
     }
-    if (document.getElementById('file_container') != null) {
-      document.getElementById('file_container').style.display = 'none';
+    if (document.getElementById("file_container") != null) {
+      document.getElementById("file_container").style.display = "none";
     }
   }
-
 }

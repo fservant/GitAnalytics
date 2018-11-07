@@ -2,8 +2,8 @@
   <h1 class="header">Deep History Analytics</h1>
 
   <div class="search container" ng-controller="myController">
-    <button class="fileCommitButtons" id="filebutton" (click)="showme=false" (click)="filesButton()">Files</button>
-    <button class="fileCommitButtons" id="commitbutton" (click)="showme=true" (click)="commitsButton()">Commits</button>
+    <button class="fileCommitButtons" id="filebutton" (click)="showme=false" (click)="hideContainers()">Files</button>
+    <button class="fileCommitButtons" id="commitbutton" (click)="showme=true" (click)="hideContainers()">Commits</button>
 
     <input type="text" name="query" autocomplete="off" placeholder="Search for a Commit..." onfocus="this.placeholder = ''"
       onblur="this.placeholder = 'Search for a Commit...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=!showme />
@@ -13,13 +13,15 @@
 
   <div class="center_container" id="cards_container" [hidden]=!showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-      <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" (click)="commitOnClick(commit.sha)" (click)="file_containerDisplay()" class="repocards">{{commit.commit.message}}</mat-grid-tile>
+      <mat-grid-tile *ngFor="let commit of commits | commitFilter:searchTerm" (click)="commitOnClick(commit.sha)"
+        (click)="file_containerDisplay()" class="repocards">{{commit.commit.message}}</mat-grid-tile>
     </mat-grid-list>
   </div>
 
   <div class="center_container" id="cards_container" [hidden]=showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-      <mat-grid-tile *ngFor="let file of files | fileFilter:searchTerm" (click)="fileOnClick(file)" (click)="table_containerDisplay()" class="repocards">{{file.path}}</mat-grid-tile>
+      <mat-grid-tile *ngFor="let file of files | fileFilter:searchTerm" (click)="fileOnClick(file)" (click)="table_containerDisplay()"
+        class="repocards">{{file.path}}</mat-grid-tile>
     </mat-grid-list>
   </div>
 
@@ -39,15 +41,10 @@
     button" class="btn-previous-page" (click)="returnBack()">Return to Repository Page
   </button>
 
-    <div class="center_container table_container" id="file_container">
-      <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
-        <mat-grid-tile class="filecards" *ngFor="let cf of commitFiles"><img src="/src/assets/pictures/file.png" height=30
-            width=30>{{cf.filename}}</mat-grid-tile>
-      </mat-grid-list>
-    </div>
-
-
-
-
+  <div class="center_container table_container" id="file_container">
+    <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
+      <mat-grid-tile class="filecards" *ngFor="let cf of commitFiles" (click)="fileToHistory(cf)"><img src="/src/assets/pictures/file.png"
+          height=30 width=30>{{cf.filename}}</mat-grid-tile>
+    </mat-grid-list>
+  </div>
 </div>
-

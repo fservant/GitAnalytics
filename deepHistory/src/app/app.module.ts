@@ -11,6 +11,7 @@ import { AuthGuard } from "./core/auth.guard";
 import { AuthService } from "./core/auth.service";
 import { UserService } from "./core/user.service";
 import { LoginComponent } from "./login/login.component";
+import { HistoryComponent } from "./history/history.component";
 import { RepoComponent } from "./repo/repo.component";
 import { UserComponent } from "./user/user.component";
 import { UserResolver } from "./user/user.resolver";
@@ -26,7 +27,7 @@ import { RepoSharedService } from './services/repo-shared-service';
 
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, RepoComponent, UserComponent, RepositorySearchPipe, CommitSearchPipe, FileSearchPipe],
+  declarations: [AppComponent, LoginComponent, HistoryComponent, RepoComponent, UserComponent, RepositorySearchPipe, CommitSearchPipe, FileSearchPipe],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
