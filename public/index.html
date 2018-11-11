@@ -75,12 +75,12 @@
 
   <body ng-app="authorship" ng-controller="primary as p" style="margin-top:50px">
 
-    <nav class="navbar navbar-default navbar-fixed-top">
+    <nav class="navbar navbar-default navbar-fixed-top" ng-if="!p.isLogin()">
       <div class="container-fluid">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
            <ul class="nav navbar-nav">
              <li>
-               <a href="#/">Home</a>
+               <a href="#/home">Home</a>
              </li>
              <li>
                <a href="#/about">About</a>
@@ -96,7 +96,7 @@
       </div>
     </nav>
 
-    <section ng-view>
+    <section ng-view style="height: 100%"><data value=""></data>
 
     </section>
 

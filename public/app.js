@@ -378,8 +378,19 @@ angular.module('authorship', ['ngRoute'])
 
   })
 
-  .controller('primary', function($http){
+  .controller('primary', function($http, $location, $rootScope){
     var p = this;
+
+    p.isLogin = function(){
+      if ($location.path() == '/'){
+        return true
+      }
+      return false
+    }
+
+    p.location = $location.path()
+    console.log($location.path())
+
     p.sumOfContribution = 0;
     p.authKey = '28b2d9e6fc82252bd80bf0c395c96a761cb72571'
 
@@ -393,7 +404,7 @@ angular.module('authorship', ['ngRoute'])
       var payload = {
         method: 'GET',
         headers:{
-          'Authorization': 'token ' + p.authKey
+          'Authorization': 'Basic ' + $rootScope.auth
         },
         url: 'https://api.github.com/users/'+ myUser +'/repos'
       }
@@ -443,7 +454,7 @@ angular.module('authorship', ['ngRoute'])
         method: 'GET',
         headers: {
           'Accept': 'application/vnd.github.mercy-preview+json',
-          'Authorization': 'token ' + p.authKey
+          'Authorization': 'Basic ' + $rootScope.auth
         },
         url: 'https://api.github.com/repos/' + p.user + '/' + p.repo + '/topics'
       }
@@ -467,7 +478,7 @@ angular.module('authorship', ['ngRoute'])
           var payload = {
             method: 'GET',
             headers:{
-              'Authorization': 'token ' + p.authKey
+              'Authorization': 'Basic ' + $rootScope.auth
             },
             url: 'https://api.github.com/repos/' + user + '/' + repo.name + '/languages'
           }
@@ -504,7 +515,7 @@ angular.module('authorship', ['ngRoute'])
       var payload1 = {
         method: 'GET',
         headers:{
-          'Authorization': 'token ' + p.authKey
+          'Authorization': 'Basic ' + $rootScope.auth
         },
         url: 'https://api.github.com/repos/' + p.user + '/' + p.repo + '/contributors'
       }
@@ -541,13 +552,49 @@ angular.module('authorship', ['ngRoute'])
 
   })
 
+
+  .controller('loginCtrl', function($http, $window, $location, $rootScope){
+    var l = this;
+    l.error = false
+    l.login = function(){
+      console.log(l.username + ':' + l.password)
+      var b = encodeURIComponent(window.btoa(l.username + ':' + l.password))
+      var encodedAuth = b.toString('base64')
+      console.log(encodedAuth)
+
+      var payload = {
+        method:"GET",
+        url:'https://api.github.com/user',
+        headers:{
+          'Authorization' : 'Basic ' + encodedAuth
+        }
+      }
+
+      $http(payload).then(function(result){
+        console.log(result)
+        if(result.status == 200){
+          l.error = false;
+          $rootScope.auth = encodedAuth
+          $window.location.href = "../#/home";
+        }else{
+          l.error = true
+          console.log(l.error)
+        }
+      },function(err){
+        l.error = true;
+        console.log(err)
+      })
+
+    }
+  })
+
   .config(function($routeProvider) {
     $routeProvider
-   .when('/', {
+   .when('/home', {
      templateUrl: 'home.html',
      controller: 'homeCtrl',
      controllerAs: 'home'
-    })
+   })
     .when('/about', {
       templateUrl: 'about.html',
     })
@@ -555,5 +602,10 @@ angular.module('authorship', ['ngRoute'])
       templateUrl: 'collaborators.html',
       // controller: 'graphCtrl',
       // controllerAs: 'g'
+    })
+    .when('/', {
+      templateUrl: 'login.html',
+      controller: 'loginCtrl',
+      controllerAs: 'l'
     });
 })

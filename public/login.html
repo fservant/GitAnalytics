@@ -1,0 +1,16 @@
+<section class="loginContainer">
+
+  <div class="alert alert-danger" role="alert" ng-show="l.error">
+    <strong>Oh snap!</strong>
+    Your login information is not correct. Please try again!
+  </div>
+
+  <img src = "github.png" style="magin-bottom: 20px"/>
+
+  <div>
+  <input ng-model = 'l.username' type="text" class="login-input" placeholder="Username" />
+  <input ng-model = 'l.password' type="password" class="login-input" placeholder="Password" />
+  </div>
+
+  <button ng-click = "l.login()" class= "login-button">login</button>
+</section>
