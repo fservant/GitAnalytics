@@ -1,15 +1,15 @@
 <div class="repository_page">
   <h1 class="header">Deep History Analytics</h1>
 
-  <div class="search container" ng-controller="myController">
-    <button class="fileCommitButtons" id="filebutton" (click)="showme=false" (click)="hideContainers()">Files</button>
-    <button class="fileCommitButtons" id="commitbutton" (click)="showme=true" (click)="hideContainers()">Commits</button>
+<div class="search container" ng-controller="myController">
+  <button class="fileCommitButtons" id="filebutton" (click)="showme=false" (click)="hideContainer('#D0D0D0', 'white')">Files</button>
+  <button class="fileCommitButtons" id="commitbutton" (click)="showme=true" (click)="hideContainer('white', '#D0D0D0')">Commits</button>
 
-    <input type="text" name="query" autocomplete="off" placeholder="Search for a Commit..." onfocus="this.placeholder = ''"
-      onblur="this.placeholder = 'Search for a Commit...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=!showme />
-    <input type="text" name="query" autocomplete="off" placeholder="Search for a File..." onfocus="this.placeholder = ''"
-      onblur="this.placeholder = 'Search for a File...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
-  </div>
+  <input type="text" name="query" autocomplete="off" placeholder="Search for a Commit..." onfocus="this.placeholder = ''"
+    onblur="this.placeholder = 'Search for a Commit...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=!showme />
+  <input type="text" name="query" autocomplete="off" placeholder="Search for a File..." onfocus="this.placeholder = ''"
+    onblur="this.placeholder = 'Search for a File...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
+</div>
 
   <div class="center_container" id="cards_container" [hidden]=!showme>
     <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">

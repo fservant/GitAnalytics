@@ -97,18 +97,18 @@ export class RepoComponent implements OnInit {
 
   // commitsbutton clears the containers on the right side and changes button color to white when clicked
   // filesbutton clears the containers on the right side and changes button color to white when clicked
-  hideContainers() {
+  hideContainer(color: string, color2: string) {
     if (document.getElementById("file_container") != null) {
       document.getElementById("file_container").style.display = "none";
     }
     if (document.getElementById("code_table") != null) {
       document.getElementById("code_table").style.display = "none";
     }
-    if (document.getElementById("filebutton") != null) {
-      document.getElementById("filebutton").style.backgroundColor = "#D0D0D0";
-    }
     if (document.getElementById("commitbutton") != null) {
-      document.getElementById("commitbutton").style.backgroundColor = "white";
+      document.getElementById("commitbutton").style.backgroundColor = color;
+    }
+    if (document.getElementById("filebutton") != null) {
+      document.getElementById("filebutton").style.backgroundColor = color2;
     }
   }
 
