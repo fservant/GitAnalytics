@@ -91,7 +91,7 @@
 
 </div>
 <script>
-    var mydata=[{type:'asdf',content:'qwerq'},{type:'asdf',content:'qwerq'},{type:'asdf',content:'qwerq'}];
+    var mydata=[{type:'Pull Request',content:'KeithNumberGen \n 10-25-2018 \n A Keith number is an integer N>9 such that if a Fibonacci-like sequence (in which each term in the sequence is the sum of the n previous terms) is formed with the first n terms taken as the decimal digits of the number N, then N itself occurs as a term in the sequence.'},{type:'Review',content:'10-25-2018'},{type:'Message',content:'10-26-2018 \n Generates keith numbers.'}];
     var timeline = document.getElementById('EventTimeline');
     
     var count = 0;
@@ -106,7 +106,7 @@
         }else{
             dividerHead='<div class="timelinecontainer timelineright"><div class="timelinecontent">'
         }
-        var content='blahblah';
+        var content=object.content;
         tr.innerHTML = dividerHead + '<h5>' + object.type + '</h5>' + '<p>' + content + '</p>' + dividerEnd;
         timeline.appendChild(tr);
       });
