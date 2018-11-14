@@ -1,9 +1,19 @@
+<div class="history page">
+
+
+<div class="search" ng-controller="myController">
+  <input type="text" name="query" autocomplete="off" placeholder="Search for a Line..." onfocus="this.placeholder = ''"
+    onblur="this.placeholder = 'Search for a Line...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
+</div>
+
 <div class="center_container table_container" id="code_table">
   <pre *ngFor="let patch of patches" class="code">
       <!-- tr is each ROW, while th is the number, and code is the line of code -->
-        <span *ngFor = "let code of patch" class="tr"> 
+        <span *ngFor = "let code of patch | lineFilter:searchTerm" class="tr">
             <span class="th"></span>
             <code [ngClass]="backgroundColorForPatch(code)" title={{code}}>{{ code }}</code>
         </span>
     </pre>
+</div>
+
 </div>

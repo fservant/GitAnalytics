@@ -97,6 +97,7 @@ export class HistoryComponent implements OnInit {
       patch = patch[patch.length - 1].includes(" No newline at end of file")
         ? patch.slice(1, -1)
         : patch.slice(1);
+
       this.patches.push(patch);
     });
   }
