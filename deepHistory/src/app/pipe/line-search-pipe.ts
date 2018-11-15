@@ -10,7 +10,6 @@ export class LineSearchPipe implements PipeTransform {
       return patch;
     }
 
-    console.log(patch);
     return patch.filter(patches =>
       patches.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
   }

@@ -1,7 +1,7 @@
+<h1 class="header">Deep History Analytics</h1>
+
 <div class="history page">
-
-
-<div class="search" ng-controller="myController">
+<div class="search container" ng-controller="myController">
   <input type="text" name="query" autocomplete="off" placeholder="Search for a Line..." onfocus="this.placeholder = ''"
     onblur="this.placeholder = 'Search for a Line...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
 </div>
@@ -16,4 +16,11 @@
     </pre>
 </div>
 
+<button type="button" class="btn-previous-page" (click)="returnBack()"> Return to Current Repository
+</button>
+
+    <!-- <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
+      <mat-grid-tile *ngFor="let number of commitNumbers"
+        class="repocards">{{commits[number].commit.message}}</mat-grid-tile>
+    </mat-grid-list> -->
 </div>

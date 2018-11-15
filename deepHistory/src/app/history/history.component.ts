@@ -17,10 +17,10 @@ export class HistoryComponent implements OnInit {
   commitSha: string;
   fileName: string;
   patches: string[][];
-
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
 
   commits: any;
+  commitNumbers: any;
 
   constructor(
     private httpClient: HttpClient,
@@ -47,6 +47,7 @@ export class HistoryComponent implements OnInit {
           );
           if (tmpIndex !== -1) {
             array.push(res["files"][tmpIndex]["patch"]);
+            this.commitNumbers.push(index);
           }
         })
         .then(
@@ -76,6 +77,7 @@ export class HistoryComponent implements OnInit {
       this.fileName = params["filePath"];
     });
 
+    this.commitNumbers = new Array<number>();
     //gets all commits
     this.githubApiService
       .getRepositoryCommits(this.loginName, this.repoName)
@@ -119,5 +121,9 @@ export class HistoryComponent implements OnInit {
     } else {
       this.router.navigate(["/user"]);
     }
+  }
+
+  returnBack(): void {
+    this.router.navigate(["/repo"]);
   }
 }
