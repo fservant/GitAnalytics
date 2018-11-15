@@ -1,9 +1,26 @@
+<h1 class="header">Deep History Analytics</h1>
+
+<div class="history page">
+<div class="search container" ng-controller="myController">
+  <input type="text" name="query" autocomplete="off" placeholder="Search for a Line..." onfocus="this.placeholder = ''"
+    onblur="this.placeholder = 'Search for a Line...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
+</div>
+
 <div class="center_container table_container" id="code_table">
   <pre *ngFor="let patch of patches" class="code">
       <!-- tr is each ROW, while th is the number, and code is the line of code -->
-        <span *ngFor = "let code of patch" class="tr"> 
+        <span *ngFor = "let code of patch | lineFilter:searchTerm" class="tr">
             <span class="th"></span>
             <code [ngClass]="backgroundColorForPatch(code)" title={{code}}>{{ code }}</code>
         </span>
     </pre>
+</div>
+
+<button type="button" class="btn-previous-page" (click)="returnBack()"> Return to Current Repository
+</button>
+
+    <!-- <mat-grid-list cols="1" rowHeight="15:1" gutterSize="10">
+      <mat-grid-tile *ngFor="let number of commitNumbers"
+        class="repocards">{{commits[number].commit.message}}</mat-grid-tile>
+    </mat-grid-list> -->
 </div>

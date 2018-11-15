@@ -24,10 +24,12 @@ import { RepositorySearchPipe } from "./pipe/repository-search-pipe";
 import { CommitSearchPipe } from "./pipe/commit-search-pipe";
 import { FileSearchPipe } from "./pipe/file-search-pipe";
 import { RepoSharedService } from './services/repo-shared-service';
+import { LineSearchPipe } from "./pipe/line-search-pipe";
 
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, HistoryComponent, RepoComponent, UserComponent, RepositorySearchPipe, CommitSearchPipe, FileSearchPipe],
+  declarations: [AppComponent, LoginComponent, HistoryComponent, RepoComponent, UserComponent, RepositorySearchPipe,
+    CommitSearchPipe, FileSearchPipe, LineSearchPipe],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
