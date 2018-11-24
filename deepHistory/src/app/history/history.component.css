@@ -1,10 +1,30 @@
+.code_row {
+  margin: 20px;
+  padding: 20px;
+  overflow-x: auto;
+  background: #eee;
+  border: 1px solid #333;
+}
+
 pre.code {
-  display: table;
+  display: inline-table;
   table-layout: fixed;
-  width: 100%;
+  width: 44.5%;
   white-space: pre-wrap;
   border: solid 1px black;
   border-collapse: collapse;
+  float: left;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+  margin-bottom: 0;
+}
+
+pre.code:first-of-type {
+  margin-left:0;
+}
+
+pre.code:last-of-type {
+  margin-right:0;
 }
 
 pre.code::before {
@@ -111,4 +131,13 @@ pre.code span.e code {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.arrow {
+  height: 5%;
+  width: 5%;
+  float: left;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
 }

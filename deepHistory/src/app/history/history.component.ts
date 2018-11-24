@@ -16,11 +16,13 @@ export class HistoryComponent implements OnInit {
   commitIndex: number;
   commitSha: string;
   fileName: string;
-  patches: string[][];
   githubApiService: GithubApiService = new GithubApiService(this.httpClient);
 
   commits: any;
   commitNumbers: any;
+
+  displayFiles: string[][][];
+  startEnd: StartEnd[];
 
   constructor(
     private httpClient: HttpClient,
@@ -69,7 +71,8 @@ export class HistoryComponent implements OnInit {
   }
 
   setup(): void {
-    this.patches = new Array<Array<string>>();
+    this.displayFiles = new Array<Array<Array<string>>>();
+    this.startEnd = new Array<StartEnd>();
 
     this.route.params.subscribe(params => {
       this.commitIndex = +params["commitNumber"];
@@ -92,16 +95,92 @@ export class HistoryComponent implements OnInit {
   }
 
   splitFilesPatches(filePatches: string[]) {
+    
+    let leftPatch  = new Array<Array<string>>();
+    let rightPatch = new Array<Array<string>>();
+
     filePatches.forEach(element => {
-      let patch = element.split("\n").map(item => item.trim());
+      let patch = element.split("\n");
       // remove the github comment regarding the number of addition and deletions occured to the patch
       // there is a case where github adds text "No newline at end of file" which needs to be cleaned
       patch = patch[patch.length - 1].includes(" No newline at end of file")
         ? patch.slice(1, -1)
         : patch.slice(1);
 
-      this.patches.push(patch);
+      rightPatch.push(patch);
+
+      //clean up each individual patch (left patch should not have deletions)
+      let tmpArray = new Array<string>();
+      patch.map(line => line.charAt(0) !== '-' ? tmpArray.push(line) : false);
+      leftPatch.push(tmpArray);
     });
+
+    this.setupLineNumbers(leftPatch, rightPatch);
+  }
+
+  //This is intended to add new lines to match up when comparing two diffs
+  setupLineNumbers(leftPatch: Array<Array<string>>, rightPatch: Array<Array<string>>): void {
+    //cleaned goes to j, regular goes to k
+    //This is for the left side of the comparison
+    for (let i = 0; i < rightPatch.length; i++) {
+      let cleaned = new Array<string>();
+      console.log(rightPatch[i]);
+      for (let j = 0, k = 0; j < leftPatch[i].length; j++) {
+        if (leftPatch[i][j].charAt(0) == '+' &&
+            rightPatch[i][k].charAt(0) == '-') {
+              
+              let rightSideCounter = 0;
+              while (leftPatch[i][j].charAt(0) == '+' &&
+                    rightPatch[i][k].charAt(0) == '-') {
+                cleaned.push(leftPatch[i][j]);
+                k++;
+                j++;
+                rightSideCounter++;
+              }
+              j--;
+              while (rightPatch[i][k].charAt(0) == '-') {
+                cleaned.push('\n');
+                k++;
+              }
+              k += rightSideCounter;
+          } else if (rightPatch[i][k].charAt(0) == '-') {
+              while (rightPatch[i][k].charAt(0) == '-') {
+                cleaned.push('\n');
+                k++;
+              }
+              j--;
+          } else if (leftPatch[i][j].charAt(0) == '+') {
+            rightPatch[i].splice(k+1, 0, '\n');
+            cleaned.push(leftPatch[i][j]);
+            k += 2;
+          } else {
+            cleaned.push(leftPatch[i][j]);
+            k++;
+          }
+      }
+      leftPatch[i] = cleaned;
+    }
+
+    //This is for the right side of the comparison
+    rightPatch = rightPatch.map(file => 
+      file.map(line => 
+        line.charAt(0) == '+' ? '' : line)
+        .filter(line => 
+          line !== ''));
+  
+    //This puts everything into one array
+    let tmp = new Array<Array<string>>();
+    for (let i = 0; i < rightPatch.length; i++) {
+      tmp.push(leftPatch[i]);
+      tmp.push(rightPatch[i]);
+    }
+
+    this.displayFiles.push(tmp);
+    this.startEnd.push(new StartEnd());
+
+    //TODO: The duplicacy is for proof of concept - remove if needed
+    // this.displayFiles.push(tmp);
+    // this.startEnd.push(new StartEnd());
   }
 
   // update the background color patch
@@ -115,6 +194,20 @@ export class HistoryComponent implements OnInit {
     return "";
   }
 
+  startClick(index: number) {
+    if (this.startEnd[index].start >= 2) {
+      this.startEnd[index].start -= 2;
+      this.startEnd[index].end -= 2;
+    }
+  }
+
+  endClick(index: number, file: Array<Array<string>>) {
+    if (this.startEnd[index].end < file.length) {
+      this.startEnd[index].start += 2;
+      this.startEnd[index].end += 2;
+    }
+  }
+
   ngOnInit(): void {
     if (this.repoName !== "default name") {
       this.setup();
@@ -125,5 +218,15 @@ export class HistoryComponent implements OnInit {
 
   returnBack(): void {
     this.router.navigate(["/repo"]);
+  }
+}
+
+class StartEnd {
+  start: number;
+  end: number;
+
+  constructor() {
+    this.start = 0;
+    this.end = 2;
   }
 }

@@ -6,14 +6,28 @@
     onblur="this.placeholder = 'Search for a Line...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
 </div>
 
-<div class="center_container table_container" id="code_table">
-  <pre *ngFor="let patch of patches" class="code">
+<!-- <div class="center_container table_container" id="code_table">
+  <pre *ngFor="let patch of patches" class="code"> -->
       <!-- tr is each ROW, while th is the number, and code is the line of code -->
-        <span *ngFor = "let code of patch | lineFilter:searchTerm" class="tr">
+        <!-- <span *ngFor = "let code of patch | lineFilter:searchTerm" class="tr">
             <span class="th"></span>
             <code [ngClass]="backgroundColorForPatch(code)" title={{code}}>{{ code }}</code>
         </span>
     </pre>
+</div> -->
+
+<div class="center_container table_container" id="code_table">
+    <div *ngFor="let file of displayFiles; let i = index" class="code_row">
+        <img (click)='startClick(i)' src="src/assets/pictures/leftarrow.png" class="arrow">
+        <pre *ngFor='let patch of file | slice:startEnd[i].start:startEnd[i].end' class="code">
+            <!-- tr is each ROW, while th is the number, and code is the line of code -->
+              <span *ngFor = "let code of patch | lineFilter:searchTerm" class="tr">
+                  <span class="th"></span>
+                  <code [ngClass]="backgroundColorForPatch(code)" title={{code}}>{{ code }}</code>
+              </span>
+        </pre>
+        <img (click)='endClick(i, file)' src="src/assets/pictures/rightarrow.png" class="arrow">
+    </div>
 </div>
 
 <button type="button" class="btn-previous-page" (click)="returnBack()"> Return to Current Repository
