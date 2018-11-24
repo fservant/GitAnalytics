@@ -32,8 +32,7 @@ export class HistoryComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private repoService: RepoSharedService,
-    private cd: ChangeDetectorRef
+    private repoService: RepoSharedService
   ) {
     this.repoService.current.subscribe(name => (this.repoName = name));
     this.dataService.current.subscribe(name => (this.loginName = name));
@@ -233,13 +232,6 @@ export class HistoryComponent implements OnInit {
     }
   }
 
-  calculateLineNumber(i: number, id: number, index: number, code: string) {
-    setTimeout(() => {
-      
-    }, 1000);
-    return this.calculateLineNumbers(i, id, index, code);
-  }
-
   //0 id is left, 1 id is right
   calculateLineNumbers(i: number, id: number, index: number, code: string): string {
     if (code.substring(0, 2) == "@@") {
@@ -281,10 +273,6 @@ export class HistoryComponent implements OnInit {
     } else {
       this.router.navigate(["/user"]);
     }
-  }
-
-  ngAfterViewChecked() {
-    // this.cd.detectChanges();
   }
 
   returnBack(): void {

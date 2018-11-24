@@ -48,22 +48,14 @@ pre.code span.th {
   border-top: solid 1px silver;
 }
 
-span.th {
-  /* content: attr(custom_linenumbers); */
+span.th::before {
+  content: attr(custom_linenumber);
   text-align: right;
   display: block;
 
   font-size: 90%;
   color: #999;
 }
-/* pre.code span.th::before {
-  content: attr(custom_linenumbers);
-  text-align: right;
-  display: block;
-
-  font-size: 90%;
-  color: #999;
-} */
 
 pre.code span.th {
   width: 4em;
