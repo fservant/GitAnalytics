@@ -28,12 +28,11 @@ pre.code:last-of-type {
 }
 
 pre.code::before {
-  counter-reset: linenum;
+  /* counter-reset: linenum; */
 }
 
 pre.code span.tr {
   display: table-row;
-  counter-increment: linenum;
 }
 
 pre.code span.th {
@@ -49,14 +48,22 @@ pre.code span.th {
   border-top: solid 1px silver;
 }
 
-pre.code span.th::before {
-  content: counter(linenum) ".";
+span.th {
+  /* content: attr(custom_linenumbers); */
   text-align: right;
   display: block;
 
   font-size: 90%;
   color: #999;
 }
+/* pre.code span.th::before {
+  content: attr(custom_linenumbers);
+  text-align: right;
+  display: block;
+
+  font-size: 90%;
+  color: #999;
+} */
 
 pre.code span.th {
   width: 4em;
@@ -68,6 +75,10 @@ code.add {
 
 code.deletion {
   background-color: #ec9f9f80;
+}
+
+code.linenumber {
+  background-color:	#5DBCD2;
 }
 
 pre.code code {

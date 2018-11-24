@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { GithubApiService } from "../services/github-api-service";
 import { DataService } from "../services/shared-service";
@@ -24,12 +24,16 @@ export class HistoryComponent implements OnInit {
   displayFiles: string[][][];
   startEnd: StartEnd[];
 
+  leftNumber: StartEnd[][];
+  rightNumber: StartEnd[][];
+
   constructor(
     private httpClient: HttpClient,
     private router: Router,
     private route: ActivatedRoute,
     private dataService: DataService,
-    private repoService: RepoSharedService
+    private repoService: RepoSharedService,
+    private cd: ChangeDetectorRef
   ) {
     this.repoService.current.subscribe(name => (this.repoName = name));
     this.dataService.current.subscribe(name => (this.loginName = name));
@@ -74,6 +78,9 @@ export class HistoryComponent implements OnInit {
     this.displayFiles = new Array<Array<Array<string>>>();
     this.startEnd = new Array<StartEnd>();
 
+    this.leftNumber = new Array<Array<StartEnd>>();
+    this.rightNumber = new Array<Array<StartEnd>>();
+
     this.route.params.subscribe(params => {
       this.commitIndex = +params["commitNumber"];
       this.commitSha = params["sha"];
@@ -101,11 +108,12 @@ export class HistoryComponent implements OnInit {
 
     filePatches.forEach(element => {
       let patch = element.split("\n");
+      // UPDATE: We need to keep the number of additions and deletions each patch for line numbering
       // remove the github comment regarding the number of addition and deletions occured to the patch
       // there is a case where github adds text "No newline at end of file" which needs to be cleaned
       patch = patch[patch.length - 1].includes(" No newline at end of file")
-        ? patch.slice(1, -1)
-        : patch.slice(1);
+        ? patch.slice(0, -1)
+        : patch;
 
       rightPatch.push(patch);
 
@@ -115,16 +123,19 @@ export class HistoryComponent implements OnInit {
       leftPatch.push(tmpArray);
     });
 
-    this.setupLineNumbers(leftPatch, rightPatch);
+    this.setupComparison(leftPatch, rightPatch);
   }
 
   //This is intended to add new lines to match up when comparing two diffs
-  setupLineNumbers(leftPatch: Array<Array<string>>, rightPatch: Array<Array<string>>): void {
+  setupComparison(leftPatch: Array<Array<string>>, rightPatch: Array<Array<string>>): void {
     //cleaned goes to j, regular goes to k
     //This is for the left side of the comparison
     for (let i = 0; i < rightPatch.length; i++) {
+
+      this.leftNumber.push(new Array<StartEnd>());
+      this.rightNumber.push(new Array<StartEnd>());
+
       let cleaned = new Array<string>();
-      console.log(rightPatch[i]);
       for (let j = 0, k = 0; j < leftPatch[i].length; j++) {
         if (leftPatch[i][j].charAt(0) == '+' &&
             rightPatch[i][k].charAt(0) == '-') {
@@ -139,24 +150,36 @@ export class HistoryComponent implements OnInit {
               }
               j--;
               while (rightPatch[i][k].charAt(0) == '-') {
-                cleaned.push('\n');
+                cleaned.push('\t\n');
                 k++;
               }
               k += rightSideCounter;
           } else if (rightPatch[i][k].charAt(0) == '-') {
               while (rightPatch[i][k].charAt(0) == '-') {
-                cleaned.push('\n');
+                cleaned.push('\t\n');
                 k++;
               }
               j--;
           } else if (leftPatch[i][j].charAt(0) == '+') {
-            rightPatch[i].splice(k+1, 0, '\n');
+            rightPatch[i].splice(k+1, 0, '\t\n');
             cleaned.push(leftPatch[i][j]);
             k += 2;
           } else {
             cleaned.push(leftPatch[i][j]);
             k++;
           }
+
+        //as we traverse both files, we also check for @@ for line numbers
+        //note that left and right both share the same @@ line
+        if (leftPatch[i][j].substring(0,2) == "@@") {
+          //Format: @@ -_,_ +_,_ @@
+          //Could be: -_ or +_ only
+          let tmp = leftPatch[i][j].split(" ");
+          let left = tmp[2].substring(1).split(",");
+          let right = tmp[1].substring(1).split(",");
+          this.leftNumber[i].push(new StartEnd(+left[0], left.length >= 2 ? +left[1] : 1));
+          this.rightNumber[i].push(new StartEnd(+right[0], right.length >= 2 ? +right[1] : 1));
+        }
       }
       leftPatch[i] = cleaned;
     }
@@ -190,6 +213,8 @@ export class HistoryComponent implements OnInit {
       return "add";
     } else if (char == "-") {
       return "deletion";
+    } else if (char == "@") {
+      return "linenumber";
     }
     return "";
   }
@@ -208,12 +233,58 @@ export class HistoryComponent implements OnInit {
     }
   }
 
+  calculateLineNumber(i: number, id: number, index: number, code: string) {
+    setTimeout(() => {
+      
+    }, 1000);
+    return this.calculateLineNumbers(i, id, index, code);
+  }
+
+  //0 id is left, 1 id is right
+  calculateLineNumbers(i: number, id: number, index: number, code: string): string {
+    if (code.substring(0, 2) == "@@") {
+      return "";
+    } else if (code == "\t\n") {
+      return "";
+    }
+    let curr = 0;
+    if (id == 0) {
+      while (curr < this.leftNumber[i].length && this.leftNumber[i][curr].end == 0) {
+        curr++;
+      }
+
+      if (curr >= this.leftNumber[i].length) {
+        return "";
+      }
+
+      this.leftNumber[i][curr].start++;
+      this.leftNumber[i][curr].end--;
+      return this.leftNumber[i][curr].start - 1 + ".";
+    } else {
+      while (curr < this.rightNumber[i].length && this.rightNumber[i][curr].end == 0) {
+        curr++;
+      }
+
+      if (curr >= this.rightNumber[i].length) {
+        return "";
+      }
+
+      this.rightNumber[i][curr].start++;
+      this.rightNumber[i][curr].end--;
+      return this.rightNumber[i][curr].start - 1 + ".";
+    }
+  }
+
   ngOnInit(): void {
     if (this.repoName !== "default name") {
       this.setup();
     } else {
       this.router.navigate(["/user"]);
     }
+  }
+
+  ngAfterViewChecked() {
+    // this.cd.detectChanges();
   }
 
   returnBack(): void {
@@ -225,8 +296,8 @@ class StartEnd {
   start: number;
   end: number;
 
-  constructor() {
-    this.start = 0;
-    this.end = 2;
+  constructor(start?: number, end?: number) {
+    this.start = start || 0;
+    this.end = end || 2;
   }
 }
