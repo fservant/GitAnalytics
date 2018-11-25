@@ -48,8 +48,8 @@ pre.code span.th {
   border-top: solid 1px silver;
 }
 
-span.th::before {
-  content: attr(custom_linenumber);
+span.th {
+  /* content: attr(custom_linenumber); */
   text-align: right;
   display: block;
 

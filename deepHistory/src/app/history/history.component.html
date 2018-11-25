@@ -22,7 +22,7 @@
         <pre *ngFor='let patch of file | slice:startEnd[i].start:startEnd[i].end; let id = index' class="code">
             <!-- tr is each ROW, while th is the number, and code is the line of code -->
             <span *ngFor = "let code of patch | lineFilter:searchTerm; let linenumbers = index" class="tr">
-                <span class="th" [attr.custom_linenumber]='calculateLineNumbers(i, id, linenumbers, code)'></span>
+                <span class="th {{id}}" title={{code}}></span>
                 <code [ngClass]="backgroundColorForPatch(code)" title={{code}}>{{ code }}</code>
             </span>
         </pre>

@@ -27,6 +27,9 @@ export class HistoryComponent implements OnInit {
   leftNumber: StartEnd[][];
   rightNumber: StartEnd[][];
 
+  latest_index: number[];
+  setUp: boolean;
+
   constructor(
     private httpClient: HttpClient,
     private router: Router,
@@ -79,6 +82,9 @@ export class HistoryComponent implements OnInit {
 
     this.leftNumber = new Array<Array<StartEnd>>();
     this.rightNumber = new Array<Array<StartEnd>>();
+
+    this.latest_index = new Array<number>();
+    this.setUp = false;
 
     this.route.params.subscribe(params => {
       this.commitIndex = +params["commitNumber"];
@@ -199,10 +205,15 @@ export class HistoryComponent implements OnInit {
 
     this.displayFiles.push(tmp);
     this.startEnd.push(new StartEnd());
+    this.latest_index.push(0);
+    
 
     //TODO: The duplicacy is for proof of concept - remove if needed
     // this.displayFiles.push(tmp);
     // this.startEnd.push(new StartEnd());
+    // this.latest_index.push(0);
+
+    this.setUp = true;
   }
 
   // update the background color patch
@@ -223,6 +234,7 @@ export class HistoryComponent implements OnInit {
       this.startEnd[index].start -= 2;
       this.startEnd[index].end -= 2;
     }
+    this.latest_index[index] = this.startEnd[index].start / 2;
   }
 
   endClick(index: number, file: Array<Array<string>>) {
@@ -230,41 +242,47 @@ export class HistoryComponent implements OnInit {
       this.startEnd[index].start += 2;
       this.startEnd[index].end += 2;
     }
+    this.latest_index[index] = this.startEnd[index].start / 2;
   }
 
-  //0 id is left, 1 id is right
-  calculateLineNumbers(i: number, id: number, index: number, code: string): string {
+  linenumbers(index: number) {
+    this.updateLineNumbers(document.getElementsByClassName("0"), index, 0);
+    this.updateLineNumbers(document.getElementsByClassName("1"), index, 1);
+  }
+
+  updateLineNumbers(doc: HTMLCollectionOf<Element>, index: number, id: number) {
+    let array: StartEnd[];
+
+    if (id == 0) {
+      array = this.leftNumber[index].map(x => Object.assign({}, x));
+    } else {
+      array = this.rightNumber[index].map(x => Object.assign({}, x));
+    }
+
+    for (let i = 0; i < doc.length; i++) {
+      doc[i].innerHTML = this.calculateLineNumbers(doc[i].getAttribute("title"), array);
+    }
+  }
+
+  calculateLineNumbers(code: string, array: StartEnd[]): string {
     if (code.substring(0, 2) == "@@") {
       return "";
     } else if (code == "\t\n") {
       return "";
     }
     let curr = 0;
-    if (id == 0) {
-      while (curr < this.leftNumber[i].length && this.leftNumber[i][curr].end == 0) {
-        curr++;
-      }
 
-      if (curr >= this.leftNumber[i].length) {
-        return "";
-      }
-
-      this.leftNumber[i][curr].start++;
-      this.leftNumber[i][curr].end--;
-      return this.leftNumber[i][curr].start - 1 + ".";
-    } else {
-      while (curr < this.rightNumber[i].length && this.rightNumber[i][curr].end == 0) {
-        curr++;
-      }
-
-      if (curr >= this.rightNumber[i].length) {
-        return "";
-      }
-
-      this.rightNumber[i][curr].start++;
-      this.rightNumber[i][curr].end--;
-      return this.rightNumber[i][curr].start - 1 + ".";
+    while (curr < array.length && array[curr].end == 0) {
+      curr++;
     }
+
+    if (curr >= array.length) {
+      return "";
+    }
+
+    array[curr].start++;
+    array[curr].end--;
+    return array[curr].start - 1 + ".";
   }
 
   ngOnInit(): void {
@@ -272,6 +290,14 @@ export class HistoryComponent implements OnInit {
       this.setup();
     } else {
       this.router.navigate(["/user"]);
+    }
+  }
+
+  ngAfterViewChecked() {
+    if (this.setUp) {
+      for (let index of this.latest_index) {
+        this.linenumbers(index);
+      }
     }
   }
 
