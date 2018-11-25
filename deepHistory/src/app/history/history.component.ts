@@ -24,8 +24,8 @@ export class HistoryComponent implements OnInit {
   displayFiles: string[][][];
   startEnd: StartEnd[];
 
-  leftNumber: StartEnd[][];
-  rightNumber: StartEnd[][];
+  leftNumber: StartEnd[][][];
+  rightNumber: StartEnd[][][];
 
   latest_index: number[];
   setUp: boolean;
@@ -80,8 +80,8 @@ export class HistoryComponent implements OnInit {
     this.displayFiles = new Array<Array<Array<string>>>();
     this.startEnd = new Array<StartEnd>();
 
-    this.leftNumber = new Array<Array<StartEnd>>();
-    this.rightNumber = new Array<Array<StartEnd>>();
+    this.leftNumber = new Array<Array<Array<StartEnd>>>();
+    this.rightNumber = new Array<Array<Array<StartEnd>>>();
 
     this.latest_index = new Array<number>();
     this.setUp = false;
@@ -101,6 +101,9 @@ export class HistoryComponent implements OnInit {
       })
       .then(res => {
         this.getDiffs(this.commitIndex, new Array<string>()).then(res => {
+          this.splitFilesPatches(res);
+
+          //TODO - This line is to show multiple files work with line numbers - for proof of concept
           this.splitFilesPatches(res);
         });
       });
@@ -128,17 +131,20 @@ export class HistoryComponent implements OnInit {
       leftPatch.push(tmpArray);
     });
 
-    this.setupComparison(leftPatch, rightPatch);
+    this.setupComparison(leftPatch, rightPatch, this.latest_index.length);
   }
 
   //This is intended to add new lines to match up when comparing two diffs
-  setupComparison(leftPatch: Array<Array<string>>, rightPatch: Array<Array<string>>): void {
+  setupComparison(leftPatch: Array<Array<string>>, rightPatch: Array<Array<string>>, index: number): void {
+    this.leftNumber.push(new Array<Array<StartEnd>>());
+    this.rightNumber.push(new Array<Array<StartEnd>>());
+
     //cleaned goes to j, regular goes to k
     //This is for the left side of the comparison
     for (let i = 0; i < rightPatch.length; i++) {
 
-      this.leftNumber.push(new Array<StartEnd>());
-      this.rightNumber.push(new Array<StartEnd>());
+      this.leftNumber[index].push(new Array<StartEnd>());
+      this.rightNumber[index].push(new Array<StartEnd>());
 
       let cleaned = new Array<string>();
       for (let j = 0, k = 0; j < leftPatch[i].length; j++) {
@@ -182,8 +188,8 @@ export class HistoryComponent implements OnInit {
           let tmp = leftPatch[i][j].split(" ");
           let left = tmp[2].substring(1).split(",");
           let right = tmp[1].substring(1).split(",");
-          this.leftNumber[i].push(new StartEnd(+left[0], left.length >= 2 ? +left[1] : 1));
-          this.rightNumber[i].push(new StartEnd(+right[0], right.length >= 2 ? +right[1] : 1));
+          this.leftNumber[index][i].push(new StartEnd(+left[0], left.length >= 2 ? +left[1] : 1));
+          this.rightNumber[index][i].push(new StartEnd(+right[0], right.length >= 2 ? +right[1] : 1));
         }
       }
       leftPatch[i] = cleaned;
@@ -206,12 +212,6 @@ export class HistoryComponent implements OnInit {
     this.displayFiles.push(tmp);
     this.startEnd.push(new StartEnd());
     this.latest_index.push(0);
-    
-
-    //TODO: The duplicacy is for proof of concept - remove if needed
-    // this.displayFiles.push(tmp);
-    // this.startEnd.push(new StartEnd());
-    // this.latest_index.push(0);
 
     this.setUp = true;
   }
@@ -246,43 +246,47 @@ export class HistoryComponent implements OnInit {
   }
 
   linenumbers(index: number) {
-    this.updateLineNumbers(document.getElementsByClassName("0"), index, 0);
-    this.updateLineNumbers(document.getElementsByClassName("1"), index, 1);
+    let outerDoc = document.getElementsByClassName("code_row") as HTMLCollectionOf<Element>;
+
+    this.updateLineNumbers(outerDoc[index].getElementsByClassName("0"), index, 0);
+    this.updateLineNumbers(outerDoc[index].getElementsByClassName("1"), index, 1);
   }
 
-  updateLineNumbers(doc: HTMLCollectionOf<Element>, index: number, id: number) {
-    let array: StartEnd[];
-
+  updateLineNumbers(doc: any, index: number, id: number) {
+    let array: StartEnd[][];
+    //need to make deep copy so we can go back to a page and still have a valid range
     if (id == 0) {
-      array = this.leftNumber[index].map(x => Object.assign({}, x));
+      array = this.leftNumber[index].slice().map(x => x.slice().map(y => new StartEnd(y.start, y.end)));
     } else {
-      array = this.rightNumber[index].map(x => Object.assign({}, x));
+      array = this.rightNumber[index].slice().map(x => x.slice().map(y => new StartEnd(y.start, y.end)));
     }
 
     for (let i = 0; i < doc.length; i++) {
-      doc[i].innerHTML = this.calculateLineNumbers(doc[i].getAttribute("title"), array);
+      doc[i].innerHTML = this.calculateLineNumbers(doc[i].getAttribute("title"), array, this.latest_index[index]);
     }
   }
 
-  calculateLineNumbers(code: string, array: StartEnd[]): string {
-    if (code.substring(0, 2) == "@@") {
+  calculateLineNumbers(code: string, array: StartEnd[][], patch: number): string {
+    if (code == null) {
+      return ""
+    } else if (code.substring(0, 2) == "@@") {
       return "";
     } else if (code == "\t\n") {
       return "";
     }
     let curr = 0;
 
-    while (curr < array.length && array[curr].end == 0) {
+    while (curr < array[patch].length && array[patch][curr].end == 0) {
       curr++;
     }
 
-    if (curr >= array.length) {
+    if (curr >= array[patch].length) {
       return "";
     }
 
-    array[curr].start++;
-    array[curr].end--;
-    return array[curr].start - 1 + ".";
+    array[patch][curr].start++;
+    array[patch][curr].end--;
+    return array[patch][curr].start - 1 + ".";
   }
 
   ngOnInit(): void {
@@ -295,8 +299,8 @@ export class HistoryComponent implements OnInit {
 
   ngAfterViewChecked() {
     if (this.setUp) {
-      for (let index of this.latest_index) {
-        this.linenumbers(index);
+      for (let i = 0; i < this.latest_index.length; i++) {
+        this.linenumbers(i);
       }
     }
   }
@@ -313,5 +317,9 @@ class StartEnd {
   constructor(start?: number, end?: number) {
     this.start = start || 0;
     this.end = end || 2;
+  }
+
+  toString(): string {
+    return "start: " + this.start + " " + "end: " + this.end;
   }
 }
