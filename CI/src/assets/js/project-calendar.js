@@ -34,6 +34,38 @@ function tableCreate(blob) {
   tbdy.append(tr);
   tbl.appendChild(tbdy);
 }
+
+function breakTableCreate(blob) {
+  var tbl = document.getElementById('breaks');
+  var tbdy = document.createElement('tbody');
+  var tr = document.createElement('tr');
+  console.log(typeof blob);
+
+  for (let [_key, elem] of Object.entries(blob)) {
+    var tr = document.createElement('tr');
+    var td = document.createElement('td');
+    td.appendChild(document.createTextNode(elem.break));
+    td.setAttribute('align', 'right')
+    tr.appendChild(td);
+
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(elem.notbreak));
+    tr.appendChild(td);
+
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(elem.fix));
+    tr.appendChild(td);
+
+    td = document.createElement('td');
+    td.appendChild(document.createTextNode(elem.notfix));
+    tr.appendChild(td);
+    tbdy.appendChild(tr);
+  }
+
+  tbdy.append(tr);
+  tbl.appendChild(tbdy);
+}
+
 function isValidDate(d) {
   return Object.prototype.toString.call(d) === "[object Date]" && d instanceof Date && !isNaN(d);
 }
@@ -109,6 +141,10 @@ function makePage() {
       tableCreate(doc.data());
       google.charts.setOnLoadCallback(calendarCreate(doc.data()));
   });
+  db.collection("break").doc("rails").get().then((doc) => {
+    breakTableCreate(doc.data());
+    //google.charts.setOnLoadCallback(calendarCreate(doc.data()));
+});
 }
 
 window.onload = makePage;
