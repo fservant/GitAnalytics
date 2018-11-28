@@ -44,6 +44,10 @@ function breakTableCreate(blob) {
   for (let [_key, elem] of Object.entries(blob)) {
     var tr = document.createElement('tr');
     var td = document.createElement('td');
+    td.appendChild(document.createTextNode(_key));
+    td.setAttribute('align', 'right')
+    tr.appendChild(td);
+
     td.appendChild(document.createTextNode(elem.break));
     td.setAttribute('align', 'right')
     tr.appendChild(td);
