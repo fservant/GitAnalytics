@@ -6,9 +6,45 @@ angular.module('authorship', ['ngRoute'])
   //   }}
   // })
 
-  .controller('homeCtrl', function(){
+  .factory('myFactory', function($http, $location, $rootScope){
+    var abc;
+    abc = {
+      location: $location.path(),
+      commits: []
+    }
+    // var arr = [];
+    // p.isLogin = function(){
+    //   if ($location.path() == '/'){
+    //     return true
+    //   }
+    //   return false
+    // }
+    abc.location = $location.path()
+    // console.log($location.path())
+    // p.sumOfContribution = 0;
+    // p.authKey = '28b2d9e6fc82252bd80bf0c395c96a761cb72571'
+    //
+    // console.log(p.user)
 
+    var payload = {
+        method: 'GET',
+        url: 'https://api.github.com/repos/'+ 'zuriw' +'/' + 'CS3114_Project4' + '/commits'
+    }
+
+    $http(payload).then(function(result){
+        abc.commits = result.data
+        //this.arr = result.data
+    }, function(err){
+        console.log(err)
+    })
+
+
+    return abc;
+  })
+
+  .controller('homeCtrl', function(myFactory){
     var home = this;
+    //home.factory = myFactory
     var margin = {top: 20, right: 20, bottom: 30, left: 40},
         width = 960 - margin.left - margin.right,
         height = 500 - margin.top - margin.bottom;
@@ -47,13 +83,41 @@ angular.module('authorship', ['ngRoute'])
     var restoreXFlag = false; //restore order of bars back to original
 
 
+
+
     //disable sort checkbox
     d3.select("label")
       .select("input")
       .property("disabled", true)
       .property("checked", false);
 
-    console.log('make req')
+    console.log('make req');
+
+
+    var map = {};
+    console.log("here")
+    console.log(myFactory.commits);
+    //console.log(home.factory.p.commits);
+    //console.log(home.factory.p.location);
+    //var arr = myFactory.p.commits
+    //console.log(arr);
+    /*arr.forEach(function(element) {
+        console.log('hi');
+        //console.log(element.commit.author.name)
+    });*/
+    // add a item
+    //map[key1] = value1;
+    // or remove it
+    //delete map[key1];
+    // or determine whether a key exists
+    //key1 in map;
+
+    /*var lineArray = [];
+    (p.commits).forEach(function (infoArray, index) {
+        var line = infoArray.join(",");
+        lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
+    });
+    var csvContent = lineArray.join("\n"); */
 
     d3.csv("state_data.csv", function(error, data) {
       console.log('data', data)
@@ -378,7 +442,7 @@ angular.module('authorship', ['ngRoute'])
 
   })
 
-  .controller('primary', function($http, $location, $rootScope){
+  .controller('primary', function($http, $location, $rootScope, myFactory){
     var p = this;
 
     p.isLogin = function(){
@@ -431,6 +495,7 @@ angular.module('authorship', ['ngRoute'])
         })
       }
     }
+    p.myFactory = myFactory
 
     p.getAnalysis = function(){
       p.repoName = p.repo
@@ -448,6 +513,9 @@ angular.module('authorship', ['ngRoute'])
       //   console.log(err)
       // })
     }
+
+
+
 
     p.getTopics = function(){
       var payload = {
