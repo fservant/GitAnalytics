@@ -104,6 +104,8 @@
   var tableData = JSON.parse(localStorage.getItem("tableData"));
   var pieData = JSON.parse(localStorage.getItem("pieData"));
   var userDropdown = JSON.parse(localStorage.getItem("users"));
+  var pie2Data = JSON.parse(localStorage.getItem("pie2Data"));
+  var reviewData = JSON.parse(localStorage.getItem("reviewData"));
 
   /* Set the user dropdown dynamically */
 
@@ -127,9 +129,16 @@
     authorNames.push(pieData[i].author);
     freqs.push(parseInt(pieData[i].frequency));
   }
+  var author2Names = [];
+  var freqs2 = [];
+  for (i in pie2Data) {
+    author2Names.push(pie2Data[i].author);
+    freqs2.push(parseInt(pie2Data[i].frequency));
+  }
+
   var charColor = randLstColor(authorNames.length);
   var ctxP = document.getElementById("chart1").getContext('2d');
-var myPieChart1 = new Chart(ctxP, {
+  var myPieChart1 = new Chart(ctxP, {
     type: 'pie',
     data: {
         labels: authorNames,
@@ -168,16 +177,17 @@ function(evt){
 }
 ); 
 
+  var charColor2 = randLstColor(author2Names.length);
   var ctxP = document.getElementById("chart2").getContext('2d');
-var myPieChart2 = new Chart(ctxP, {
+  var myPieChart2 = new Chart(ctxP, {
     type: 'pie',
     data: {
-        labels: ["Red", "Green", "Yellow", "Grey", "Dark Grey"],
+        labels: author2Names,
         datasets: [
             {
-                data: [300, 500, 100, 40, 120],
-                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360"],
-                hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+                data: freqs2,
+                backgroundColor: charColor2[0],
+                hoverBackgroundColor: charColor2[0]
             }
         ]
     },
@@ -196,6 +206,12 @@ function(evt){
     if(activePoints[0]){
       var labelnum = activePoints[0]._index;
       var label = myPieChart2.data.labels[labelnum] ;
+
+      //window.alert(label);
+      //nameClicked=label;
+      var nameClicked = [];
+      nameClicked.push(label);
+      localStorage.setItem("nameClicked", JSON.stringify(nameClicked));
       window.location = "index3.html";
       //window.alert(label);
     }

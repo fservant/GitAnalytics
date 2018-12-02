@@ -22,14 +22,18 @@
         // This part to get the user information
         var app=angular.module('app', []);
 
-        app.controller('MainCtrl', function($http){
+        app.controller('MainCtrl', function($http, $timeout){
         var vm = this;
         vm.data = false;
         var tableData = [];
         var authorNames = [];
         var authorFreq = [];
+        var reviewUserNames = [];
+        var reviewUserFreq = [];
         var pieData = [];
+        var pie2Data = [];
         var userDropdown = [];
+        var reviewData = [];
 
           /* All the data getting happens here */
           vm.fetchData = function(user, repo) {
@@ -55,26 +59,65 @@
                   var currFreq = authorFreq[iOf];
                   authorFreq[iOf] = currFreq + 1;
                 }
-                $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/pulls/"+pull.number+"reviews?client_id=f3c2bc2be8ba0b77fb43&client_secret=a92aa63bf9f45fcc19af0b2c25f78118534d020d").then(function(res2) {
-                    console.log(res2.data);
-                })
+                $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/pulls/"+pull.number+"/reviews?client_id=f3c2bc2be8ba0b77fb43&client_secret=a92aa63bf9f45fcc19af0b2c25f78118534d020d").then(function(res2) {
+                  for(i in res2.data) {
+                    console.log(res2.data[i]);
+                    var currUsername = res2.data[i].user.login;
+                    var currIOf = reviewUserNames.indexOf(currUsername);
+                    if(currIOf < 0) {
+                      reviewUserNames.push(currUsername);
+                      reviewUserFreq.push(1);
+                    } else {
+                      var currFreq = reviewUserFreq[currIOf];
+                      reviewUserFreq[currIOf] = currFreq + 1;
+                    }
+                  }
+               }),
+                $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/pulls/"+pull.number+"?client_id=f3c2bc2be8ba0b77fb43&client_secret=a92aa63bf9f45fcc19af0b2c25f78118534d020d").then(function(res3) {
+                  var review = res3.data;
+                  reviewData.push({
+                    "number" : review.number,
+                    "additions" : review.additions,
+                    "deletions" : review.deletions,
+                    "bodyText" : review.body,
+                    "titleText" : review.title,
+                    "numFilesChanged" : review.changed_files,
+                    "numComments" : review.comments,
+                    "numCommits" : review.commits,
+                    "user" : review.user.login
+                  });
+               });
               }
-              for(var i = 0; i < authorNames.length; i++) {
-                pieData.push({
-                  "author": authorNames[i],
-                  "frequency": authorFreq[i]
+
+              
+              $timeout(function() {
+                for(var i = 0; i < reviewUserNames.length; i++) {
+                  pie2Data.push({
+                      "author": reviewUserNames[i],
+                      "frequency" : reviewUserFreq[i]
+                  });
+                }
+                for(var i = 0; i < authorNames.length; i++) {
+                  pieData.push({
+                    "author": authorNames[i],
+                    "frequency": authorFreq[i]
+                  });
+                }
+                tableData.sort(function(a, b) {
+                    return parseInt(a.number) - parseInt(b.number);
                 });
-              }
-              tableData.sort(function(a, b) {
-                  return parseInt(a.number) - parseInt(b.number);
-              });
-              // vm.name = res.data.name || "NOT FOUND~ :(";
-              // vm.location = res.data.location || "NOT FOUND~ :(";
-              vm.loading = false;
-              localStorage.setItem("allPulls",JSON.stringify(vm.data));
-              localStorage.setItem("tableData", JSON.stringify(tableData));
-              localStorage.setItem("pieData", JSON.stringify(pieData));
-              //window.location = "index2.html";
+                // vm.name = res.data.name || "NOT FOUND~ :(";
+                // vm.location = res.data.location || "NOT FOUND~ :(";
+                vm.loading = false;
+                
+                localStorage.setItem("allPulls",JSON.stringify(vm.data));
+                localStorage.setItem("tableData", JSON.stringify(tableData));
+                localStorage.setItem("pieData", JSON.stringify(pieData));
+                localStorage.setItem("reviewData", JSON.stringify(reviewData));
+                localStorage.setItem("pie2Data", JSON.stringify(pie2Data));
+ 
+                window.location = "index2.html";
+              }, 1000);
             }),
             /* This section gets all the users and contributions to fill out the dropdown list */
             $http.get("http://api.github.com/repos/"+user.name+"/"+repo.name+"/contributors?client_id=f3c2bc2be8ba0b77fb43&client_secret=a92aa63bf9f45fcc19af0b2c25f78118534d020d").then(function(res) {
