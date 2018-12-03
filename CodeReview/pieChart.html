@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <!-- Header file -->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Code Review</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  
+      <script src="main.js"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  </head>
+  <style>
+    .scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+}
+  </style>
+  <body>
+    <!-- <nav class="navbar navbar-expand-lg navbar-light"> -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand mb-0 h1" href="index.html">Analytics</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+          
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="PullRequestLst.html">Pull Request</a>
+            </li>
+          
+            <li class="nav-item">
+              <a class = "nav-link" href = "#">Authorship and Reviewer</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> User </a>
+              <ul class="dropdown-menu scrollable-menu" id="userDropdown"> </ul>
+            </li>
+
+          </ul>
+          
+          <!-- Search bar -->
+          <div class = "inputWithIcon">
+            <form class="form-inline my-2 my-lg-0">
+              <i class = "fas fa-search"></i>
+              <input class="form-control mr-sm-2" type="text" placeholder="Repository Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="searchButtonClicked()">Search</button>
+            </form>
+          </div>
+      </div>
+    </nav>
+
+    <!-- Title -->
+    <h1>Code Review<br><br></h1>
+
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div>
+                <div>
+                    <h1>Pull Requests</h1>
+                </div>
+                <div>
+                    <canvas id="chart1" height=250></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div>
+                <div>
+                    <h1>Reviewers</h1>
+                </div>
+                <div>
+                    <canvas id="chart2" height=250></canvas>
+                </div>
+            </div>
+        </div>
+        
+</div>
+
+</div>
+    <!-- The rest in the body!!! -->
+
+
+<!-- Graphs-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script src="randListColor.js"></script>
+<script>
+  
+  /* Get all the stuff in local storage that was gotten through Github API */
+  var pullReqs = JSON.parse(localStorage.getItem("allPulls"));
+  var tableData = JSON.parse(localStorage.getItem("tableData"));
+  var pieData = JSON.parse(localStorage.getItem("pieData"));
+  var userDropdown = JSON.parse(localStorage.getItem("users"));
+  var pie2Data = JSON.parse(localStorage.getItem("pie2Data"));
+  var reviewData = JSON.parse(localStorage.getItem("reviewData"));
+
+  /* Set the user dropdown dynamically */
+
+  var list = document.getElementById("userDropdown"); 
+  for (var i = 0; i < userDropdown.length; i++){                
+      var opt = userDropdown[i];
+      var li = document.createElement("li");
+      var link = document.createElement("a");             
+      var text = document.createTextNode(opt.login);
+      link.appendChild(text);
+      link.href = "#";
+      link.className = "dropdown-item";
+      li.appendChild(link);
+      list.appendChild(li);
+  }
+  /* Set the Pull Requests Pie Chart */
+
+  var authorNames = [];
+  var freqs = [];
+  for (i in pieData) {
+    authorNames.push(pieData[i].author);
+    freqs.push(parseInt(pieData[i].frequency));
+  }
+  var author2Names = [];
+  var freqs2 = [];
+  for (i in pie2Data) {
+    author2Names.push(pie2Data[i].author);
+    freqs2.push(parseInt(pie2Data[i].frequency));
+  }
+
+  var charColor = randLstColor(authorNames.length);
+  var ctxP = document.getElementById("chart1").getContext('2d');
+  var myPieChart1 = new Chart(ctxP, {
+    type: 'pie',
+    data: {
+        labels: authorNames,
+        datasets: [
+            {
+                data: freqs,
+                backgroundColor: charColor[0],
+                hoverBackgroundColor: charColor[0]
+            }
+        ]
+    },
+    options: {
+      legend: {
+        display: false
+      },
+        responsive: true
+    }
+});
+
+$("#chart1").click( 
+function(evt){
+
+    var activePoints = myPieChart1.getElementsAtEvent(evt);
+    if(activePoints[0]){
+      var labelnum = activePoints[0]._index;
+      var label = myPieChart1.data.labels[labelnum] ;
+
+      //window.alert(label);
+      //nameClicked=label;
+      var nameClicked = [];
+      nameClicked.push(label);
+      localStorage.setItem("nameClicked", JSON.stringify(nameClicked));
+      window.location = "index3.html";
+    }
+    
+}
+); 
+
+  var charColor2 = randLstColor(author2Names.length);
+  var ctxP = document.getElementById("chart2").getContext('2d');
+  var myPieChart2 = new Chart(ctxP, {
+    type: 'pie',
+    data: {
+        labels: author2Names,
+        datasets: [
+            {
+                data: freqs2,
+                backgroundColor: charColor2[0],
+                hoverBackgroundColor: charColor2[0]
+            }
+        ]
+    },
+    options: {
+        legend: {
+          display: false
+        },
+        responsive: true
+    }
+
+});
+$("#chart2").click( 
+function(evt){
+
+    var activePoints = myPieChart2.getElementsAtEvent(evt);
+    if(activePoints[0]){
+      var labelnum = activePoints[0]._index;
+      var label = myPieChart2.data.labels[labelnum] ;
+
+      //window.alert(label);
+      //nameClicked=label;
+      var nameClicked = [];
+      nameClicked.push(label);
+      localStorage.setItem("nameClicked", JSON.stringify(nameClicked));
+      window.location = "userSpecificTable.html";
+      //window.alert(label);
+    }
+    
+}
+); 
+
+</script>
+
+  </body>
+</html>

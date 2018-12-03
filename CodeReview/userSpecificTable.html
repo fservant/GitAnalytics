@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <!-- Header file -->
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <title>Code Review</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+  
+      <!--script src="main.js"></script-->
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+      <script>
+        var pullReqs = JSON.parse(localStorage.getItem("allPulls"));
+        var tableData = JSON.parse(localStorage.getItem("tableData"));
+        var pieData = JSON.parse(localStorage.getItem("pieData"));
+        var userDropdown = JSON.parse(localStorage.getItem("users"));
+      </script>
+ </head>
+
+  <body>
+    <!-- <nav class="navbar navbar-expand-lg navbar-light"> -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand mb-0 h1" href="index.html">Analytics</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+          
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="index2.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+          
+            <li class="nav-item">
+              <a class="nav-link" href="PullRequestLst.html">Pull Request</a>
+            </li>
+          
+            <li class="nav-item">
+              <a class = "nav-link" href = "#">Authorship and Reviewer</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> User </a>
+              <ul class="dropdown-menu scrollable-menu" id="userDropdown"> </ul>
+            </li>
+
+          </ul>
+          
+          <!-- Search bar -->
+          <div class = "inputWithIcon">
+            <form class="form-inline my-2 my-lg-0">
+              <i class = "fas fa-search"></i>
+              <input class="form-control mr-sm-2" type="text" placeholder="Repository Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit" onclick="searchButtonClicked()">Search</button>
+            </form>
+          </div>
+      </div>
+    </nav>
+
+    <!-- Title -->
+    <h1>Code Review<br><br></h1>
+
+    <div class="container-fluid">
+    <!--div class="row">
+        <div class="col-md-6">
+            <div>
+                <div>
+                    <h1>Reviewed</h1>
+                </div>
+                <div>
+                    <canvas id="chart1"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div>
+                <div>
+                    <h1>Pull Requests</h1>
+                </div>
+                <div>
+                    <canvas id="chart2"></canvas>
+                </div>
+            </div>
+        </div>
+        
+</div-->
+<div class="container-fluid">
+  <h3> </h3>
+  <h3> </h3>
+  <h3>Lists pull requests</h3>
+  <div class="row">
+  <div class="col-md-9 col-md-push-3">
+    <table class="table table-striped table-hover" id="pullRequestTable">
+      <thead class="thead-dark">
+        <tr>
+          <th data-field="number">#</th>
+          <th data-field="title">Name</th>
+          <!--th data-field="linkToPull">Link</th-->
+          <th data-field="author">Author</th>
+          <!--th data-field="authorProfile">Author Profile</th-->
+          <th data-field="state">State</th>
+        </tr>
+      </thead>
+      
+    </table>
+  </div>
+  <!-- Graphs-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script>
+<script>
+  //var table = $('#pullRequestTable');
+   var tableData = JSON.parse(localStorage.getItem("tableData"));
+   var nameClicked = JSON.parse(localStorage.getItem("nameClicked"));
+    var mydata = tableData;
+    
+
+    
+    var table = document.getElementById('pullRequestTable');
+    console.log(nameClicked);
+    var count = 0;
+    mydata.forEach(function(object) {
+      if(object.author==nameClicked[0]){
+        count=count+1;
+        var tr = document.createElement('tr');
+        tr.innerHTML = '<td>' + object.number + '</td>' +
+          '<td><a href="' + object.linkToPull + '">' + object.title + '</a></td>' +
+          
+          '<td><a href="' + object.authorProfile + '">' + object.author + '</a></td>'+
+          
+          '<td>' + object.state + '</td>';
+        table.appendChild(tr);
+      }
+});
+
+</script>
+  <div class="col-md-3 col-md-pull-9">
+    <table class="table table-dark">
+      <tr>
+        <th>Total Users</th>
+        <td><script> document.write(Object.keys(userDropdown).length)</script></td>
+      </tr>
+      <tr>
+        <th>Pull Requested</th>
+        <td><script> document.write(Object.keys(pieData).length)</script></td>
+      </tr>
+      <tr>
+        <th>Current User</th>
+        <td><script>document.write(nameClicked[0])</script></td>
+      </tr>
+      <tr>
+          <th>Current User's # 0f Pull Request</th>
+          <td><script>document.write(count)</script></td>
+        </tr>
+      <tr>
+        <th>Additions</th>
+        <td><script>document.write(68)</script></td>
+      </tr>
+      <tr>
+        <th>Deletions</th>
+        <td><script>document.write(37)</script></td>
+      </tr>
+      <tr>
+        <th>Number of Files Changed</th>
+        <td><script>document.write(12)</script></td>
+      </tr>
+      <tr>
+        <th>Number of Commits</th>
+        <td><script>document.write(4)</script></td>
+      </tr>
+      <tr>
+        <th>Ratio of Code Reviewed vs Written</th>
+        <td><script>document.write("35:105")</script></td>
+      </tr>
+
+    </table>
+
+  </div>
+</div>
+
+</div>
+    <!-- The rest in the body!!! -->
+
+
+
+
+
+  </body>
+</html>
