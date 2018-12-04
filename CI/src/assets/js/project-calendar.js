@@ -117,6 +117,55 @@ function calendarCreate(data) {
   chart.draw(dataTable, options);
 }
 
+function eventTypeCreate(data) {
+  var cr_arr = [];
+  var pr_arr = [];
+  var push_arr = [];
+  for (let [_key, elem] of Object.entries(blob)) {
+    if (_key === 'cron') {
+      cr_arr.push(['canceled', elem.canceled]);
+      cr_arr.push(['errored', elem.errored]);
+      cr_arr.push(['failed', elem.failed]);
+      cr_arr.push(['passed', elem.passed]);
+    }
+    if (_key === 'pull_request') {
+      pr_arr.push(['canceled', elem.canceled]);
+      pr_arr.push(['errored', elem.errored]);
+      pr_arr.push(['failed', elem.failed]);
+      pr_arr.push(['passed', elem.passed]);
+    }
+    if (_key === 'push') {
+      push_arr.push(['canceled', elem.canceled]);
+      push_arr.push(['errored', elem.errored]);
+      push_arr.push(['failed', elem.failed]);
+      push_arr.push(['passed', elem.passed]);
+    }
+  }
+  var options = {
+    title: 'Cron'
+  };
+
+  var data = google.visualization.arrayToDataTable(cr_arr);
+  var chart = new google.visualization.PieChart(document.getElementById('pie_cron'));
+  chart.draw(data, options);
+
+  var options = {
+    title: 'Pull Requests'
+  };
+
+  var data = google.visualization.arrayToDataTable(pr_arr);
+  var chart = new google.visualization.PieChart(document.getElementById('pie_pull'));
+  chart.draw(data, options);
+
+  var options = {
+    title: 'Push'
+  };
+
+  var data = google.visualization.arrayToDataTable(push_arr);
+  var chart = new google.visualization.PieChart(document.getElementById('pie_push'));
+  chart.draw(data, options);
+}
+
 
 function makePage() {
   if (!firebase.apps.length) {
@@ -144,6 +193,11 @@ function makePage() {
   db.collection("break").doc("rails").get().then((doc) => {
     breakTableCreate(doc.data());
     //google.charts.setOnLoadCallback(calendarCreate(doc.data()));
+  });
+
+  google.charts.load('current', {'packages':['corechart']});
+  db.collection("build_type").doc("rails").get().then((doc) => {
+    google.charts.setOnLoadCallback(eventTypeCreate(doc.data()));
 });
 }
 
