@@ -16,6 +16,14 @@
     </pre>
 </div> -->
 
+<div>
+    <form>
+        <label class="file_checkbox" *ngFor='let file of listOfFilesFromCommit'>
+            <input type="checkbox" id="{{file.filename}}" (click)="checkBoxClicked(file)" [checked]="checkBoxOriginal(file)">{{ file.filename }}
+        </label>
+    </form>
+</div>
+
 <div class="center_container table_container" id="code_table">
     <div *ngFor="let file of displayFiles; let i = index" class="code_row">
         <img (click)='startClick(i)' src="src/assets/pictures/leftarrow.png" class="arrow">

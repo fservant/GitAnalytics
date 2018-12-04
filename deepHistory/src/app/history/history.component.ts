@@ -23,12 +23,15 @@ export class HistoryComponent implements OnInit {
 
   displayFiles: string[][][];
   startEnd: StartEnd[];
+  fileOrder: string[];
 
   leftNumber: StartEnd[][][];
   rightNumber: StartEnd[][][];
 
   latest_index: number[];
   setUp: boolean;
+
+  listOfFilesFromCommit: String[];
 
   constructor(
     private httpClient: HttpClient,
@@ -41,7 +44,7 @@ export class HistoryComponent implements OnInit {
     this.dataService.current.subscribe(name => (this.loginName = name));
   }
 
-  getDiffs(index: number, array: string[]): Promise<string[]> {
+  getDiffs(individualFileName: string, index: number, array: string[]): Promise<string[]> {
     return new Promise((resolve, reject) => {
       this.githubApiService
         .getSingleCommitWithSha(
@@ -51,7 +54,7 @@ export class HistoryComponent implements OnInit {
         )
         .forEach(res => {
           let tmpIndex = res["files"].findIndex(
-            file => file["filename"] == this.fileName
+            file => file["filename"] == individualFileName
           );
           if (tmpIndex !== -1) {
             array.push(res["files"][tmpIndex]["patch"]);
@@ -63,7 +66,7 @@ export class HistoryComponent implements OnInit {
             if (index + 1 >= this.commits.length) {
               resolve(array);
             } else {
-              this.getDiffs(index + 1, array).then(res2 => {
+              this.getDiffs(individualFileName, index + 1, array).then(res2 => {
                 resolve(res2);
               });
             }
@@ -79,6 +82,7 @@ export class HistoryComponent implements OnInit {
   setup(): void {
     this.displayFiles = new Array<Array<Array<string>>>();
     this.startEnd = new Array<StartEnd>();
+    this.fileOrder = new Array<string>();
 
     this.leftNumber = new Array<Array<Array<StartEnd>>>();
     this.rightNumber = new Array<Array<Array<StartEnd>>>();
@@ -93,20 +97,30 @@ export class HistoryComponent implements OnInit {
     });
 
     this.commitNumbers = new Array<number>();
+
+    this.getCommitsAndDisplay(this.fileName);
+
+    this.githubApiService
+      .getSingleCommitWithSha(this.loginName, this.repoName, this.commitSha)
+      .forEach(res => {
+        this.listOfFilesFromCommit = res["files"];
+      });
+  }
+
+  getCommitsAndDisplay(individualFileName: string): void {
+    this.fileOrder.push(individualFileName);
+
     //gets all commits
     this.githubApiService
-      .getRepositoryCommits(this.loginName, this.repoName)
-      .forEach((commit: any) => {
-        this.commits = commit;
-      })
-      .then(res => {
-        this.getDiffs(this.commitIndex, new Array<string>()).then(res => {
-          this.splitFilesPatches(res);
-
-          //TODO - This line is to show multiple files work with line numbers - for proof of concept
-          this.splitFilesPatches(res);
-        });
+    .getRepositoryCommits(this.loginName, this.repoName)
+    .forEach((commit: any) => {
+      this.commits = commit;
+    })
+    .then(res => {
+      this.getDiffs(individualFileName, this.commitIndex, new Array<string>()).then(res => {
+        this.splitFilesPatches(res);
       });
+    });
   }
 
   splitFilesPatches(filePatches: string[]) {
@@ -287,6 +301,25 @@ export class HistoryComponent implements OnInit {
     array[patch][curr].start++;
     array[patch][curr].end--;
     return array[patch][curr].start - 1 + ".";
+  }
+  
+  checkBoxClicked(file: any): void {
+    let tmp = document.getElementById(file["filename"]) as HTMLInputElement;
+    if (tmp.checked) {
+      this.getCommitsAndDisplay(file["filename"]);
+    } else {
+      let index = this.fileOrder.indexOf(file["filename"]);
+      this.displayFiles.splice(index, 1);
+      this.startEnd.splice(index, 1);
+      this.leftNumber.splice(index, 1);
+      this.rightNumber.splice(index, 1);
+      this.latest_index.splice(index, 1);
+      this.fileOrder.splice(index, 1);
+    }
+  }
+
+  checkBoxOriginal(file: any): boolean {
+    return file["filename"] === this.fileName;
   }
 
   ngOnInit(): void {
