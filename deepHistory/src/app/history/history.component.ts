@@ -4,6 +4,7 @@ import { GithubApiService } from "../services/github-api-service";
 import { DataService } from "../services/shared-service";
 import { RepoSharedService } from "../services/repo-shared-service";
 import { HttpClient } from "@angular/common/http";
+import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: "page-history",
@@ -124,7 +125,7 @@ export class HistoryComponent implements OnInit {
   }
 
   splitFilesPatches(filePatches: string[]) {
-    
+
     let leftPatch  = new Array<Array<string>>();
     let rightPatch = new Array<Array<string>>();
 
@@ -164,7 +165,7 @@ export class HistoryComponent implements OnInit {
       for (let j = 0, k = 0; j < leftPatch[i].length; j++) {
         if (leftPatch[i][j].charAt(0) == '+' &&
             rightPatch[i][k].charAt(0) == '-') {
-              
+
               let rightSideCounter = 0;
               while (leftPatch[i][j].charAt(0) == '+' &&
                     rightPatch[i][k].charAt(0) == '-') {
@@ -210,12 +211,12 @@ export class HistoryComponent implements OnInit {
     }
 
     //This is for the right side of the comparison
-    rightPatch = rightPatch.map(file => 
-      file.map(line => 
+    rightPatch = rightPatch.map(file =>
+      file.map(line =>
         line.charAt(0) == '+' ? '' : line)
-        .filter(line => 
+        .filter(line =>
           line !== ''));
-  
+
     //This puts everything into one array
     let tmp = new Array<Array<string>>();
     for (let i = 0; i < rightPatch.length; i++) {
@@ -302,7 +303,7 @@ export class HistoryComponent implements OnInit {
     array[patch][curr].end--;
     return array[patch][curr].start - 1 + ".";
   }
-  
+
   checkBoxClicked(file: any): void {
     let tmp = document.getElementById(file["filename"]) as HTMLInputElement;
     if (tmp.checked) {

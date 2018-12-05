@@ -4,6 +4,18 @@
 <div class="search container" ng-controller="myController">
   <input type="text" name="query" autocomplete="off" placeholder="Search for a Line..." onfocus="this.placeholder = ''"
     onblur="this.placeholder = 'Search for a Line...'" id="textbox" [(ngModel)]="searchTerm" [hidden]=showme />
+
+      <div ngbDropdown class="d-inline-block filebutton" [autoClose]="false">
+        <button class="btn filebutton" id="dropdownConfig" ngbDropdownToggle>File Menu</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownConfig">
+          <form>
+            <label class="dropdown-item" *ngFor='let file of listOfFilesFromCommit'>
+              <input type="checkbox" id="{{file.filename}}" (click)="checkBoxClicked(file)" [checked]="checkBoxOriginal(file)">{{
+              file.filename }}
+            </label>
+          </form>
+        </div>
+      </div>
 </div>
 
 <!-- <div class="center_container table_container" id="code_table">
@@ -16,13 +28,7 @@
     </pre>
 </div> -->
 
-<div>
-    <form>
-        <label class="file_checkbox" *ngFor='let file of listOfFilesFromCommit'>
-            <input type="checkbox" id="{{file.filename}}" (click)="checkBoxClicked(file)" [checked]="checkBoxOriginal(file)">{{ file.filename }}
-        </label>
-    </form>
-</div>
+
 
 <div class="center_container table_container" id="code_table">
     <div *ngFor="let file of displayFiles; let i = index" class="code_row">

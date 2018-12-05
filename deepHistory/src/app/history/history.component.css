@@ -144,3 +144,12 @@ pre.code span.e code {
   margin-left:auto;
   margin-right:auto;
 }
+
+.filebutton {
+  padding-top: 10px;
+  float:left;
+  color: black;
+  border-color:black;
+  font-family: 'Nexa Light';
+  font-size: 120%;
+}

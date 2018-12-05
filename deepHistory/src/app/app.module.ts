@@ -25,7 +25,7 @@ import { CommitSearchPipe } from "./pipe/commit-search-pipe";
 import { FileSearchPipe } from "./pipe/file-search-pipe";
 import { RepoSharedService } from './services/repo-shared-service';
 import { LineSearchPipe } from "./pipe/line-search-pipe";
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent, HistoryComponent, RepoComponent, UserComponent, RepositorySearchPipe,
@@ -40,7 +40,8 @@ import { LineSearchPipe } from "./pipe/line-search-pipe";
     HttpClientModule,
     MatCardModule,
     FormsModule,
-    MatGridListModule
+    MatGridListModule,
+    NgbModule
   ],
   providers: [AuthService, UserService, UserResolver, AuthGuard, DataService, RepoSharedService],
   bootstrap: [AppComponent]
