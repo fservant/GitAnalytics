@@ -10,7 +10,7 @@ angular.module('authorship', ['ngRoute'])
       initDayNightPie: function(user, repo){
         var payload = {
             method: 'GET',
-            url: 'https://api.github.com/repos/'+ user+'/' + repo + '/commits'
+            url: 'https://api.github.com/repos/'+ user+'/' + repo + '/commits?per_page=1000&type=owner'
         }
         $http(payload).then(function(result){
             graph.commits = result.data
@@ -28,6 +28,7 @@ angular.module('authorship', ['ngRoute'])
             console.log(graph.nightCommits)
             graph.buildDayNightPie()
             graph.buildBarGraph()
+            graph.buildWeekGraph()
         }, function(err){
             console.log(err)
         })
@@ -36,11 +37,11 @@ angular.module('authorship', ['ngRoute'])
       nightCommits: [],
       buildDayNightPie: function(){
         var dayCommitsPair = {
-          label: "Day Commits",
+          label: "Day",
           value: graph.dayCommits.length
         }
         var nightCommitsPair = {
-          label: "Night Commits",
+          label: "Night",
           value: graph.nightCommits.length
         }
         document.getElementById("dayNightPie").innerHTML = ''
@@ -90,9 +91,6 @@ angular.module('authorship', ['ngRoute'])
      var sortDescending; //if true, bars are sorted by height in descending order
      var restoreXFlag = false; //restore order of bars back to original
 
-
-
-
      //disable sort checkbox
      d3.select("label")
        .select("input")
@@ -100,7 +98,6 @@ angular.module('authorship', ['ngRoute'])
        .property("checked", false);
 
      console.log('make req');
-
 
      var map = {};
      //Bug fix: Bug, fix, error
@@ -166,6 +163,7 @@ angular.module('authorship', ['ngRoute'])
      keys.forEach(function(key) {
          console.log(key);
          colNames += ("," + key);
+         console.log("COLNAMES", colNames)
          bugFixRow += ("," + map[key]['bugFix']);
          refactorRow += ("," + map[key]['refactor']);
          featureRow += ("," + map[key]['feature']);
@@ -502,6 +500,291 @@ angular.module('authorship', ['ngRoute'])
 
      });
 
+      }, 
+    buildWeekGraph: function(){
+        document.getElementById("weekGraph").innerHTML = ''
+        //home.factory = myFactory
+     var margin = {top: 20, right: 20, bottom: 30, left: 40},
+         width = 960 - margin.left - margin.right,
+         height = 500 - margin.top - margin.bottom;
+
+     var x = d3.scale.ordinal()
+         .rangeRoundBands([0, width*0.9], .1);
+
+     var y = d3.scale.linear()
+         .rangeRound([height, 0]);
+
+     var color = d3.scale.ordinal()
+         .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+     var xAxis = d3.svg.axis()
+         .scale(x)
+         .orient("bottom");
+
+     var yAxis = d3.svg.axis()
+         .scale(y)
+         .orient("left")
+         .tickFormat(d3.format(".2s"));
+
+         console.log('create svg')
+
+     var svg = d3.select(document.getElementById("barGraph")).append("svg")
+         .attr("width", width + margin.left + margin.right)
+         .attr("height", height + margin.top + margin.bottom)
+       .append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+     var active_link = "0"; //to control legend selections and hover
+     var legendClicked; //to control legend selections
+     var legendClassArray = []; //store legend classes to select bars in plotSingle()
+     var legendClassArray_orig = []; //orig (with spaces)
+     var sortDescending; //if true, bars are sorted by height in descending order
+     var restoreXFlag = false; //restore order of bars back to original
+
+     //disable sort checkbox
+     d3.select("label")
+       .select("input")
+       .property("disabled", true)
+       .property("checked", false);
+
+     console.log('make req');
+
+
+     var map = {};
+
+     // console.log("here")
+     // console.log(myFactory.commits);
+     var commitArr = graph.commits;
+     map['Sunday'] = 0;
+     map['Monday'] = 0;
+     map['Tuesday'] = 0;
+     map['Wednesday'] = 0;
+     map['Thursday'] = 0;
+     map['Friday'] = 0;
+     map['Saturday'] = 0
+
+     commitArr.forEach(function(element) {
+     
+      var date = element.commit.committer.date;
+      var splitup = date.split('T');
+      
+      //var year = splitup[0];
+      //var month = splitup[1];
+      //var dateofMonth = splitup[2].split('T');
+
+      var finaldate = new Date(splitup); 
+      var dayOfWeek = finaldate.getDay();
+      
+      if (dayOfWeek == 0) {
+        map['Sunday']++; 
+      } else if (dayOfWeek == 1) {
+        map['Monday']++; 
+      } else if (dayOfWeek == 2) {
+        map['Tuesday']++; 
+      } else if (dayOfWeek == 3) {
+        map['Wednesday']++;
+      } else if (dayOfWeek == 4) {
+        map['Thursday']++; 
+      } else if (dayOfWeek == 5) {
+        map['Friday']++; 
+      } else if (dayOfWeek == 6) {
+        map['Saturday']++; 
+      }
+
+
+     });
+     console.log("MAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP", map)
+
+     //Column names of csv
+     var colNames = "State"
+     var row1 = "Sunday"
+     var row2 = "Monday"
+     var row3 = "Tuesday"
+     var row4 = "Wednesday"
+     var row5 = "Thursday"
+     var row6 = "Friday"
+     var row7 = "Saturday"
+
+     //var keys = Object.keys(map);
+    
+     //console.log(key);
+     colNames += ("," + "Count");
+     row1 += ("," + map["Sunday"]);
+     //colNames += ("," + "Monday");
+     row2 += ("," + map["Monday"]);
+     //colNames += ("," + "Tuesday");
+     row3 += ("," + map["Tuesday"]);
+     //colNames += ("," + "Wednesday");
+     row4 += ("," + map["Wednesday"]);
+     //colNames += ("," + "Thursday");
+     row5 += ("," + map["Thursday"]);
+     //colNames += ("," + "Friday");
+     row6 += ("," + map["Friday"]);
+     //colNames += ("," + "Saturday");
+     row7 += ("," + map["Saturday"]);
+
+
+     var csvString = colNames + "\n" + row1 + "\n" + row2 + "\n" + row3 + "\n" + row4 + "\n" + row5 + "\n" + row6 + "\n" + row7;
+
+     console.log(csvString);
+
+     var fileName = "state_data.csv";
+
+     var data = d3.csv.parse(csvString);
+     console.log(data);
+
+     d3.csv(fileName, function(datee) {
+       console.log('data', data)
+
+       color.domain(d3.keys(data[0]).filter(function(key) { return key !== "State"; }));
+
+       data.forEach(function(d) {
+         var mystate = d.State; //add to stock code
+         var y0 = 0;
+         //d.ages = color.domain().map(function(name) { return {name: name, y0: y0, y1: y0 += +d[name]}; });
+         d.ages = color.domain().map(function(name) {
+           //return { mystate:mystate, name: name, y0: y0, y1: y0 += +d[name]}; });
+           return {
+             mystate:mystate,
+             name: name,
+             y0: y0,
+             y1: y0 += +d[name],
+             value: d[name],
+             y_corrected: 0
+           };
+           });
+         d.total = d.ages[d.ages.length - 1].y1;
+
+       });
+
+       //Sort totals in descending order
+       data.sort(function(a, b) { return b.total - a.total; });
+
+       x.domain(data.map(function(d) { return d.State; }));
+       y.domain([0, d3.max(data, function(d) { return d.total; })]);
+
+       svg.append("g")
+           .attr("class", "x axis")
+           .attr("transform", "translate(0," + height + ")")
+           .call(xAxis);
+
+       svg.append("g")
+           .attr("class", "y axis")
+           .call(yAxis)
+         .append("text")
+           .attr("transform", "rotate(-90)")
+           .attr("y", 6)
+           .attr("dy", ".71em")
+           .style("text-anchor", "end");
+           //.text("Population");
+
+       var state = svg.selectAll(".state")
+           .data(data)
+         .enter().append("g")
+           .attr("class", "g")
+           .attr("transform", function(d) { return "translate(" + "0" + ",0)"; });
+           //.attr("transform", function(d) { return "translate(" + x(d.State) + ",0)"; })
+
+        height_diff = 0;  //height discrepancy when calculating h based on data vs y(d.y0) - y(d.y1)
+        state.selectAll("rect")
+           .data(function(d) {
+             return d.ages;
+           })
+         .enter().append("rect")
+           .attr("width", x.rangeBand())
+           .attr("y", function(d) {
+             height_diff = height_diff + y(d.y0) - y(d.y1) - (y(0) - y(d.value));
+             y_corrected = y(d.y1) + height_diff;
+             d.y_corrected = y_corrected //store in d for later use in restorePlot()
+
+             if (d.name === "Tommy") height_diff = 0; //reset for next d.mystate
+
+             return y_corrected;
+             // return y(d.y1);  //orig, but not accurate
+           })
+           .attr("x",function(d) { //add to stock code
+               return x(d.mystate)
+             })
+           .attr("height", function(d) {
+             //return y(d.y0) - y(d.y1); //heights calculated based on stacked values (inaccurate)
+             return y(0) - y(d.value); //calculate height directly from value in csv file
+           })
+           .attr("class", function(d) {
+             classLabel = d.name.replace(/\s/g, ''); //remove spaces
+             return "bars class" + classLabel;
+           })
+           .style("fill", function(d) { return color(d.name); });
+
+       state.selectAll("rect")
+            .on("mouseover", function(d){
+
+               var delta = d.y1 - d.y0;
+               var xPos = parseFloat(d3.select(this).attr("x"));
+               var yPos = parseFloat(d3.select(this).attr("y"));
+               var height = parseFloat(d3.select(this).attr("height"))
+
+               d3.select(this).attr("stroke","blue").attr("stroke-width",0.8);
+
+               svg.append("text")
+               .attr("x",xPos)
+               .attr("y",yPos +height/2)
+               .attr("class","tooltip")
+               .text(d.name +": "+ delta);
+
+            })
+            .on("mouseout",function(){
+               svg.select(".tooltip").remove();
+               d3.select(this).attr("stroke","pink").attr("stroke-width",0.2);
+
+             })
+
+
+       
+
+       //adapted change() fn in http://bl.ocks.org/mbostock/3885705
+       function change() {
+
+         if (this.checked) sortDescending = true;
+         else sortDescending = false;
+
+         colName = legendClassArray_orig[sortBy];
+
+         var x0 = x.domain(data.sort(sortDescending
+             ? function(a, b) { return b[colName] - a[colName]; }
+             : function(a, b) { return b.total - a.total; })
+             .map(function(d,i) { return d.State; }))
+             .copy();
+
+         state.selectAll(".class" + active_link)
+              .sort(function(a, b) {
+                 return x0(a.mystate) - x0(b.mystate);
+               });
+
+         var transition = svg.transition().duration(750),
+             delay = function(d, i) { return i * 20; };
+
+         //sort bars
+         transition.selectAll(".class" + active_link)
+           .delay(delay)
+           .attr("x", function(d) {
+             return x0(d.mystate);
+           });
+
+         //sort x-labels accordingly
+         transition.select(".x.axis")
+             .call(xAxis)
+             .selectAll("g")
+             .delay(delay);
+
+
+         transition.select(".x.axis")
+             .call(xAxis)
+           .selectAll("g")
+             .delay(delay);
+       }
+
+     });
+
       }
     }
 
@@ -681,7 +964,7 @@ angular.module('authorship', ['ngRoute'])
     var l = this;
     l.error = false
     l.login = function(){
-      console.log(l.username + ':' + l.password)
+      //console.log(l.username + ':' + l.password)
       var b = encodeURIComponent(window.btoa(l.username + ':' + l.password))
       var encodedAuth = b.toString('base64')
       console.log(encodedAuth)
